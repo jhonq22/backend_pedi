@@ -1,0 +1,3162 @@
+{
+  "xrayFields": [
+    {
+      "key": "chest_xray_id",
+      "label": "ID de radiografía",
+      "type": "UUID",
+      "ui": "No visible",
+      "required": "Sí",
+      "format": "UUID",
+      "rule": "Generado automáticamente; único",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "encounter_id",
+      "label": "Hospitalización asociada",
+      "type": "UUID/FK",
+      "ui": "Automático",
+      "required": "Sí",
+      "format": "ID hospitalización",
+      "rule": "Permitir múltiples Rx dentro del mismo ingreso",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "xray_date",
+      "label": "Fecha de radiografía",
+      "type": "DATE",
+      "ui": "Date picker/importado",
+      "required": "Sí",
+      "format": "YYYY-MM-DD",
+      "rule": "No permitir fecha futura",
+      "group": "context",
+      "scope": "xray",
+      "mode": "date"
+    },
+    {
+      "key": "xray_time",
+      "label": "Hora de radiografía",
+      "type": "TIME",
+      "ui": "Time picker/importado",
+      "required": "No",
+      "format": "HH",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "time"
+    },
+    {
+      "key": "xray_datetime",
+      "label": "Fecha/hora del estudio",
+      "type": "DATETIME",
+      "ui": "Automático",
+      "required": "Sí",
+      "format": "YYYY-MM-DD HH",
+      "rule": "Construir desde fecha/hora",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "hospital_day",
+      "label": "Día de hospitalización",
+      "type": "INTEGER",
+      "ui": "Solo lectura",
+      "required": "Automático",
+      "format": "1,2,3...",
+      "rule": "Calcular desde fecha de ingreso",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "postoperative_day",
+      "label": "Día postoperatorio",
+      "type": "INTEGER",
+      "ui": "Solo lectura",
+      "required": "Condicional",
+      "format": "PO 0, PO 1, PO 2...",
+      "rule": "Calcular si existe cirugía previa",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "xray_location",
+      "label": "Lugar de realización",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Radiología / UCIP / UCI cardiovascular / Hospitalización / Quirófano / Otro",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Radiología",
+        "UCIP",
+        "UCI cardiovascular",
+        "Hospitalización",
+        "Quirófano",
+        "Otro"
+      ]
+    },
+    {
+      "key": "xray_interpreter_id",
+      "label": "Médico que interpreta",
+      "type": "FK",
+      "ui": "Autocomplete profesional",
+      "required": "No",
+      "format": "ID profesional",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "xray_indication",
+      "label": "Indicación",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Ingreso / Control / Posoperatorio / Postcateterismo / Postprocedimiento / Control de dispositivo / Dificultad respiratoria / Desaturación / Fiebre / Sospecha de derrame / Sospecha de neumotórax / Congestión / Otro",
+      "rule": "Permitir múltiples",
+      "group": "context",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "Ingreso",
+        "Control",
+        "Posoperatorio",
+        "Postcateterismo",
+        "Postprocedimiento",
+        "Control de dispositivo",
+        "Dificultad respiratoria",
+        "Desaturación",
+        "Fiebre",
+        "Sospecha de derrame",
+        "Sospecha de neumotórax",
+        "Congestión",
+        "Otro"
+      ]
+    },
+    {
+      "key": "xray_indication_other",
+      "label": "Otra indicación",
+      "type": "VARCHAR(250)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "Si se selecciona Otro",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "xray_control_type",
+      "label": "Tipo de control",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Evolutivo / Posoperatorio / Posterior a procedimiento / Posterior a retiro de dispositivo / Pre-egreso / Otro",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Evolutivo",
+        "Posoperatorio",
+        "Posterior a procedimiento",
+        "Posterior a retiro de dispositivo",
+        "Pre-egreso",
+        "Otro"
+      ]
+    },
+    {
+      "key": "related_surgery_id",
+      "label": "Cirugía relacionada",
+      "type": "UUID/FK",
+      "ui": "Buscador",
+      "required": "No",
+      "format": "ID cirugía",
+      "rule": "Si radiografía posoperatoria",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "related_procedure_id",
+      "label": "Procedimiento relacionado",
+      "type": "UUID/FK",
+      "ui": "Buscador",
+      "required": "No",
+      "format": "ID procedimiento",
+      "rule": "Si posterior a procedimiento",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "xray_projection",
+      "label": "Proyección",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "PA / AP / Lateral / AP portátil / Otra",
+      "rule": "Interpretación cardíaca depende de proyección",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "PA",
+        "AP",
+        "Lateral",
+        "AP portátil",
+        "Otra"
+      ]
+    },
+    {
+      "key": "patient_position",
+      "label": "Posición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "De pie / Sentado / Semisentado / Decúbito supino / Decúbito lateral / Otra",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "De pie",
+        "Sentado",
+        "Semisentado",
+        "Decúbito supino",
+        "Decúbito lateral",
+        "Otra"
+      ]
+    },
+    {
+      "key": "inspiration_quality",
+      "label": "Inspiración",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Hipoinspirada / Hiperinsuflada / No evaluable",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Hipoinspirada",
+        "Hiperinsuflada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "rotation_status",
+      "label": "Rotación",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Sin rotación significativa / Rotada derecha / Rotada izquierda / No evaluable",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin rotación significativa",
+        "Rotada derecha",
+        "Rotada izquierda",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "penetration_quality",
+      "label": "Penetración/exposición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Adecuada / Hipopenetrada / Hiperpenetrada / No evaluable",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Hipopenetrada",
+        "Hiperpenetrada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "xray_quality",
+      "label": "Calidad diagnóstica global",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Limitada pero interpretable / No diagnóstica",
+      "rule": "Si no diagnóstica, exigir motivo",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Limitada pero interpretable",
+        "No diagnóstica"
+      ]
+    },
+    {
+      "key": "xray_quality_limitation",
+      "label": "Limitaciones técnicas",
+      "type": "TEXT",
+      "ui": "Textarea corta",
+      "required": "Condicional",
+      "format": "Máx. 500 caracteres",
+      "rule": "Si calidad limitada/no diagnóstica",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "lung_expansion",
+      "label": "Expansión pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Disminuida / Hiperinsuflación / Asimétrica / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Disminuida",
+        "Hiperinsuflación",
+        "Asimétrica",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "lung_parenchyma_status",
+      "label": "Parénquima pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Sin alteraciones / Alterado / No evaluable",
+      "rule": "Si Alterado, abrir hallazgos",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteraciones",
+        "Alterado",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "atelectasis_present",
+      "label": "Atelectasia",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "Condicional",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "atelectasis_location",
+      "label": "Localización de atelectasia",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "LSD / LMD / LID / LSI / Língula / LII / Bilateral / Laminar / Otra",
+      "rule": "Si presente",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "LSD",
+        "LMD",
+        "LID",
+        "LSI",
+        "Língula",
+        "LII",
+        "Bilateral",
+        "Laminar",
+        "Otra"
+      ]
+    },
+    {
+      "key": "consolidation_present",
+      "label": "Consolidación",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "Condicional",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "consolidation_location",
+      "label": "Localización",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "Por lóbulos/hemitórax",
+      "rule": "Si presente",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "LSD",
+        "LMD",
+        "LID",
+        "LSI",
+        "Língula",
+        "LII",
+        "Hemitórax derecho",
+        "Hemitórax izquierdo",
+        "Bilateral",
+        "Otro"
+      ]
+    },
+    {
+      "key": "interstitial_opacity",
+      "label": "Patrón intersticial",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausente / Presente / Difuso / Focal / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "Difuso",
+        "Focal",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "alveolar_opacity",
+      "label": "Opacidades alveolares",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausentes / Presentes / Unilaterales / Bilaterales",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausentes",
+        "Presentes",
+        "Unilaterales",
+        "Bilaterales"
+      ]
+    },
+    {
+      "key": "hyperinflation_present",
+      "label": "Hiperinsuflación",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "lung_other_findings",
+      "label": "Otros hallazgos pulmonares",
+      "type": "TEXT",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Máx. 1.000 caracteres",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "pulmonary_congestion",
+      "label": "Congestión vascular pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_edema",
+      "label": "Edema pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Intersticial / Alveolar / Mixto / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Intersticial",
+        "Alveolar",
+        "Mixto",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_edema_distribution",
+      "label": "Distribución del edema",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Central / Difusa / Perihiliar / Asimétrica / Otra",
+      "rule": "Si edema",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Central",
+        "Difusa",
+        "Perihiliar",
+        "Asimétrica",
+        "Otra"
+      ]
+    },
+    {
+      "key": "interstitial_edema_signs",
+      "label": "Signos de edema intersticial",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "No",
+      "format": "Engrosamiento peribronquial / Engrosamiento septal / Otro",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "Engrosamiento peribronquial",
+        "Engrosamiento septal",
+        "Otro"
+      ]
+    },
+    {
+      "key": "pulmonary_edema_severity",
+      "label": "Severidad radiográfica",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Leve / Moderada / Severa",
+      "rule": "Adaptación HCIL; validar por expertos",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Leve",
+        "Moderada",
+        "Severa"
+      ]
+    },
+    {
+      "key": "pleural_effusion",
+      "label": "Derrame pleural",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Derecho / Izquierdo / Bilateral / No evaluable",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Derecho",
+        "Izquierdo",
+        "Bilateral",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "right_pleural_effusion_size",
+      "label": "Derrame derecho",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Pequeño / Moderado / Grande",
+      "rule": "Si derecho/bilateral",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Pequeño",
+        "Moderado",
+        "Grande"
+      ]
+    },
+    {
+      "key": "left_pleural_effusion_size",
+      "label": "Derrame izquierdo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Pequeño / Moderado / Grande",
+      "rule": "Si izquierdo/bilateral",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Pequeño",
+        "Moderado",
+        "Grande"
+      ]
+    },
+    {
+      "key": "pneumothorax",
+      "label": "Neumotórax",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Derecho / Izquierdo / Bilateral / No evaluable",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Derecho",
+        "Izquierdo",
+        "Bilateral",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pneumothorax_size",
+      "label": "Tamaño aproximado",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Pequeño / Moderado / Grande / A tensión",
+      "rule": "Si presente",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Pequeño",
+        "Moderado",
+        "Grande",
+        "A tensión"
+      ]
+    },
+    {
+      "key": "pleural_other_findings",
+      "label": "Otros hallazgos pleurales",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "mediastinum_status",
+      "label": "Mediastino",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal para edad / Ensanchado / Desplazado / No evaluable",
+      "rule": "Considerar edad y proyección",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal para edad",
+        "Ensanchado",
+        "Desplazado",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "mediastinal_shift",
+      "label": "Desplazamiento mediastinal",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "No / Derecha / Izquierda",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "No",
+        "Derecha",
+        "Izquierda"
+      ]
+    },
+    {
+      "key": "thymus_visible",
+      "label": "Timo visible",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sí / No / No evaluable",
+      "rule": "Hallazgo dependiente de edad",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sí",
+        "No",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "thymic_appearance",
+      "label": "Apariencia tímica",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Esperada para edad / Prominente / Otra",
+      "rule": "No clasificar automáticamente como masa",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Esperada para edad",
+        "Prominente",
+        "Otra"
+      ]
+    },
+    {
+      "key": "mediastinal_notes",
+      "label": "Observaciones mediastínicas",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "diaphragm_status",
+      "label": "Diafragma",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Sin alteraciones / Elevación derecha / Elevación izquierda / Aplanamiento / No evaluable",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteraciones",
+        "Elevación derecha",
+        "Elevación izquierda",
+        "Aplanamiento",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "diaphragmatic_paralysis_suspected",
+      "label": "Sospecha de parálisis diafragmática",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "No / Derecha / Izquierda / Bilateral / Indeterminada",
+      "rule": "Radiografía puede sugerir; no convertir automáticamente en diagnóstico definitivo",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "No",
+        "Derecha",
+        "Izquierda",
+        "Bilateral",
+        "Indeterminada"
+      ]
+    },
+    {
+      "key": "diaphragm_notes",
+      "label": "Observaciones",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "cardiac_position_xray",
+      "label": "Posición cardíaca",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Levocardia / Dextrocardia / Mesocardia / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Levocardia",
+        "Dextrocardia",
+        "Mesocardia",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cardiac_apex_direction",
+      "label": "Dirección del ápex",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Izquierda / Derecha / Central / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Izquierda",
+        "Derecha",
+        "Central",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cardiac_silhouette_size",
+      "label": "Tamaño de silueta cardíaca",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal para edad/proyección / Aumentada / Disminuida / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal para edad/proyección",
+        "Aumentada",
+        "Disminuida",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cardiothoracic_ratio",
+      "label": "Índice cardiotorácico",
+      "type": "DECIMAL(4,3)",
+      "ui": "Numeric input/calculado",
+      "required": "Condicional",
+      "format": "0.000–1.000",
+      "rule": "Si se mide",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "number"
+    },
+    {
+      "key": "cardiac_silhouette_configuration",
+      "label": "Configuración de silueta",
+      "type": "ENUM/FK",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Habitual / Globular / Predominio derecho / Predominio izquierdo / Configuración característica / Indeterminada / Otra",
+      "rule": "Hallazgo descriptivo, no diagnóstico automático",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Habitual",
+        "Globular",
+        "Predominio derecho",
+        "Predominio izquierdo",
+        "Configuración característica",
+        "Indeterminada",
+        "Otra"
+      ]
+    },
+    {
+      "key": "cardiac_contour_abnormality",
+      "label": "Alteración de contornos",
+      "type": "BOOLEAN",
+      "ui": "Radio Sí/No",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "cardiac_contour_notes",
+      "label": "Descripción de contornos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "pulmonary_vascularity",
+      "label": "Vascularidad pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Aumentada / Disminuida / Redistribuida / Asimétrica / No evaluable",
+      "rule": "Elemento cardiovascular prioritario",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Aumentada",
+        "Disminuida",
+        "Redistribuida",
+        "Asimétrica",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_plethora",
+      "label": "Plétora pulmonar",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Si vascularidad aumentada",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "pulmonary_oligemia",
+      "label": "Oligohemia pulmonar",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Si vascularidad disminuida",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "vascularity_asymmetry",
+      "label": "Asimetría vascular",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Mayor derecha / Mayor izquierda / Otra",
+      "rule": "Si asimétrica",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Mayor derecha",
+        "Mayor izquierda",
+        "Otra"
+      ]
+    },
+    {
+      "key": "pulmonary_vascularity_notes",
+      "label": "Observaciones vasculares",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "main_pa_segment",
+      "label": "Segmento de arteria pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Prominente / Disminuido / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Prominente",
+        "Disminuido",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "right_hilum_status",
+      "label": "Hilio derecho",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Prominente / Disminuido / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Prominente",
+        "Disminuido",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "left_hilum_status",
+      "label": "Hilio izquierdo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Prominente / Disminuido / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Prominente",
+        "Disminuido",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "central_pulmonary_arteries",
+      "label": "Arterias pulmonares centrales",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normales / Dilatadas / Pequeñas / Asimétricas / No evaluables",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normales",
+        "Dilatadas",
+        "Pequeñas",
+        "Asimétricas",
+        "No evaluables"
+      ]
+    },
+    {
+      "key": "pulmonary_venous_congestion",
+      "label": "Congestión venosa pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cephalization_present",
+      "label": "Redistribución vascular hacia ápices",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "perihilar_congestion",
+      "label": "Congestión perihiliar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_venous_notes",
+      "label": "Observaciones vasculares",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "aortic_arch_side_xray",
+      "label": "Lateralidad aparente del arco aórtico",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Izquierdo / Derecho / Indeterminado / No evaluable",
+      "rule": "Radiografía puede sugerir; confirmar por imagen anatómica",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Izquierdo",
+        "Derecho",
+        "Indeterminado",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "aortic_knob_status",
+      "label": "Botón aórtico",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Habitual / Prominente / No visible / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Habitual",
+        "Prominente",
+        "No visible",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "great_vessel_contour",
+      "label": "Contorno de grandes vasos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sin alteración / Prominente / Anormal / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteración",
+        "Prominente",
+        "Anormal",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "great_vessel_notes",
+      "label": "Observaciones de grandes vasos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "ett_present",
+      "label": "Tubo endotraqueal",
+      "type": "BOOLEAN",
+      "ui": "Automático/Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Derivar de dispositivos",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "ett_tip_position",
+      "label": "Posición de punta del TET",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Alta / Baja / Bronquial derecha / Bronquial izquierda / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Alta",
+        "Baja",
+        "Bronquial derecha",
+        "Bronquial izquierda",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "ett_distance_to_carina_cm",
+      "label": "Distancia a carina",
+      "type": "DECIMAL(4,1)",
+      "ui": "Numeric input",
+      "required": "No",
+      "format": "cm",
+      "rule": "Si medible",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "number"
+    },
+    {
+      "key": "cvc_present",
+      "label": "Catéter venoso central",
+      "type": "BOOLEAN",
+      "ui": "Automático",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "cvc_tip_location",
+      "label": "Localización de punta",
+      "type": "ENUM/FK",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "VCS / Unión cavoauricular / AD / Vena innominada / Otra / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "VCS",
+        "Unión cavoauricular",
+        "AD",
+        "Vena innominada",
+        "Otra",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cvc_position_status",
+      "label": "Posición del CVC",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Alta / Profunda / Malposicionada / Indeterminada",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Alta",
+        "Profunda",
+        "Malposicionada",
+        "Indeterminada"
+      ]
+    },
+    {
+      "key": "thoracic_drain_present",
+      "label": "Drenaje torácico/mediastinal",
+      "type": "BOOLEAN",
+      "ui": "Automático",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "thoracic_drain_count",
+      "label": "Número de drenajes",
+      "type": "SMALLINT",
+      "ui": "Numeric input",
+      "required": "Condicional",
+      "format": "1–10",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "number"
+    },
+    {
+      "key": "thoracic_drain_position_status",
+      "label": "Posición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Dudosa / Malposicionada / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Dudosa",
+        "Malposicionada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "thoracic_drain_notes",
+      "label": "Observaciones vasculares",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "ecmo_cannula_present",
+      "label": "Cánulas ECMO visibles",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "ecmo_cannula_position",
+      "label": "Posición de cánulas",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Alterada / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Alterada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "mechanical_support_device_visible",
+      "label": "Otro soporte circulatorio visible",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "mechanical_support_xray_notes",
+      "label": "Observaciones",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "bone_findings",
+      "label": "Estructuras óseas",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sin hallazgos agudos / Alteradas / No evaluables",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin hallazgos agudos",
+        "Alteradas",
+        "No evaluables"
+      ]
+    },
+    {
+      "key": "bone_abnormality_notes",
+      "label": "Hallazgos óseos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "soft_tissue_status",
+      "label": "Tejidos blandos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sin alteraciones / Alterados / No evaluables",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteraciones",
+        "Alterados",
+        "No evaluables"
+      ]
+    },
+    {
+      "key": "soft_tissue_notes",
+      "label": "Hallazgos de tejidos blandos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "cardiovascular_xray_summary",
+      "label": "Resumen cardiovascular",
+      "type": "TEXT",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Máx. 1.500 caracteres",
+      "rule": "Integrar silueta + vascularidad + congestión",
+      "group": "other",
+      "scope": "xray",
+      "mode": "textarea"
+    }
+  ],
+  "deviceFields": [
+    {
+      "key": "xray_device_id",
+      "label": "ID dispositivo",
+      "type": "UUID",
+      "ui": "No visible",
+      "required": "Sí",
+      "format": "UUID",
+      "rule": "Automático",
+      "group": "devices",
+      "scope": "device",
+      "mode": "derived"
+    },
+    {
+      "key": "chest_xray_id",
+      "label": "Radiografía",
+      "type": "UUID/FK",
+      "ui": "Automático",
+      "required": "Sí",
+      "format": "ID Rx",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "derived"
+    },
+    {
+      "key": "device_type",
+      "label": "Dispositivo/catéter",
+      "type": "FK/ENUM",
+      "ui": "Select con búsqueda",
+      "required": "Sí",
+      "format": "Catéter venoso central / PICC / Catéter arterial / Tubo endotraqueal / SNG/SOG / Drenaje pleural / Drenaje mediastinal / Cable de marcapasos temporal / Marcapasos permanente / ICD / Stent cardiovascular / Clip ductal / ECMO / VAD / Otro",
+      "rule": "Permitir múltiples",
+      "group": "devices",
+      "scope": "device",
+      "mode": "select",
+      "options": [
+        "Catéter venoso central",
+        "PICC",
+        "Catéter arterial",
+        "Tubo endotraqueal",
+        "SNG/SOG",
+        "Drenaje pleural",
+        "Drenaje mediastinal",
+        "Cable de marcapasos temporal",
+        "Marcapasos permanente",
+        "ICD",
+        "Stent cardiovascular",
+        "Clip ductal",
+        "ECMO",
+        "VAD",
+        "Otro"
+      ]
+    },
+    {
+      "key": "device_location",
+      "label": "Localización",
+      "type": "VARCHAR(250)",
+      "ui": "Autocomplete/Text",
+      "required": "Sí",
+      "format": "Posición anatómica",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "text"
+    },
+    {
+      "key": "device_position_status",
+      "label": "Posición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Muy proximal / Muy distal / Malposicionada / Indeterminada",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Muy proximal",
+        "Muy distal",
+        "Malposicionada",
+        "Indeterminada"
+      ]
+    },
+    {
+      "key": "device_complication_suspected",
+      "label": "Complicación relacionada",
+      "type": "BOOLEAN",
+      "ui": "Radio Sí/No",
+      "required": "Sí",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "bool"
+    },
+    {
+      "key": "device_notes",
+      "label": "Observaciones",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "textarea"
+    }
+  ],
+  "all": [
+    {
+      "key": "chest_xray_id",
+      "label": "ID de radiografía",
+      "type": "UUID",
+      "ui": "No visible",
+      "required": "Sí",
+      "format": "UUID",
+      "rule": "Generado automáticamente; único",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "encounter_id",
+      "label": "Hospitalización asociada",
+      "type": "UUID/FK",
+      "ui": "Automático",
+      "required": "Sí",
+      "format": "ID hospitalización",
+      "rule": "Permitir múltiples Rx dentro del mismo ingreso",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "xray_date",
+      "label": "Fecha de radiografía",
+      "type": "DATE",
+      "ui": "Date picker/importado",
+      "required": "Sí",
+      "format": "YYYY-MM-DD",
+      "rule": "No permitir fecha futura",
+      "group": "context",
+      "scope": "xray",
+      "mode": "date"
+    },
+    {
+      "key": "xray_time",
+      "label": "Hora de radiografía",
+      "type": "TIME",
+      "ui": "Time picker/importado",
+      "required": "No",
+      "format": "HH",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "time"
+    },
+    {
+      "key": "xray_datetime",
+      "label": "Fecha/hora del estudio",
+      "type": "DATETIME",
+      "ui": "Automático",
+      "required": "Sí",
+      "format": "YYYY-MM-DD HH",
+      "rule": "Construir desde fecha/hora",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "hospital_day",
+      "label": "Día de hospitalización",
+      "type": "INTEGER",
+      "ui": "Solo lectura",
+      "required": "Automático",
+      "format": "1,2,3...",
+      "rule": "Calcular desde fecha de ingreso",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "postoperative_day",
+      "label": "Día postoperatorio",
+      "type": "INTEGER",
+      "ui": "Solo lectura",
+      "required": "Condicional",
+      "format": "PO 0, PO 1, PO 2...",
+      "rule": "Calcular si existe cirugía previa",
+      "group": "context",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "xray_location",
+      "label": "Lugar de realización",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Radiología / UCIP / UCI cardiovascular / Hospitalización / Quirófano / Otro",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Radiología",
+        "UCIP",
+        "UCI cardiovascular",
+        "Hospitalización",
+        "Quirófano",
+        "Otro"
+      ]
+    },
+    {
+      "key": "xray_interpreter_id",
+      "label": "Médico que interpreta",
+      "type": "FK",
+      "ui": "Autocomplete profesional",
+      "required": "No",
+      "format": "ID profesional",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "xray_indication",
+      "label": "Indicación",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Ingreso / Control / Posoperatorio / Postcateterismo / Postprocedimiento / Control de dispositivo / Dificultad respiratoria / Desaturación / Fiebre / Sospecha de derrame / Sospecha de neumotórax / Congestión / Otro",
+      "rule": "Permitir múltiples",
+      "group": "context",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "Ingreso",
+        "Control",
+        "Posoperatorio",
+        "Postcateterismo",
+        "Postprocedimiento",
+        "Control de dispositivo",
+        "Dificultad respiratoria",
+        "Desaturación",
+        "Fiebre",
+        "Sospecha de derrame",
+        "Sospecha de neumotórax",
+        "Congestión",
+        "Otro"
+      ]
+    },
+    {
+      "key": "xray_indication_other",
+      "label": "Otra indicación",
+      "type": "VARCHAR(250)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "Si se selecciona Otro",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "xray_control_type",
+      "label": "Tipo de control",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Evolutivo / Posoperatorio / Posterior a procedimiento / Posterior a retiro de dispositivo / Pre-egreso / Otro",
+      "rule": "—",
+      "group": "context",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Evolutivo",
+        "Posoperatorio",
+        "Posterior a procedimiento",
+        "Posterior a retiro de dispositivo",
+        "Pre-egreso",
+        "Otro"
+      ]
+    },
+    {
+      "key": "related_surgery_id",
+      "label": "Cirugía relacionada",
+      "type": "UUID/FK",
+      "ui": "Buscador",
+      "required": "No",
+      "format": "ID cirugía",
+      "rule": "Si radiografía posoperatoria",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "related_procedure_id",
+      "label": "Procedimiento relacionado",
+      "type": "UUID/FK",
+      "ui": "Buscador",
+      "required": "No",
+      "format": "ID procedimiento",
+      "rule": "Si posterior a procedimiento",
+      "group": "context",
+      "scope": "xray",
+      "mode": "text"
+    },
+    {
+      "key": "xray_projection",
+      "label": "Proyección",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "PA / AP / Lateral / AP portátil / Otra",
+      "rule": "Interpretación cardíaca depende de proyección",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "PA",
+        "AP",
+        "Lateral",
+        "AP portátil",
+        "Otra"
+      ]
+    },
+    {
+      "key": "patient_position",
+      "label": "Posición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "De pie / Sentado / Semisentado / Decúbito supino / Decúbito lateral / Otra",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "De pie",
+        "Sentado",
+        "Semisentado",
+        "Decúbito supino",
+        "Decúbito lateral",
+        "Otra"
+      ]
+    },
+    {
+      "key": "inspiration_quality",
+      "label": "Inspiración",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Hipoinspirada / Hiperinsuflada / No evaluable",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Hipoinspirada",
+        "Hiperinsuflada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "rotation_status",
+      "label": "Rotación",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Sin rotación significativa / Rotada derecha / Rotada izquierda / No evaluable",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin rotación significativa",
+        "Rotada derecha",
+        "Rotada izquierda",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "penetration_quality",
+      "label": "Penetración/exposición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Adecuada / Hipopenetrada / Hiperpenetrada / No evaluable",
+      "rule": "—",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Hipopenetrada",
+        "Hiperpenetrada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "xray_quality",
+      "label": "Calidad diagnóstica global",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Limitada pero interpretable / No diagnóstica",
+      "rule": "Si no diagnóstica, exigir motivo",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Limitada pero interpretable",
+        "No diagnóstica"
+      ]
+    },
+    {
+      "key": "xray_quality_limitation",
+      "label": "Limitaciones técnicas",
+      "type": "TEXT",
+      "ui": "Textarea corta",
+      "required": "Condicional",
+      "format": "Máx. 500 caracteres",
+      "rule": "Si calidad limitada/no diagnóstica",
+      "group": "quality",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "lung_expansion",
+      "label": "Expansión pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Disminuida / Hiperinsuflación / Asimétrica / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Disminuida",
+        "Hiperinsuflación",
+        "Asimétrica",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "lung_parenchyma_status",
+      "label": "Parénquima pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Sin alteraciones / Alterado / No evaluable",
+      "rule": "Si Alterado, abrir hallazgos",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteraciones",
+        "Alterado",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "atelectasis_present",
+      "label": "Atelectasia",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "Condicional",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "atelectasis_location",
+      "label": "Localización de atelectasia",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "LSD / LMD / LID / LSI / Língula / LII / Bilateral / Laminar / Otra",
+      "rule": "Si presente",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "LSD",
+        "LMD",
+        "LID",
+        "LSI",
+        "Língula",
+        "LII",
+        "Bilateral",
+        "Laminar",
+        "Otra"
+      ]
+    },
+    {
+      "key": "consolidation_present",
+      "label": "Consolidación",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "Condicional",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "consolidation_location",
+      "label": "Localización",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "Por lóbulos/hemitórax",
+      "rule": "Si presente",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "LSD",
+        "LMD",
+        "LID",
+        "LSI",
+        "Língula",
+        "LII",
+        "Hemitórax derecho",
+        "Hemitórax izquierdo",
+        "Bilateral",
+        "Otro"
+      ]
+    },
+    {
+      "key": "interstitial_opacity",
+      "label": "Patrón intersticial",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausente / Presente / Difuso / Focal / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "Difuso",
+        "Focal",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "alveolar_opacity",
+      "label": "Opacidades alveolares",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausentes / Presentes / Unilaterales / Bilaterales",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausentes",
+        "Presentes",
+        "Unilaterales",
+        "Bilaterales"
+      ]
+    },
+    {
+      "key": "hyperinflation_present",
+      "label": "Hiperinsuflación",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "lung_other_findings",
+      "label": "Otros hallazgos pulmonares",
+      "type": "TEXT",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Máx. 1.000 caracteres",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "pulmonary_congestion",
+      "label": "Congestión vascular pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_edema",
+      "label": "Edema pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Intersticial / Alveolar / Mixto / No evaluable",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Intersticial",
+        "Alveolar",
+        "Mixto",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_edema_distribution",
+      "label": "Distribución del edema",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Central / Difusa / Perihiliar / Asimétrica / Otra",
+      "rule": "Si edema",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Central",
+        "Difusa",
+        "Perihiliar",
+        "Asimétrica",
+        "Otra"
+      ]
+    },
+    {
+      "key": "interstitial_edema_signs",
+      "label": "Signos de edema intersticial",
+      "type": "M / FK",
+      "ui": "Select múltiple",
+      "required": "No",
+      "format": "Engrosamiento peribronquial / Engrosamiento septal / Otro",
+      "rule": "—",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "multi",
+      "options": [
+        "Engrosamiento peribronquial",
+        "Engrosamiento septal",
+        "Otro"
+      ]
+    },
+    {
+      "key": "pulmonary_edema_severity",
+      "label": "Severidad radiográfica",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Leve / Moderada / Severa",
+      "rule": "Adaptación HCIL; validar por expertos",
+      "group": "lung",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Leve",
+        "Moderada",
+        "Severa"
+      ]
+    },
+    {
+      "key": "pleural_effusion",
+      "label": "Derrame pleural",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Derecho / Izquierdo / Bilateral / No evaluable",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Derecho",
+        "Izquierdo",
+        "Bilateral",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "right_pleural_effusion_size",
+      "label": "Derrame derecho",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Pequeño / Moderado / Grande",
+      "rule": "Si derecho/bilateral",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Pequeño",
+        "Moderado",
+        "Grande"
+      ]
+    },
+    {
+      "key": "left_pleural_effusion_size",
+      "label": "Derrame izquierdo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Pequeño / Moderado / Grande",
+      "rule": "Si izquierdo/bilateral",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Pequeño",
+        "Moderado",
+        "Grande"
+      ]
+    },
+    {
+      "key": "pneumothorax",
+      "label": "Neumotórax",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Derecho / Izquierdo / Bilateral / No evaluable",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Derecho",
+        "Izquierdo",
+        "Bilateral",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pneumothorax_size",
+      "label": "Tamaño aproximado",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Pequeño / Moderado / Grande / A tensión",
+      "rule": "Si presente",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Pequeño",
+        "Moderado",
+        "Grande",
+        "A tensión"
+      ]
+    },
+    {
+      "key": "pleural_other_findings",
+      "label": "Otros hallazgos pleurales",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "mediastinum_status",
+      "label": "Mediastino",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal para edad / Ensanchado / Desplazado / No evaluable",
+      "rule": "Considerar edad y proyección",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal para edad",
+        "Ensanchado",
+        "Desplazado",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "mediastinal_shift",
+      "label": "Desplazamiento mediastinal",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "No / Derecha / Izquierda",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "No",
+        "Derecha",
+        "Izquierda"
+      ]
+    },
+    {
+      "key": "thymus_visible",
+      "label": "Timo visible",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sí / No / No evaluable",
+      "rule": "Hallazgo dependiente de edad",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sí",
+        "No",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "thymic_appearance",
+      "label": "Apariencia tímica",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Esperada para edad / Prominente / Otra",
+      "rule": "No clasificar automáticamente como masa",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Esperada para edad",
+        "Prominente",
+        "Otra"
+      ]
+    },
+    {
+      "key": "mediastinal_notes",
+      "label": "Observaciones mediastínicas",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "diaphragm_status",
+      "label": "Diafragma",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Sin alteraciones / Elevación derecha / Elevación izquierda / Aplanamiento / No evaluable",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteraciones",
+        "Elevación derecha",
+        "Elevación izquierda",
+        "Aplanamiento",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "diaphragmatic_paralysis_suspected",
+      "label": "Sospecha de parálisis diafragmática",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "No / Derecha / Izquierda / Bilateral / Indeterminada",
+      "rule": "Radiografía puede sugerir; no convertir automáticamente en diagnóstico definitivo",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "No",
+        "Derecha",
+        "Izquierda",
+        "Bilateral",
+        "Indeterminada"
+      ]
+    },
+    {
+      "key": "diaphragm_notes",
+      "label": "Observaciones",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "pleura",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "cardiac_position_xray",
+      "label": "Posición cardíaca",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Levocardia / Dextrocardia / Mesocardia / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Levocardia",
+        "Dextrocardia",
+        "Mesocardia",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cardiac_apex_direction",
+      "label": "Dirección del ápex",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Izquierda / Derecha / Central / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Izquierda",
+        "Derecha",
+        "Central",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cardiac_silhouette_size",
+      "label": "Tamaño de silueta cardíaca",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal para edad/proyección / Aumentada / Disminuida / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal para edad/proyección",
+        "Aumentada",
+        "Disminuida",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cardiothoracic_ratio",
+      "label": "Índice cardiotorácico",
+      "type": "DECIMAL(4,3)",
+      "ui": "Numeric input/calculado",
+      "required": "Condicional",
+      "format": "0.000–1.000",
+      "rule": "Si se mide",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "number"
+    },
+    {
+      "key": "cardiac_silhouette_configuration",
+      "label": "Configuración de silueta",
+      "type": "ENUM/FK",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Habitual / Globular / Predominio derecho / Predominio izquierdo / Configuración característica / Indeterminada / Otra",
+      "rule": "Hallazgo descriptivo, no diagnóstico automático",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Habitual",
+        "Globular",
+        "Predominio derecho",
+        "Predominio izquierdo",
+        "Configuración característica",
+        "Indeterminada",
+        "Otra"
+      ]
+    },
+    {
+      "key": "cardiac_contour_abnormality",
+      "label": "Alteración de contornos",
+      "type": "BOOLEAN",
+      "ui": "Radio Sí/No",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "cardiac_contour_notes",
+      "label": "Descripción de contornos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "pulmonary_vascularity",
+      "label": "Vascularidad pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Aumentada / Disminuida / Redistribuida / Asimétrica / No evaluable",
+      "rule": "Elemento cardiovascular prioritario",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Aumentada",
+        "Disminuida",
+        "Redistribuida",
+        "Asimétrica",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_plethora",
+      "label": "Plétora pulmonar",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Si vascularidad aumentada",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "pulmonary_oligemia",
+      "label": "Oligohemia pulmonar",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Si vascularidad disminuida",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "vascularity_asymmetry",
+      "label": "Asimetría vascular",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Mayor derecha / Mayor izquierda / Otra",
+      "rule": "Si asimétrica",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Mayor derecha",
+        "Mayor izquierda",
+        "Otra"
+      ]
+    },
+    {
+      "key": "pulmonary_vascularity_notes",
+      "label": "Observaciones vasculares",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "main_pa_segment",
+      "label": "Segmento de arteria pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Prominente / Disminuido / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Prominente",
+        "Disminuido",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "right_hilum_status",
+      "label": "Hilio derecho",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Prominente / Disminuido / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Prominente",
+        "Disminuido",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "left_hilum_status",
+      "label": "Hilio izquierdo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Prominente / Disminuido / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normal",
+        "Prominente",
+        "Disminuido",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "central_pulmonary_arteries",
+      "label": "Arterias pulmonares centrales",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normales / Dilatadas / Pequeñas / Asimétricas / No evaluables",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Normales",
+        "Dilatadas",
+        "Pequeñas",
+        "Asimétricas",
+        "No evaluables"
+      ]
+    },
+    {
+      "key": "pulmonary_venous_congestion",
+      "label": "Congestión venosa pulmonar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cephalization_present",
+      "label": "Redistribución vascular hacia ápices",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "perihilar_congestion",
+      "label": "Congestión perihiliar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Ausente",
+        "Presente",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "pulmonary_venous_notes",
+      "label": "Observaciones vasculares",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "aortic_arch_side_xray",
+      "label": "Lateralidad aparente del arco aórtico",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Izquierdo / Derecho / Indeterminado / No evaluable",
+      "rule": "Radiografía puede sugerir; confirmar por imagen anatómica",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Izquierdo",
+        "Derecho",
+        "Indeterminado",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "aortic_knob_status",
+      "label": "Botón aórtico",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Habitual / Prominente / No visible / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Habitual",
+        "Prominente",
+        "No visible",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "great_vessel_contour",
+      "label": "Contorno de grandes vasos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sin alteración / Prominente / Anormal / No evaluable",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteración",
+        "Prominente",
+        "Anormal",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "great_vessel_notes",
+      "label": "Observaciones de grandes vasos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "heart",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "xray_device_id",
+      "label": "ID dispositivo",
+      "type": "UUID",
+      "ui": "No visible",
+      "required": "Sí",
+      "format": "UUID",
+      "rule": "Automático",
+      "group": "devices",
+      "scope": "device",
+      "mode": "derived"
+    },
+    {
+      "key": "chest_xray_id",
+      "label": "Radiografía",
+      "type": "UUID/FK",
+      "ui": "Automático",
+      "required": "Sí",
+      "format": "ID Rx",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "derived"
+    },
+    {
+      "key": "device_type",
+      "label": "Dispositivo/catéter",
+      "type": "FK/ENUM",
+      "ui": "Select con búsqueda",
+      "required": "Sí",
+      "format": "Catéter venoso central / PICC / Catéter arterial / Tubo endotraqueal / SNG/SOG / Drenaje pleural / Drenaje mediastinal / Cable de marcapasos temporal / Marcapasos permanente / ICD / Stent cardiovascular / Clip ductal / ECMO / VAD / Otro",
+      "rule": "Permitir múltiples",
+      "group": "devices",
+      "scope": "device",
+      "mode": "select",
+      "options": [
+        "Catéter venoso central",
+        "PICC",
+        "Catéter arterial",
+        "Tubo endotraqueal",
+        "SNG/SOG",
+        "Drenaje pleural",
+        "Drenaje mediastinal",
+        "Cable de marcapasos temporal",
+        "Marcapasos permanente",
+        "ICD",
+        "Stent cardiovascular",
+        "Clip ductal",
+        "ECMO",
+        "VAD",
+        "Otro"
+      ]
+    },
+    {
+      "key": "device_location",
+      "label": "Localización",
+      "type": "VARCHAR(250)",
+      "ui": "Autocomplete/Text",
+      "required": "Sí",
+      "format": "Posición anatómica",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "text"
+    },
+    {
+      "key": "device_position_status",
+      "label": "Posición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada / Muy proximal / Muy distal / Malposicionada / Indeterminada",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Muy proximal",
+        "Muy distal",
+        "Malposicionada",
+        "Indeterminada"
+      ]
+    },
+    {
+      "key": "device_complication_suspected",
+      "label": "Complicación relacionada",
+      "type": "BOOLEAN",
+      "ui": "Radio Sí/No",
+      "required": "Sí",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "bool"
+    },
+    {
+      "key": "device_notes",
+      "label": "Observaciones",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "devices",
+      "scope": "device",
+      "mode": "textarea"
+    },
+    {
+      "key": "ett_present",
+      "label": "Tubo endotraqueal",
+      "type": "BOOLEAN",
+      "ui": "Automático/Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Derivar de dispositivos",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "ett_tip_position",
+      "label": "Posición de punta del TET",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Alta / Baja / Bronquial derecha / Bronquial izquierda / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Alta",
+        "Baja",
+        "Bronquial derecha",
+        "Bronquial izquierda",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "ett_distance_to_carina_cm",
+      "label": "Distancia a carina",
+      "type": "DECIMAL(4,1)",
+      "ui": "Numeric input",
+      "required": "No",
+      "format": "cm",
+      "rule": "Si medible",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "number"
+    },
+    {
+      "key": "cvc_present",
+      "label": "Catéter venoso central",
+      "type": "BOOLEAN",
+      "ui": "Automático",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "cvc_tip_location",
+      "label": "Localización de punta",
+      "type": "ENUM/FK",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "VCS / Unión cavoauricular / AD / Vena innominada / Otra / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "VCS",
+        "Unión cavoauricular",
+        "AD",
+        "Vena innominada",
+        "Otra",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "cvc_position_status",
+      "label": "Posición del CVC",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Alta / Profunda / Malposicionada / Indeterminada",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Alta",
+        "Profunda",
+        "Malposicionada",
+        "Indeterminada"
+      ]
+    },
+    {
+      "key": "thoracic_drain_present",
+      "label": "Drenaje torácico/mediastinal",
+      "type": "BOOLEAN",
+      "ui": "Automático",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "derived"
+    },
+    {
+      "key": "thoracic_drain_count",
+      "label": "Número de drenajes",
+      "type": "SMALLINT",
+      "ui": "Numeric input",
+      "required": "Condicional",
+      "format": "1–10",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "number"
+    },
+    {
+      "key": "thoracic_drain_position_status",
+      "label": "Posición",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Dudosa / Malposicionada / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Dudosa",
+        "Malposicionada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "thoracic_drain_notes",
+      "label": "Observaciones vasculares",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "ecmo_cannula_present",
+      "label": "Cánulas ECMO visibles",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "ecmo_cannula_position",
+      "label": "Posición de cánulas",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Alterada / No evaluable",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Adecuada",
+        "Alterada",
+        "No evaluable"
+      ]
+    },
+    {
+      "key": "mechanical_support_device_visible",
+      "label": "Otro soporte circulatorio visible",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "bool"
+    },
+    {
+      "key": "mechanical_support_xray_notes",
+      "label": "Observaciones",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—",
+      "group": "devices",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "bone_findings",
+      "label": "Estructuras óseas",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sin hallazgos agudos / Alteradas / No evaluables",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin hallazgos agudos",
+        "Alteradas",
+        "No evaluables"
+      ]
+    },
+    {
+      "key": "bone_abnormality_notes",
+      "label": "Hallazgos óseos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "soft_tissue_status",
+      "label": "Tejidos blandos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Sin alteraciones / Alterados / No evaluables",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "select",
+      "options": [
+        "Sin alteraciones",
+        "Alterados",
+        "No evaluables"
+      ]
+    },
+    {
+      "key": "soft_tissue_notes",
+      "label": "Hallazgos de tejidos blandos",
+      "type": "VARCHAR(750)",
+      "ui": "Textarea",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "—",
+      "group": "other",
+      "scope": "xray",
+      "mode": "textarea"
+    },
+    {
+      "key": "cardiovascular_xray_summary",
+      "label": "Resumen cardiovascular",
+      "type": "TEXT",
+      "ui": "Textarea",
+      "required": "No",
+      "format": "Máx. 1.500 caracteres",
+      "rule": "Integrar silueta + vascularidad + congestión",
+      "group": "other",
+      "scope": "xray",
+      "mode": "textarea"
+    }
+  ]
+}

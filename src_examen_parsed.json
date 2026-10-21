@@ -1,0 +1,2671 @@
+{
+  "spec": [
+    {
+      "key": "weight_kg",
+      "label": "Peso",
+      "type": "DECIMAL(5,2)",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "0,20–500,00 kg",
+      "rule": "No aceptar valores fuera de rango"
+    },
+    {
+      "key": "weight_percentile",
+      "label": "Percentil de presión arterial",
+      "type": "VARCHAR(150)",
+      "ui": "Text input",
+      "required": "Sí",
+      "format": "Alfanumérico",
+      "rule": "—"
+    },
+    {
+      "key": "height_cm",
+      "label": "Talla",
+      "type": "DECIMAL(5,1)",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "10–230 cm",
+      "rule": "No aceptar valores fuera de rango"
+    },
+    {
+      "key": "height_percentile",
+      "label": "Percentil de presión arterial",
+      "type": "VARCHAR(150)",
+      "ui": "Text input",
+      "required": "Sí",
+      "format": "Alfanumérico",
+      "rule": "—"
+    },
+    {
+      "key": "bmi",
+      "label": "Índice de masa corporal",
+      "type": "DECIMAL(5,2)",
+      "ui": "Solo lectura",
+      "required": "Automático",
+      "format": "kg/m²",
+      "rule": "Calcular automáticamente con peso y talla"
+    },
+    {
+      "key": "bsa",
+      "label": "Superficie corporal",
+      "type": "DECIMAL(5,3)",
+      "ui": "Solo lectura",
+      "required": "Automático",
+      "format": "m²",
+      "rule": "Calcular automáticamente con fórmula institucional"
+    },
+    {
+      "key": "heart_rate",
+      "label": "Frecuencia cardíaca",
+      "type": "SMALLINT",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "0–300 lpm",
+      "rule": "No aceptar valores fuera de rango"
+    },
+    {
+      "key": "respiratory_rate",
+      "label": "Frecuencia respiratoria",
+      "type": "SMALLINT",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "0–100 rpm",
+      "rule": "No aceptar valores fuera de rango"
+    },
+    {
+      "key": "oxygen_saturation",
+      "label": "Saturación de oxígeno",
+      "type": "TINYINT",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "20–100 %",
+      "rule": "No aceptar >100 %"
+    },
+    {
+      "key": "oxygen_support",
+      "label": "Soporte de oxígeno al momento de SpO₂",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Recomendado",
+      "format": "Aire ambiente / Cánula nasal / Mascarilla / Alto flujo / Ventilación / Otro",
+      "rule": "Adaptación HCIL para interpretar correctamente SpO₂"
+    },
+    {
+      "key": "oxygen_flow",
+      "label": "Flujo de oxígeno",
+      "type": "DECIMAL(4,1)",
+      "ui": "Numeric input",
+      "required": "Condicional",
+      "format": "L/min",
+      "rule": "Mostrar si recibe oxígeno"
+    },
+    {
+      "key": "bp_extremity",
+      "label": "Extremidad",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Brazo derecho / Brazo izquierdo / Pierna derecha / Pierna izquierda",
+      "rule": "Brazo derecho como referencia principal"
+    },
+    {
+      "key": "bp_systolic",
+      "label": "Presión arterial sistólica",
+      "type": "SMALLINT",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "mmHg",
+      "rule": "Número entero"
+    },
+    {
+      "key": "bp_diastolic",
+      "label": "Presión arterial diastólica",
+      "type": "SMALLINT",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "mmHg",
+      "rule": "Debe ser < sistólica"
+    },
+    {
+      "key": "bp_percentile",
+      "label": "Percentil de presión arterial",
+      "type": "VARCHAR(150)",
+      "ui": "Text input",
+      "required": "Sí",
+      "format": "Alfanumérico",
+      "rule": "—"
+    },
+    {
+      "key": "perfusion_status",
+      "label": "Estado de perfusión",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Bien perfundido / Hipoperfundido",
+      "rule": "Una opción"
+    },
+    {
+      "key": "skin_findings",
+      "label": "Piel",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Normal / Palidez / Rubicundez / Diaforesis",
+      "rule": "Normal excluye hallazgos patológicos"
+    },
+    {
+      "key": "general_exam_notes",
+      "label": "Otros hallazgos generales",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto clínico",
+      "rule": "Complementario; no sustituye campos estructurados"
+    },
+    {
+      "key": "anterior_chest_inspection",
+      "label": "Inspección del tórax/precordio",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Normal / Simétrico / Asimétrico / Pectus excavatum / Pectus carinatum",
+      "rule": "Normal debe excluir anomalías"
+    },
+    {
+      "key": "sternotomy_scar",
+      "label": "Cicatriz de esternotomía",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—"
+    },
+    {
+      "key": "thoracotomy_scar",
+      "label": "Cicatriz de toracotomía",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—"
+    },
+    {
+      "key": "precordial_palpation",
+      "label": "Palpación precordial",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Normal / Hiperdinámico / Frémito / Impulso sostenido / Latido sistólico palpable / Retracción sistólica palpable",
+      "rule": "Normal excluye hallazgos anormales"
+    },
+    {
+      "key": "thrill_present",
+      "label": "Frémito",
+      "type": "BOOLEAN",
+      "ui": "Checkbox / derivado",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Si Sí puede habilitar localización"
+    },
+    {
+      "key": "thrill_location",
+      "label": "Localización del frémito",
+      "type": "ENUM/FK",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Catálogo de focos cardíacos",
+      "rule": "Mostrar si hay frémito"
+    },
+    {
+      "key": "pmi_type",
+      "label": "Latido sistólico",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Desplazado / No palpable",
+      "rule": "—"
+    },
+    {
+      "key": "pmi_side",
+      "label": "Lado",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Izquierdo / Derecho / Central",
+      "rule": "Si localización anormal"
+    },
+    {
+      "key": "pmi_intercostal_space",
+      "label": "Espacio intercostal",
+      "type": "TINYINT",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "1–8",
+      "rule": "—"
+    },
+    {
+      "key": "pmi_reference_line",
+      "label": "Línea anatómica",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Paraesternal / Medioclavicular / Axilar anterior / Otra",
+      "rule": "—"
+    },
+    {
+      "key": "pmi_notes",
+      "label": "Observaciones del PMI",
+      "type": "VARCHAR(250)",
+      "ui": "Text input",
+      "required": "No",
+      "format": "Alfanumérico",
+      "rule": "Principalmente si desplazado/anormal"
+    },
+    {
+      "key": "precordial_palpation_notes",
+      "label": "Observaciones de palpación",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Alfanumérico",
+      "rule": "—"
+    },
+    {
+      "key": "lung_auscultation",
+      "label": "Auscultación pulmonar",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Recomendado",
+      "format": "Murmullo vesicular conservado / Disminuido / Crepitantes / Sibilancias / Roncus / Otro",
+      "rule": "Permitir múltiples"
+    },
+    {
+      "key": "lung_findings_side",
+      "label": "Distribución",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Bilateral / Derecho / Izquierdo",
+      "rule": "Si existe hallazgo"
+    },
+    {
+      "key": "respiratory_effort",
+      "label": "Trabajo respiratorio",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Recomendado",
+      "format": "Normal / Tiraje / Aleteo nasal / Quejido / Taquipnea / Otro",
+      "rule": "Normal excluye hallazgos"
+    },
+    {
+      "key": "respiratory_exam_notes",
+      "label": "Observaciones respiratorias",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto clínico",
+      "rule": "—"
+    },
+    {
+      "key": "heart_sounds",
+      "label": "Ruidos/hallazgos auscultatorios",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "S1 / S2 / S3 / S4 / Galope de sumación / Click sistólico / Chasquido de apertura / Roce / Whoop / Knock",
+      "rule": "Permitir múltiples"
+    },
+    {
+      "key": "s1_type",
+      "label": "Características de S1",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Único / Desdoblamiento fisiológico / Desdoblamiento amplio / hipofonético / hiperfonético / Soplo",
+      "rule": "Permitir múltiples"
+    },
+    {
+      "key": "murmur_s1_present",
+      "label": "Soplo cardíaco",
+      "type": "BOOLEAN",
+      "ui": "Radio Sí/No",
+      "required": "Sí",
+      "format": "Sí / No",
+      "rule": "Si Sí, abrir submódulo"
+    },
+    {
+      "key": "murmur_s1_phase",
+      "label": "Fase del soplo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Protosistólico / Mesosistólico / Holosistólico / Continuo",
+      "rule": "Obligatorio si existe soplo"
+    },
+    {
+      "key": "murmur_s1_location",
+      "label": "Máxima intensidad/localización",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Ápex / Borde esternal inferior izquierdo / Borde esternal medio izquierdo / Borde esternal superior izquierdo / Borde esternal superior derecho / Borde esternal medio derecho / Borde esternal inferior derecho / Hemitórax derecho / Hemitórax izquierdo / Línea axilar anterior izquierda / Axila izquierda / Línea axilar anterior derecha / Axila derecha / Espalda / Infraclavicular izquierda / Infraclavicular derecha",
+      "rule": "Obligatorio si existe soplo"
+    },
+    {
+      "key": "murmur_s1_grade",
+      "label": "Grado del soplo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "I/VI / II/VI / III/VI / IV/VI / V/VI / VI/VI",
+      "rule": "Obligatorio si existe soplo"
+    },
+    {
+      "key": "murmur_s1_pitch",
+      "label": "Tono/frecuencia",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Alta / Media / Baja",
+      "rule": "Una opción"
+    },
+    {
+      "key": "murmur_s1_character",
+      "label": "Característica del soplo",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "Vibratorio / Soplante / Áspero-rudo / Multifrecuencia / Chillón / En maquinaria / Inespecífico",
+      "rule": "Permitir múltiples"
+    },
+    {
+      "key": "murmur_s1_radiation",
+      "label": "Irradiación del soplo",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "No",
+      "format": "Cuello/carótidas / Axila izquierda / Axila derecha / Espalda / Infraclavicular / Otro / No irradia",
+      "rule": "—"
+    },
+    {
+      "key": "murmur_s1_radiation_other",
+      "label": "Otra irradiación",
+      "type": "VARCHAR(100)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "Mostrar si Otro"
+    },
+    {
+      "key": "s2_type",
+      "label": "Características de S2",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Único / Desdoblamiento fisiólógico / Desdoblamiento amplio, fijo y permanente / P2 hiperfonético / Soplo",
+      "rule": "Permitir múltiples cuando corresponda"
+    },
+    {
+      "key": "murmur_s2_present",
+      "label": "Soplo cardíaco",
+      "type": "BOOLEAN",
+      "ui": "Radio Sí/No",
+      "required": "Sí",
+      "format": "Sí / No",
+      "rule": "Si Sí, abrir submódulo"
+    },
+    {
+      "key": "murmur_s2_phase",
+      "label": "Fase del soplo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Protosistólico / Mesosistólico / Holosistólico / Continuo",
+      "rule": "Obligatorio si existe soplo"
+    },
+    {
+      "key": "murmur_s2_location",
+      "label": "Máxima intensidad/localización",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Ápex / Borde esternal inferior izquierdo / Borde esternal medio izquierdo / Borde esternal superior izquierdo / Borde esternal superior derecho / Borde esternal medio derecho / Borde esternal inferior derecho / Hemitórax derecho / Hemitórax izquierdo / Línea axilar anterior izquierda / Axila izquierda / Línea axilar anterior derecha / Axila derecha / Espalda / Infraclavicular izquierda / Infraclavicular derecha",
+      "rule": "Obligatorio si existe soplo"
+    },
+    {
+      "key": "murmur_s2_grade",
+      "label": "Grado del soplo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "I/VI / II/VI / III/VI / IV/VI / V/VI / VI/VI",
+      "rule": "Obligatorio si existe soplo"
+    },
+    {
+      "key": "murmur_s2_pitch",
+      "label": "Tono/frecuencia",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Alta / Media / Baja",
+      "rule": "Una opción"
+    },
+    {
+      "key": "murmur_s2_character",
+      "label": "Característica del soplo",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "Vibratorio / Soplante / Áspero-rudo / Multifrecuencia / Chillón / En maquinaria / Inespecífico",
+      "rule": "Permitir múltiples"
+    },
+    {
+      "key": "murmur_s2_radiation",
+      "label": "Irradiación del soplo",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "No",
+      "format": "Cuello/carótidas / Axila izquierda / Axila derecha / Espalda / Infraclavicular / Otro / No irradia",
+      "rule": "—"
+    },
+    {
+      "key": "murmur_s2_radiation_other",
+      "label": "Otra irradiación",
+      "type": "VARCHAR(100)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "Mostrar si Otro"
+    },
+    {
+      "key": "abdominal_inspection",
+      "label": "Inspección abdominal",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Plano / Globoso / Escafoide",
+      "rule": "—"
+    },
+    {
+      "key": "abdominal_auscultation",
+      "label": "Auscultación abdominal",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ruidos hidroaéreos presentes / Ruidos hidroaéreos ausentes",
+      "rule": "—"
+    },
+    {
+      "key": "abdominal_palpation",
+      "label": "Palpación abdominal",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Normal / Hepatomegalia / Esplenomegalia",
+      "rule": "Normal excluye hallazgos"
+    },
+    {
+      "key": "hepatomegaly_present",
+      "label": "Hepatomegalia",
+      "type": "BOOLEAN",
+      "ui": "Derivado",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Derivar de palpación"
+    },
+    {
+      "key": "liver_edge_cm",
+      "label": "Hígado palpable bajo reborde costal",
+      "type": "DECIMAL(4,1)",
+      "ui": "Numeric input",
+      "required": "Condicional",
+      "format": "cm",
+      "rule": "—"
+    },
+    {
+      "key": "splenomegaly_present",
+      "label": "Esplenomegalia",
+      "type": "BOOLEAN",
+      "ui": "Derivado",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "—"
+    },
+    {
+      "key": "abdominal_exam_notes",
+      "label": "Observaciones abdominales",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Alfanumérico",
+      "rule": "—"
+    },
+    {
+      "key": "extremity_appearance",
+      "label": "Apariencia de extremidades",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Normal / Cianosis / Hipocratismo digital / Edema",
+      "rule": "Normal excluye hallazgos"
+    },
+    {
+      "key": "edema_location",
+      "label": "Localización del edema",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "Miembros inferiores / Miembros superiores / Generalizado / Otro",
+      "rule": "Si Sí, abrir submódulo"
+    },
+    {
+      "key": "edema_grade",
+      "label": "Grado de edema",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "1+ / 2+ / 3+ / 4+",
+      "rule": "Adaptación clínica"
+    },
+    {
+      "key": "extremity_notes",
+      "label": "Observaciones",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Alfanumérico",
+      "rule": "—"
+    },
+    {
+      "key": "capillary_refill_seconds",
+      "label": "Llenado capilar",
+      "type": "DECIMAL(3,1)",
+      "ui": "Numeric input",
+      "required": "Sí",
+      "format": "Segundos",
+      "rule": "<2 s = normal; >2 s = retardado según definición AHA/ACC"
+    },
+    {
+      "key": "capillary_refill_status",
+      "label": "Estado del llenado capilar",
+      "type": "ENUM",
+      "ui": "Solo lectura",
+      "required": "Automático",
+      "format": "Normal / Retardado",
+      "rule": "Derivar de tiempo"
+    },
+    {
+      "key": "pulse_location",
+      "label": "Pulso arterial",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Braquial / Cubital / Radial / Femoral / Pedio / Tibial posterior / Carotídeo / Aorta abdominal",
+      "rule": "Catálogo AHA/ACC"
+    },
+    {
+      "key": "pulse_side",
+      "label": "Lado",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Derecho / Izquierdo / Central",
+      "rule": "Central para aorta abdominal"
+    },
+    {
+      "key": "pulse_amplitude",
+      "label": "Amplitud",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "0 ausente / 1+ disminuido / 2+ normal / 3+ aumentado / 4+ salton-water hammer",
+      "rule": "Una opción"
+    },
+    {
+      "key": "pulse_symmetry",
+      "label": "Simetría",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Simétricos / Asimétricos / No evaluable",
+      "rule": "Adaptación para comparación bilateral"
+    },
+    {
+      "key": "pulse_symmetry_notes",
+      "label": "Observaciones abdominales",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Alfanumérico",
+      "rule": "—"
+    },
+    {
+      "key": "external_genital_exam",
+      "label": "Genitales externos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / No evaluado / Alteración",
+      "rule": "Una opción"
+    },
+    {
+      "key": "external_genital_exam_notes",
+      "label": "Observaciones abdominales",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Alfanumérico",
+      "rule": "Obligatorio si existe alteración"
+    },
+    {
+      "key": "neurologic_exam_overall",
+      "label": "Examen neurológico global",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Anormal / No evaluable",
+      "rule": "Si = Anormal, exigir al menos un hallazgo anormal"
+    },
+    {
+      "key": "neurologic_exam_age_appropriate",
+      "label": "Examen acorde con edad y desarrollo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Sí / No / No evaluable",
+      "rule": "La valoración debe interpretarse según edad"
+    },
+    {
+      "key": "focal_neurologic_deficit",
+      "label": "Déficit neurológico focal",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "Si Presente, exigir descripción"
+    },
+    {
+      "key": "focal_neurologic_deficit_notes",
+      "label": "Descripción del déficit focal",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "Condicional",
+      "format": "Texto clínico",
+      "rule": "Mostrar si déficit focal = Presente"
+    },
+    {
+      "key": "consciousness_level",
+      "label": "Nivel de conciencia",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Alerta / Somnoliento / Obnubilado / Estupor / Coma / No evaluable",
+      "rule": "Una sola opción"
+    },
+    {
+      "key": "response_to_environment",
+      "label": "Respuesta al entorno",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuada para la edad / Disminuida / Irritable / No responde / No evaluable",
+      "rule": "Interpretar según edad"
+    },
+    {
+      "key": "behavior_status",
+      "label": "Conducta durante el examen",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Apropiada / Irritable / Agitada / Hipoactiva / No cooperador / Otro",
+      "rule": "Puede haber más de un hallazgo mediante Otro/nota"
+    },
+    {
+      "key": "behavior_notes",
+      "label": "Observaciones conductuales",
+      "type": "VARCHAR(300)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto",
+      "rule": "—"
+    },
+    {
+      "key": "gcs_required",
+      "label": "Aplicar escala de Glasgow",
+      "type": "BOOLEAN",
+      "ui": "Automático / Checkbox",
+      "required": "Condicional",
+      "format": "Sí / No",
+      "rule": "Activar si existe alteración de conciencia"
+    },
+    {
+      "key": "gcs_eye",
+      "label": "Glasgow – respuesta ocular",
+      "type": "TINYINT",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "1–4",
+      "rule": "Según escala"
+    },
+    {
+      "key": "gcs_verbal",
+      "label": "Glasgow – respuesta verbal",
+      "type": "TINYINT",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "1–5",
+      "rule": "Adaptar respuesta verbal a edad"
+    },
+    {
+      "key": "gcs_motor",
+      "label": "Glasgow – respuesta motora",
+      "type": "TINYINT",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "1–6",
+      "rule": "—"
+    },
+    {
+      "key": "gcs_total",
+      "label": "Glasgow total",
+      "type": "TINYINT",
+      "ui": "Solo lectura",
+      "required": "Automático",
+      "format": "3–15",
+      "rule": "eye + verbal + motor"
+    },
+    {
+      "key": "mental_status",
+      "label": "Estado mental",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Apropiado para edad / Alterado / No evaluable",
+      "rule": "Si Alterado, abrir detalle"
+    },
+    {
+      "key": "orientation_person",
+      "label": "Orientación en persona",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Conservada / Alterada / No evaluable",
+      "rule": "Solo cuando desarrollo permita evaluarla"
+    },
+    {
+      "key": "orientation_place",
+      "label": "Orientación en lugar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Conservada / Alterada / No evaluable",
+      "rule": "Según edad"
+    },
+    {
+      "key": "orientation_time",
+      "label": "Orientación en tiempo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Conservada / Alterada / No evaluable",
+      "rule": "Según edad"
+    },
+    {
+      "key": "attention_status",
+      "label": "Atención",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Adecuada / Disminuida / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "memory_status",
+      "label": "Memoria",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Conservada / Alterada / No evaluable",
+      "rule": "Solo si edad permite"
+    },
+    {
+      "key": "language_status",
+      "label": "Lenguaje",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Adecuado para edad / Retrasado / Disártrico / Afásico / No verbal por edad / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "mental_status_notes",
+      "label": "Observaciones de estado mental",
+      "type": "VARCHAR(500)",
+      "ui": "Textarea corta",
+      "required": "No",
+      "format": "Texto clínico",
+      "rule": "—"
+    },
+    {
+      "key": "pupil_symmetry",
+      "label": "Pupilas",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Isocóricas / Anisocóricas / No evaluable",
+      "rule": "Si anisocóricas, registrar tamaño"
+    },
+    {
+      "key": "right_pupil_mm",
+      "label": "Pupila derecha",
+      "type": "DECIMAL(2,1)",
+      "ui": "Numeric input",
+      "required": "No",
+      "format": "mm",
+      "rule": "1–9 mm"
+    },
+    {
+      "key": "left_pupil_mm",
+      "label": "Pupila izquierda",
+      "type": "DECIMAL(2,1)",
+      "ui": "Numeric input",
+      "required": "No",
+      "format": "mm",
+      "rule": "1–9 mm"
+    },
+    {
+      "key": "right_pupil_reactivity",
+      "label": "Reactividad pupilar derecha",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Reactiva / Hiporreactiva / Arreactiva / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "left_pupil_reactivity",
+      "label": "Reactividad pupilar izquierda",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Reactiva / Hiporreactiva / Arreactiva / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "extraocular_movements",
+      "label": "Movimientos oculares extrínsecos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Conservados / Alterados / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "gaze_alignment",
+      "label": "Alineación ocular",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Estrabismo / Desviación conjugada / Otro / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "nystagmus",
+      "label": "Nistagmo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "Si presente, describir"
+    },
+    {
+      "key": "nystagmus_notes",
+      "label": "Características del nistagmo",
+      "type": "VARCHAR(250)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "Si nistagmo presente"
+    },
+    {
+      "key": "ptosis",
+      "label": "Ptosis palpebral",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Derecha / Izquierda / Bilateral / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "cranial_nerve",
+      "label": "Par craneal",
+      "type": "ENUM",
+      "ui": "Matriz / Select",
+      "required": "Sí",
+      "format": "I / II / III / IV / V / VI / VII / VIII / IX / X / XI / XII",
+      "rule": "Un registro por par"
+    },
+    {
+      "key": "cranial_nerve_status",
+      "label": "Resultado",
+      "type": "ENUM",
+      "ui": "Radio en matriz",
+      "required": "Sí",
+      "format": "Normal / Anormal / No evaluado / No evaluable por edad",
+      "rule": "Si Anormal, exigir observación"
+    },
+    {
+      "key": "cranial_nerve_notes",
+      "label": "Hallazgo",
+      "type": "VARCHAR(250)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto clínico",
+      "rule": "Mostrar si Anormal"
+    },
+    {
+      "key": "facial_symmetry",
+      "label": "Simetría facial",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Simétrica / Asimétrica / No evaluable",
+      "rule": "Evaluar reposo y movimiento"
+    },
+    {
+      "key": "facial_movement",
+      "label": "Movimientos faciales",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Conservados / Disminuidos / Ausentes / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "palate_movement",
+      "label": "Elevación del paladar",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Simétrica / Asimétrica / No evaluable",
+      "rule": "Según edad/cooperación"
+    },
+    {
+      "key": "swallowing_status",
+      "label": "Deglución",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Disfagia / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "voice_status",
+      "label": "Voz/llanto",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Disfónica / Débil / No evaluable",
+      "rule": "En lactantes valorar llanto"
+    },
+    {
+      "key": "tongue_movement",
+      "label": "Movilidad lingual",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Desviación derecha / Desviación izquierda / Fasciculaciones / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "spontaneous_movements",
+      "label": "Movimientos espontáneos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Simétricos / Asimétricos / Disminuidos / Ausentes / No evaluable",
+      "rule": "Fundamental en lactantes"
+    },
+    {
+      "key": "motor_symmetry",
+      "label": "Simetría motora",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Simétrica / Asimétrica / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "muscle_bulk",
+      "label": "Trofismo muscular",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Hipotrofia / Atrofia / Hipertrofia / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "motor_deficit",
+      "label": "Déficit motor",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "Si Presente, registrar extremidad"
+    },
+    {
+      "key": "pronator_drift",
+      "label": "Maniobra de Barré/pronator drift",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "Solo si edad y cooperación permiten"
+    },
+    {
+      "key": "involuntary_movements",
+      "label": "Movimientos involuntarios",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Sí",
+      "format": "Ninguno / Temblor / Corea / Atetosis / Distonía / Mioclonías / Tics / Otro",
+      "rule": "Ninguno excluye demás"
+    },
+    {
+      "key": "involuntary_movement_other",
+      "label": "Otro movimiento involuntario",
+      "type": "VARCHAR(150)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "Si Otro"
+    },
+    {
+      "key": "muscle_tone_global",
+      "label": "Tono muscular global",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Hipotonía / Hipertonía / Mixto / No evaluable",
+      "rule": "Si anormal, registrar distribución"
+    },
+    {
+      "key": "tone_distribution",
+      "label": "Distribución de alteración del tono",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "MSD / MSI / MID / MII / Axial / Generalizado",
+      "rule": "Mostrar si tono ≠ Normal"
+    },
+    {
+      "key": "tone_symmetry",
+      "label": "Simetría del tono",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Simétrica / Asimétrica / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "strength_assessment_method",
+      "label": "Método de valoración de fuerza",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Escala 0–5 / Evaluación funcional / No evaluable",
+      "rule": "Según edad/cooperación"
+    },
+    {
+      "key": "right_upper_strength",
+      "label": "Fuerza miembro superior derecho",
+      "type": "TINYINT/ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "0–5 / Normal / Disminuida / No evaluable",
+      "rule": "Según método"
+    },
+    {
+      "key": "left_upper_strength",
+      "label": "Fuerza miembro superior izquierdo",
+      "type": "TINYINT/ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "0–5 / Normal / Disminuida / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "right_lower_strength",
+      "label": "Fuerza miembro inferior derecho",
+      "type": "TINYINT/ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "0–5 / Normal / Disminuida / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "left_lower_strength",
+      "label": "Fuerza miembro inferior izquierdo",
+      "type": "TINYINT/ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "0–5 / Normal / Disminuida / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "reflex_type",
+      "label": "Reflejo",
+      "type": "ENUM",
+      "ui": "Matriz",
+      "required": "Sí",
+      "format": "Bicipital / Tricipital / Braquiorradial / Rotuliano / Aquíleo",
+      "rule": "Registrar bilateralmente"
+    },
+    {
+      "key": "reflex_side",
+      "label": "Lado",
+      "type": "ENUM",
+      "ui": "Matriz",
+      "required": "Sí",
+      "format": "Derecho / Izquierdo",
+      "rule": "—"
+    },
+    {
+      "key": "reflex_grade",
+      "label": "Respuesta",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "0 / 1+ / 2+ / 3+ / 4+ / No evaluable",
+      "rule": "2+ como respuesta habitual"
+    },
+    {
+      "key": "reflex_symmetry",
+      "label": "Simetría",
+      "type": "ENUM",
+      "ui": "Solo lectura / selección",
+      "required": "Automático/Recomendado",
+      "format": "Simétricos / Asimétricos",
+      "rule": "Comparar lados"
+    },
+    {
+      "key": "clonus_right",
+      "label": "Clonus derecho",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "clonus_left",
+      "label": "Clonus izquierdo",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "plantar_response_right",
+      "label": "Respuesta plantar derecha",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Flexora / Extensora / Indiferente / No evaluable",
+      "rule": "Interpretar según edad"
+    },
+    {
+      "key": "plantar_response_left",
+      "label": "Respuesta plantar izquierda",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Flexora / Extensora / Indiferente / No evaluable",
+      "rule": "Interpretar según edad"
+    },
+    {
+      "key": "light_touch",
+      "label": "Tacto ligero",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Normal / Disminuido / Ausente / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "pain_sensation",
+      "label": "Sensibilidad dolorosa",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Disminuida / Ausente / No evaluable",
+      "rule": "Cuando esté indicado"
+    },
+    {
+      "key": "temperature_sensation",
+      "label": "Sensibilidad térmica",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterada / No evaluable",
+      "rule": "No necesaria en tamizaje normal"
+    },
+    {
+      "key": "vibration_sensation",
+      "label": "Sensibilidad vibratoria",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterada / No evaluable",
+      "rule": "Según edad"
+    },
+    {
+      "key": "proprioception",
+      "label": "Propiocepción",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterada / No evaluable",
+      "rule": "Según edad"
+    },
+    {
+      "key": "sensory_deficit_distribution",
+      "label": "Distribución del déficit sensitivo",
+      "type": "VARCHAR(250)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto clínico",
+      "rule": "Si sensibilidad alterada"
+    },
+    {
+      "key": "coordination_overall",
+      "label": "Coordinación",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Normal / Alterada / No evaluable por edad",
+      "rule": "Si Alterada, abrir pruebas"
+    },
+    {
+      "key": "finger_to_nose",
+      "label": "Índice-nariz",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Normal / Disimetría / No evaluable",
+      "rule": "Según edad"
+    },
+    {
+      "key": "rapid_alternating_movements",
+      "label": "Movimientos alternantes rápidos",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Normal / Disdiadococinesia / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "heel_to_shin",
+      "label": "Talón-rodilla",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterado / No evaluable",
+      "rule": "Niño cooperador"
+    },
+    {
+      "key": "truncal_ataxia",
+      "label": "Ataxia troncal",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Sí",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "balance_status",
+      "label": "Equilibrio",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Normal / Alterado / No evaluable",
+      "rule": "Solo edad apropiada"
+    },
+    {
+      "key": "romberg_test",
+      "label": "Romberg",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Negativo / Positivo / No evaluable",
+      "rule": "Según edad y cooperación"
+    },
+    {
+      "key": "single_leg_stance",
+      "label": "Apoyo monopodal",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterado / No evaluable",
+      "rule": "Según edad"
+    },
+    {
+      "key": "gait_status",
+      "label": "Marcha",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Normal / Anormal / No camina por edad / No evaluable",
+      "rule": "Si Anormal, abrir características"
+    },
+    {
+      "key": "gait_abnormality",
+      "label": "Tipo de alteración de la marcha",
+      "type": "M / ARRAY FK",
+      "ui": "Select múltiple",
+      "required": "Condicional",
+      "format": "Atáxica / Base amplia / Circunducción / Espástica / Hemiparética / En puntillas / Equina / Otro",
+      "rule": "Mostrar si marcha anormal"
+    },
+    {
+      "key": "heel_walking",
+      "label": "Marcha sobre talones",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterada / No evaluable",
+      "rule": "Edad apropiada"
+    },
+    {
+      "key": "toe_walking_test",
+      "label": "Marcha sobre puntas",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterada / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "tandem_gait",
+      "label": "Marcha en tándem",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Normal / Alterada / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "gait_other",
+      "label": "Otra alteración de marcha",
+      "type": "VARCHAR(150)",
+      "ui": "Text input",
+      "required": "Condicional",
+      "format": "Texto",
+      "rule": "Si Otro"
+    },
+    {
+      "key": "head_circumference_cm",
+      "label": "Perímetro cefálico",
+      "type": "DECIMAL(4,1)",
+      "ui": "Numeric input",
+      "required": "Condicional",
+      "format": "cm",
+      "rule": "Activar según edad definida por protocolo"
+    },
+    {
+      "key": "anterior_fontanelle",
+      "label": "Fontanela anterior",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Normotensa / Abombada / Deprimida / Cerrada / No evaluable",
+      "rule": "Mostrar mientras sea clínicamente aplicable"
+    },
+    {
+      "key": "infant_posture",
+      "label": "Postura espontánea",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuada / Anormal / Asimétrica / No evaluable",
+      "rule": "Lactantes"
+    },
+    {
+      "key": "infant_antigravity_movement",
+      "label": "Movimientos contra gravedad",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Presentes y simétricos / Disminuidos / Asimétricos / Ausentes",
+      "rule": "Lactantes"
+    },
+    {
+      "key": "head_control",
+      "label": "Control cefálico",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Adecuado para edad / Retrasado / No evaluable",
+      "rule": "Edad dependiente"
+    },
+    {
+      "key": "primitive_reflex",
+      "label": "Reflejo primitivo",
+      "type": "ENUM",
+      "ui": "Matriz",
+      "required": "Condicional",
+      "format": "Moro / Búsqueda / Succión / Prensión palmar / Prensión plantar / Tónico cervical asimétrico",
+      "rule": "Solo cuando corresponda por edad"
+    },
+    {
+      "key": "primitive_reflex_status",
+      "label": "Respuesta",
+      "type": "ENUM",
+      "ui": "Matriz",
+      "required": "Condicional",
+      "format": "Presente / Ausente / Asimétrico / No evaluable",
+      "rule": "Interpretar según edad"
+    },
+    {
+      "key": "meningeal_signs_assessed",
+      "label": "Signos meníngeos evaluados",
+      "type": "BOOLEAN",
+      "ui": "Checkbox",
+      "required": "No",
+      "format": "Sí / No",
+      "rule": "Si Sí, desplegar campos"
+    },
+    {
+      "key": "neck_stiffness",
+      "label": "Rigidez de nuca",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "Condicional",
+      "format": "Ausente / Presente / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "kernig_sign",
+      "label": "Signo de Kernig",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Negativo / Positivo / No evaluable",
+      "rule": "—"
+    },
+    {
+      "key": "brudzinski_sign",
+      "label": "Signo de Brudzinski",
+      "type": "ENUM",
+      "ui": "Select simple",
+      "required": "No",
+      "format": "Negativo / Positivo / No evaluable",
+      "rule": "—"
+    }
+  ],
+  "groups": [
+    {
+      "key": "vitals",
+      "title": "Antropometría y signos vitales",
+      "ranges": [
+        [
+          "Antropometría",
+          0,
+          6
+        ],
+        [
+          "Frecuencia y oxigenación",
+          6,
+          11
+        ],
+        [
+          "Presión arterial",
+          11,
+          15
+        ]
+      ]
+    },
+    {
+      "key": "general",
+      "title": "Estado general y exploración del tórax",
+      "ranges": [
+        [
+          "Estado general y perfusión",
+          15,
+          18
+        ],
+        [
+          "Inspección torácica",
+          18,
+          21
+        ],
+        [
+          "Palpación precordial",
+          21,
+          30
+        ]
+      ]
+    },
+    {
+      "key": "auscult",
+      "title": "Auscultación cardiopulmonar",
+      "ranges": [
+        [
+          "Auscultación respiratoria",
+          30,
+          34
+        ],
+        [
+          "Ruidos cardíacos y S1",
+          34,
+          44
+        ],
+        [
+          "S2 y segundo submódulo de soplo",
+          44,
+          53
+        ]
+      ]
+    },
+    {
+      "key": "other",
+      "title": "Abdomen, extremidades y genitales",
+      "ranges": [
+        [
+          "Abdomen",
+          53,
+          60
+        ],
+        [
+          "Extremidades y perfusión periférica",
+          60,
+          71
+        ],
+        [
+          "Genitales",
+          71,
+          73
+        ]
+      ]
+    },
+    {
+      "key": "neuro1",
+      "title": "Neurología · Evaluación global",
+      "ranges": [
+        [
+          "Evaluación neurológica global",
+          73,
+          77
+        ],
+        [
+          "Estado de conciencia",
+          77,
+          81
+        ],
+        [
+          "Escala de Glasgow",
+          81,
+          86
+        ],
+        [
+          "Estado mental y cognición",
+          86,
+          94
+        ],
+        [
+          "Pupilas",
+          94,
+          99
+        ]
+      ]
+    },
+    {
+      "key": "neuro2",
+      "title": "Neurología · Pares craneales",
+      "ranges": [
+        [
+          "Motilidad ocular",
+          99,
+          104
+        ],
+        [
+          "Pares craneales (matriz)",
+          104,
+          107
+        ],
+        [
+          "Simetría facial y función oromotora",
+          107,
+          113
+        ]
+      ]
+    },
+    {
+      "key": "neuro3",
+      "title": "Neurología · Motricidad y reflejos",
+      "ranges": [
+        [
+          "Función motora global",
+          113,
+          120
+        ],
+        [
+          "Tono muscular",
+          120,
+          123
+        ],
+        [
+          "Fuerza muscular",
+          123,
+          128
+        ],
+        [
+          "Reflejos osteotendinosos",
+          128,
+          132
+        ],
+        [
+          "Clonus y respuesta plantar",
+          132,
+          136
+        ]
+      ]
+    },
+    {
+      "key": "neuro4",
+      "title": "Neurología · Sensibilidad y desarrollo",
+      "ranges": [
+        [
+          "Sensibilidad",
+          136,
+          142
+        ],
+        [
+          "Coordinación",
+          142,
+          147
+        ],
+        [
+          "Equilibrio y marcha",
+          147,
+          156
+        ],
+        [
+          "Evaluación especial del lactante",
+          156,
+          163
+        ],
+        [
+          "Signos meníngeos",
+          163,
+          167
+        ]
+      ]
+    }
+  ],
+  "modes": {
+    "weight_kg": "number",
+    "weight_percentile": "text",
+    "height_cm": "number",
+    "height_percentile": "text",
+    "bmi": "derived",
+    "bsa": "derived",
+    "heart_rate": "number",
+    "respiratory_rate": "number",
+    "oxygen_saturation": "number",
+    "oxygen_support": "select",
+    "oxygen_flow": "number",
+    "bp_extremity": "select",
+    "bp_systolic": "number",
+    "bp_diastolic": "number",
+    "bp_percentile": "text",
+    "perfusion_status": "select",
+    "skin_findings": "multi",
+    "general_exam_notes": "textarea",
+    "anterior_chest_inspection": "multi",
+    "sternotomy_scar": "boolean",
+    "thoracotomy_scar": "boolean",
+    "precordial_palpation": "multi",
+    "thrill_present": "derived",
+    "thrill_location": "select",
+    "pmi_type": "select",
+    "pmi_side": "select",
+    "pmi_intercostal_space": "select",
+    "pmi_reference_line": "select",
+    "pmi_notes": "text",
+    "precordial_palpation_notes": "textarea",
+    "lung_auscultation": "multi",
+    "lung_findings_side": "select",
+    "respiratory_effort": "multi",
+    "respiratory_exam_notes": "textarea",
+    "heart_sounds": "multi",
+    "s1_type": "multi",
+    "murmur_s1_present": "radio",
+    "murmur_s1_phase": "select",
+    "murmur_s1_location": "multi",
+    "murmur_s1_grade": "select",
+    "murmur_s1_pitch": "select",
+    "murmur_s1_character": "multi",
+    "murmur_s1_radiation": "multi",
+    "murmur_s1_radiation_other": "text",
+    "s2_type": "multi",
+    "murmur_s2_present": "radio",
+    "murmur_s2_phase": "select",
+    "murmur_s2_location": "multi",
+    "murmur_s2_grade": "select",
+    "murmur_s2_pitch": "select",
+    "murmur_s2_character": "multi",
+    "murmur_s2_radiation": "multi",
+    "murmur_s2_radiation_other": "text",
+    "abdominal_inspection": "select",
+    "abdominal_auscultation": "select",
+    "abdominal_palpation": "multi",
+    "hepatomegaly_present": "derived",
+    "liver_edge_cm": "number",
+    "splenomegaly_present": "derived",
+    "abdominal_exam_notes": "textarea",
+    "extremity_appearance": "multi",
+    "edema_location": "multi",
+    "edema_grade": "select",
+    "extremity_notes": "textarea",
+    "capillary_refill_seconds": "number",
+    "capillary_refill_status": "derived",
+    "pulse_location": "select",
+    "pulse_side": "select",
+    "pulse_amplitude": "select",
+    "pulse_symmetry": "select",
+    "pulse_symmetry_notes": "textarea",
+    "external_genital_exam": "select",
+    "external_genital_exam_notes": "textarea",
+    "neurologic_exam_overall": "select",
+    "neurologic_exam_age_appropriate": "select",
+    "focal_neurologic_deficit": "select",
+    "focal_neurologic_deficit_notes": "textarea",
+    "consciousness_level": "select",
+    "response_to_environment": "select",
+    "behavior_status": "select",
+    "behavior_notes": "textarea",
+    "gcs_required": "boolean",
+    "gcs_eye": "select",
+    "gcs_verbal": "select",
+    "gcs_motor": "select",
+    "gcs_total": "derived",
+    "mental_status": "select",
+    "orientation_person": "select",
+    "orientation_place": "select",
+    "orientation_time": "select",
+    "attention_status": "select",
+    "memory_status": "select",
+    "language_status": "select",
+    "mental_status_notes": "textarea",
+    "pupil_symmetry": "select",
+    "right_pupil_mm": "number",
+    "left_pupil_mm": "number",
+    "right_pupil_reactivity": "select",
+    "left_pupil_reactivity": "select",
+    "extraocular_movements": "select",
+    "gaze_alignment": "select",
+    "nystagmus": "select",
+    "nystagmus_notes": "text",
+    "ptosis": "select",
+    "cranial_nerve": "matrix",
+    "cranial_nerve_status": "matrix",
+    "cranial_nerve_notes": "matrix",
+    "facial_symmetry": "select",
+    "facial_movement": "select",
+    "palate_movement": "select",
+    "swallowing_status": "select",
+    "voice_status": "select",
+    "tongue_movement": "select",
+    "spontaneous_movements": "select",
+    "motor_symmetry": "select",
+    "muscle_bulk": "select",
+    "motor_deficit": "select",
+    "pronator_drift": "select",
+    "involuntary_movements": "multi",
+    "involuntary_movement_other": "text",
+    "muscle_tone_global": "select",
+    "tone_distribution": "multi",
+    "tone_symmetry": "select",
+    "strength_assessment_method": "select",
+    "right_upper_strength": "select",
+    "left_upper_strength": "select",
+    "right_lower_strength": "select",
+    "left_lower_strength": "select",
+    "reflex_type": "matrix",
+    "reflex_side": "matrix",
+    "reflex_grade": "matrix",
+    "reflex_symmetry": "derived",
+    "clonus_right": "select",
+    "clonus_left": "select",
+    "plantar_response_right": "select",
+    "plantar_response_left": "select",
+    "light_touch": "select",
+    "pain_sensation": "select",
+    "temperature_sensation": "select",
+    "vibration_sensation": "select",
+    "proprioception": "select",
+    "sensory_deficit_distribution": "text",
+    "coordination_overall": "select",
+    "finger_to_nose": "select",
+    "rapid_alternating_movements": "select",
+    "heel_to_shin": "select",
+    "truncal_ataxia": "select",
+    "balance_status": "select",
+    "romberg_test": "select",
+    "single_leg_stance": "select",
+    "gait_status": "select",
+    "gait_abnormality": "multi",
+    "heel_walking": "select",
+    "toe_walking_test": "select",
+    "tandem_gait": "select",
+    "gait_other": "text",
+    "head_circumference_cm": "number",
+    "anterior_fontanelle": "select",
+    "infant_posture": "select",
+    "infant_antigravity_movement": "select",
+    "head_control": "select",
+    "primitive_reflex": "matrix",
+    "primitive_reflex_status": "matrix",
+    "meningeal_signs_assessed": "boolean",
+    "neck_stiffness": "select",
+    "kernig_sign": "select",
+    "brudzinski_sign": "select"
+  },
+  "catalog": {
+    "oxygen_support": [
+      "Aire ambiente",
+      "Cánula nasal",
+      "Mascarilla",
+      "Alto flujo",
+      "Ventilación",
+      "Otro"
+    ],
+    "bp_extremity": [
+      "Brazo derecho",
+      "Brazo izquierdo",
+      "Pierna derecha",
+      "Pierna izquierda"
+    ],
+    "perfusion_status": [
+      "Bien perfundido",
+      "Hipoperfundido"
+    ],
+    "skin_findings": [
+      "Normal",
+      "Palidez",
+      "Rubicundez",
+      "Diaforesis"
+    ],
+    "anterior_chest_inspection": [
+      "Normal",
+      "Simétrico",
+      "Asimétrico",
+      "Pectus excavatum",
+      "Pectus carinatum"
+    ],
+    "precordial_palpation": [
+      "Normal",
+      "Hiperdinámico",
+      "Frémito",
+      "Impulso sostenido",
+      "Latido sistólico palpable",
+      "Retracción sistólica palpable"
+    ],
+    "thrill_location": [
+      "Foco aórtico",
+      "Foco pulmonar",
+      "Foco aórtico accesorio",
+      "Foco tricuspídeo",
+      "Foco mitral"
+    ],
+    "pmi_type": [
+      "Normal",
+      "Desplazado",
+      "No palpable"
+    ],
+    "pmi_side": [
+      "Izquierdo",
+      "Derecho",
+      "Central"
+    ],
+    "pmi_intercostal_space": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "pmi_reference_line": [
+      "Paraesternal",
+      "Medioclavicular",
+      "Axilar anterior",
+      "Otra"
+    ],
+    "lung_auscultation": [
+      "Murmullo vesicular conservado",
+      "Disminuido",
+      "Crepitantes",
+      "Sibilancias",
+      "Roncus",
+      "Otro"
+    ],
+    "lung_findings_side": [
+      "Bilateral",
+      "Derecho",
+      "Izquierdo"
+    ],
+    "respiratory_effort": [
+      "Normal",
+      "Tiraje",
+      "Aleteo nasal",
+      "Quejido",
+      "Taquipnea",
+      "Otro"
+    ],
+    "heart_sounds": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "Galope de sumación",
+      "Click sistólico",
+      "Chasquido de apertura",
+      "Roce",
+      "Whoop",
+      "Knock"
+    ],
+    "s1_type": [
+      "Único",
+      "Desdoblamiento fisiológico",
+      "Desdoblamiento amplio",
+      "Hipofonético",
+      "Hiperfonético",
+      "Soplo"
+    ],
+    "murmur_s1_phase": [
+      "Protosistólico",
+      "Mesosistólico",
+      "Holosistólico",
+      "Continuo"
+    ],
+    "murmur_s1_location": [
+      "Ápex",
+      "Borde esternal inferior izquierdo",
+      "Borde esternal medio izquierdo",
+      "Borde esternal superior izquierdo",
+      "Borde esternal superior derecho",
+      "Borde esternal medio derecho",
+      "Borde esternal inferior derecho",
+      "Hemitórax derecho",
+      "Hemitórax izquierdo",
+      "Línea axilar anterior izquierda",
+      "Axila izquierda",
+      "Línea axilar anterior derecha",
+      "Axila derecha",
+      "Espalda",
+      "Infraclavicular izquierda",
+      "Infraclavicular derecha"
+    ],
+    "murmur_s1_grade": [
+      "I/VI",
+      "II/VI",
+      "III/VI",
+      "IV/VI",
+      "V/VI",
+      "VI/VI"
+    ],
+    "murmur_s1_pitch": [
+      "Alta",
+      "Media",
+      "Baja"
+    ],
+    "murmur_s1_character": [
+      "Vibratorio",
+      "Soplante",
+      "Áspero-rudo",
+      "Multifrecuencia",
+      "Chillón",
+      "En maquinaria",
+      "Inespecífico"
+    ],
+    "murmur_s1_radiation": [
+      "Cuello/carótidas",
+      "Axila izquierda",
+      "Axila derecha",
+      "Espalda",
+      "Infraclavicular",
+      "Otro",
+      "No irradia"
+    ],
+    "s2_type": [
+      "Único",
+      "Desdoblamiento fisiológico",
+      "Desdoblamiento amplio, fijo y permanente",
+      "P2 hiperfonético",
+      "Soplo"
+    ],
+    "murmur_s2_phase": [
+      "Protosistólico",
+      "Mesosistólico",
+      "Holosistólico",
+      "Continuo"
+    ],
+    "murmur_s2_location": [
+      "Ápex",
+      "Borde esternal inferior izquierdo",
+      "Borde esternal medio izquierdo",
+      "Borde esternal superior izquierdo",
+      "Borde esternal superior derecho",
+      "Borde esternal medio derecho",
+      "Borde esternal inferior derecho",
+      "Hemitórax derecho",
+      "Hemitórax izquierdo",
+      "Línea axilar anterior izquierda",
+      "Axila izquierda",
+      "Línea axilar anterior derecha",
+      "Axila derecha",
+      "Espalda",
+      "Infraclavicular izquierda",
+      "Infraclavicular derecha"
+    ],
+    "murmur_s2_grade": [
+      "I/VI",
+      "II/VI",
+      "III/VI",
+      "IV/VI",
+      "V/VI",
+      "VI/VI"
+    ],
+    "murmur_s2_pitch": [
+      "Alta",
+      "Media",
+      "Baja"
+    ],
+    "murmur_s2_character": [
+      "Vibratorio",
+      "Soplante",
+      "Áspero-rudo",
+      "Multifrecuencia",
+      "Chillón",
+      "En maquinaria",
+      "Inespecífico"
+    ],
+    "murmur_s2_radiation": [
+      "Cuello/carótidas",
+      "Axila izquierda",
+      "Axila derecha",
+      "Espalda",
+      "Infraclavicular",
+      "Otro",
+      "No irradia"
+    ],
+    "abdominal_inspection": [
+      "Plano",
+      "Globoso",
+      "Escafoide"
+    ],
+    "abdominal_auscultation": [
+      "Ruidos hidroaéreos presentes",
+      "Ruidos hidroaéreos ausentes"
+    ],
+    "abdominal_palpation": [
+      "Normal",
+      "Hepatomegalia",
+      "Esplenomegalia"
+    ],
+    "extremity_appearance": [
+      "Normal",
+      "Cianosis",
+      "Hipocratismo digital",
+      "Edema"
+    ],
+    "edema_location": [
+      "Miembros inferiores",
+      "Miembros superiores",
+      "Generalizado",
+      "Otro"
+    ],
+    "edema_grade": [
+      "1+",
+      "2+",
+      "3+",
+      "4+"
+    ],
+    "pulse_location": [
+      "Braquial",
+      "Cubital",
+      "Radial",
+      "Femoral",
+      "Pedio",
+      "Tibial posterior",
+      "Carotídeo",
+      "Aorta abdominal"
+    ],
+    "pulse_side": [
+      "Derecho",
+      "Izquierdo",
+      "Central"
+    ],
+    "pulse_amplitude": [
+      "0 ausente",
+      "1+ disminuido",
+      "2+ normal",
+      "3+ aumentado",
+      "4+ salton-water hammer"
+    ],
+    "pulse_symmetry": [
+      "Simétricos",
+      "Asimétricos",
+      "No evaluable"
+    ],
+    "external_genital_exam": [
+      "Normal",
+      "No evaluado",
+      "Alteración"
+    ],
+    "neurologic_exam_overall": [
+      "Normal",
+      "Anormal",
+      "No evaluable"
+    ],
+    "neurologic_exam_age_appropriate": [
+      "Sí",
+      "No",
+      "No evaluable"
+    ],
+    "focal_neurologic_deficit": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "consciousness_level": [
+      "Alerta",
+      "Somnoliento",
+      "Obnubilado",
+      "Estupor",
+      "Coma",
+      "No evaluable"
+    ],
+    "response_to_environment": [
+      "Adecuada para la edad",
+      "Disminuida",
+      "Irritable",
+      "No responde",
+      "No evaluable"
+    ],
+    "behavior_status": [
+      "Apropiada",
+      "Irritable",
+      "Agitada",
+      "Hipoactiva",
+      "No cooperador",
+      "Otro"
+    ],
+    "gcs_eye": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "gcs_verbal": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "gcs_motor": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "mental_status": [
+      "Apropiado para edad",
+      "Alterado",
+      "No evaluable"
+    ],
+    "orientation_person": [
+      "Conservada",
+      "Alterada",
+      "No evaluable"
+    ],
+    "orientation_place": [
+      "Conservada",
+      "Alterada",
+      "No evaluable"
+    ],
+    "orientation_time": [
+      "Conservada",
+      "Alterada",
+      "No evaluable"
+    ],
+    "attention_status": [
+      "Adecuada",
+      "Disminuida",
+      "No evaluable"
+    ],
+    "memory_status": [
+      "Conservada",
+      "Alterada",
+      "No evaluable"
+    ],
+    "language_status": [
+      "Adecuado para edad",
+      "Retrasado",
+      "Disártrico",
+      "Afásico",
+      "No verbal por edad",
+      "No evaluable"
+    ],
+    "pupil_symmetry": [
+      "Isocóricas",
+      "Anisocóricas",
+      "No evaluable"
+    ],
+    "right_pupil_reactivity": [
+      "Reactiva",
+      "Hiporreactiva",
+      "Arreactiva",
+      "No evaluable"
+    ],
+    "left_pupil_reactivity": [
+      "Reactiva",
+      "Hiporreactiva",
+      "Arreactiva",
+      "No evaluable"
+    ],
+    "extraocular_movements": [
+      "Conservados",
+      "Alterados",
+      "No evaluable"
+    ],
+    "gaze_alignment": [
+      "Normal",
+      "Estrabismo",
+      "Desviación conjugada",
+      "Otro",
+      "No evaluable"
+    ],
+    "nystagmus": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "ptosis": [
+      "Ausente",
+      "Derecha",
+      "Izquierda",
+      "Bilateral",
+      "No evaluable"
+    ],
+    "facial_symmetry": [
+      "Simétrica",
+      "Asimétrica",
+      "No evaluable"
+    ],
+    "facial_movement": [
+      "Conservados",
+      "Disminuidos",
+      "Ausentes",
+      "No evaluable"
+    ],
+    "palate_movement": [
+      "Simétrica",
+      "Asimétrica",
+      "No evaluable"
+    ],
+    "swallowing_status": [
+      "Normal",
+      "Disfagia",
+      "No evaluable"
+    ],
+    "voice_status": [
+      "Normal",
+      "Disfónica",
+      "Débil",
+      "No evaluable"
+    ],
+    "tongue_movement": [
+      "Normal",
+      "Desviación derecha",
+      "Desviación izquierda",
+      "Fasciculaciones",
+      "No evaluable"
+    ],
+    "spontaneous_movements": [
+      "Simétricos",
+      "Asimétricos",
+      "Disminuidos",
+      "Ausentes",
+      "No evaluable"
+    ],
+    "motor_symmetry": [
+      "Simétrica",
+      "Asimétrica",
+      "No evaluable"
+    ],
+    "muscle_bulk": [
+      "Normal",
+      "Hipotrofia",
+      "Atrofia",
+      "Hipertrofia",
+      "No evaluable"
+    ],
+    "motor_deficit": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "pronator_drift": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "involuntary_movements": [
+      "Ninguno",
+      "Temblor",
+      "Corea",
+      "Atetosis",
+      "Distonía",
+      "Mioclonías",
+      "Tics",
+      "Otro"
+    ],
+    "muscle_tone_global": [
+      "Normal",
+      "Hipotonía",
+      "Hipertonía",
+      "Mixto",
+      "No evaluable"
+    ],
+    "tone_distribution": [
+      "MSD",
+      "MSI",
+      "MID",
+      "MII",
+      "Axial",
+      "Generalizado"
+    ],
+    "tone_symmetry": [
+      "Simétrica",
+      "Asimétrica",
+      "No evaluable"
+    ],
+    "strength_assessment_method": [
+      "Escala 0–5",
+      "Evaluación funcional",
+      "No evaluable"
+    ],
+    "right_upper_strength": [
+      "0–5",
+      "Normal",
+      "Disminuida",
+      "No evaluable"
+    ],
+    "left_upper_strength": [
+      "0–5",
+      "Normal",
+      "Disminuida",
+      "No evaluable"
+    ],
+    "right_lower_strength": [
+      "0–5",
+      "Normal",
+      "Disminuida",
+      "No evaluable"
+    ],
+    "left_lower_strength": [
+      "0–5",
+      "Normal",
+      "Disminuida",
+      "No evaluable"
+    ],
+    "clonus_right": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "clonus_left": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "plantar_response_right": [
+      "Flexora",
+      "Extensora",
+      "Indiferente",
+      "No evaluable"
+    ],
+    "plantar_response_left": [
+      "Flexora",
+      "Extensora",
+      "Indiferente",
+      "No evaluable"
+    ],
+    "light_touch": [
+      "Normal",
+      "Disminuido",
+      "Ausente",
+      "No evaluable"
+    ],
+    "pain_sensation": [
+      "Normal",
+      "Disminuida",
+      "Ausente",
+      "No evaluable"
+    ],
+    "temperature_sensation": [
+      "Normal",
+      "Alterada",
+      "No evaluable"
+    ],
+    "vibration_sensation": [
+      "Normal",
+      "Alterada",
+      "No evaluable"
+    ],
+    "proprioception": [
+      "Normal",
+      "Alterada",
+      "No evaluable"
+    ],
+    "coordination_overall": [
+      "Normal",
+      "Alterada",
+      "No evaluable por edad"
+    ],
+    "finger_to_nose": [
+      "Normal",
+      "Disimetría",
+      "No evaluable"
+    ],
+    "rapid_alternating_movements": [
+      "Normal",
+      "Disdiadococinesia",
+      "No evaluable"
+    ],
+    "heel_to_shin": [
+      "Normal",
+      "Alterado",
+      "No evaluable"
+    ],
+    "truncal_ataxia": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "balance_status": [
+      "Normal",
+      "Alterado",
+      "No evaluable"
+    ],
+    "romberg_test": [
+      "Negativo",
+      "Positivo",
+      "No evaluable"
+    ],
+    "single_leg_stance": [
+      "Normal",
+      "Alterado",
+      "No evaluable"
+    ],
+    "gait_status": [
+      "Normal",
+      "Anormal",
+      "No camina por edad",
+      "No evaluable"
+    ],
+    "gait_abnormality": [
+      "Atáxica",
+      "Base amplia",
+      "Circunducción",
+      "Espástica",
+      "Hemiparética",
+      "En puntillas",
+      "Equina",
+      "Otro"
+    ],
+    "heel_walking": [
+      "Normal",
+      "Alterada",
+      "No evaluable"
+    ],
+    "toe_walking_test": [
+      "Normal",
+      "Alterada",
+      "No evaluable"
+    ],
+    "tandem_gait": [
+      "Normal",
+      "Alterada",
+      "No evaluable"
+    ],
+    "anterior_fontanelle": [
+      "Normotensa",
+      "Abombada",
+      "Deprimida",
+      "Cerrada",
+      "No evaluable"
+    ],
+    "infant_posture": [
+      "Adecuada",
+      "Anormal",
+      "Asimétrica",
+      "No evaluable"
+    ],
+    "infant_antigravity_movement": [
+      "Presentes y simétricos",
+      "Disminuidos",
+      "Asimétricos",
+      "Ausentes"
+    ],
+    "head_control": [
+      "Adecuado para edad",
+      "Retrasado",
+      "No evaluable"
+    ],
+    "neck_stiffness": [
+      "Ausente",
+      "Presente",
+      "No evaluable"
+    ],
+    "kernig_sign": [
+      "Negativo",
+      "Positivo",
+      "No evaluable"
+    ],
+    "brudzinski_sign": [
+      "Negativo",
+      "Positivo",
+      "No evaluable"
+    ]
+  },
+  "nums": {
+    "weight_kg": [
+      "0.2",
+      "500",
+      "0.01",
+      "kg"
+    ],
+    "height_cm": [
+      "10",
+      "230",
+      "0.1",
+      "cm"
+    ],
+    "heart_rate": [
+      "0",
+      "300",
+      "1",
+      "lpm"
+    ],
+    "respiratory_rate": [
+      "0",
+      "100",
+      "1",
+      "rpm"
+    ],
+    "oxygen_saturation": [
+      "20",
+      "100",
+      "1",
+      "%"
+    ],
+    "oxygen_flow": [
+      "0",
+      "999",
+      "0.1",
+      "L/min"
+    ],
+    "bp_systolic": [
+      "0",
+      "500",
+      "1",
+      "mmHg"
+    ],
+    "bp_diastolic": [
+      "0",
+      "500",
+      "1",
+      "mmHg"
+    ],
+    "liver_edge_cm": [
+      "0",
+      "99",
+      "0.1",
+      "cm"
+    ],
+    "capillary_refill_seconds": [
+      "0",
+      "99",
+      "0.1",
+      "s"
+    ],
+    "right_pupil_mm": [
+      "1",
+      "9",
+      "0.1",
+      "mm"
+    ],
+    "left_pupil_mm": [
+      "1",
+      "9",
+      "0.1",
+      "mm"
+    ],
+    "head_circumference_cm": [
+      "1",
+      "99",
+      "0.1",
+      "cm"
+    ]
+  }
+}

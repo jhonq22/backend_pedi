@@ -1,0 +1,3826 @@
+[
+  {
+    "tab": "vitals",
+    "field": "weight_kg",
+    "label": "Peso *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "weight_percentile",
+    "label": "Percentil de peso *",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "height_cm",
+    "label": "Talla *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "height_percentile",
+    "label": "Percentil de talla *",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "bmi",
+    "label": "Índice de masa corporal Automático",
+    "type": "derived",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "bsa",
+    "label": "Superficie corporal Automático",
+    "type": "derived",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "heart_rate",
+    "label": "Frecuencia cardíaca *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "respiratory_rate",
+    "label": "Frecuencia respiratoria *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "oxygen_saturation",
+    "label": "Saturación de oxígeno *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "oxygen_support",
+    "label": "Soporte de oxígeno al momento de SpO₂ Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Aire ambiente",
+        "txt": "Aire ambiente"
+      },
+      {
+        "val": "Cánula nasal",
+        "txt": "Cánula nasal"
+      },
+      {
+        "val": "Mascarilla",
+        "txt": "Mascarilla"
+      },
+      {
+        "val": "Alto flujo",
+        "txt": "Alto flujo"
+      },
+      {
+        "val": "Ventilación",
+        "txt": "Ventilación"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "oxygen_flow",
+    "label": "Flujo de oxígeno Condicional",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "bp_extremity",
+    "label": "Extremidad *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Brazo derecho",
+        "txt": "Brazo derecho"
+      },
+      {
+        "val": "Brazo izquierdo",
+        "txt": "Brazo izquierdo"
+      },
+      {
+        "val": "Pierna derecha",
+        "txt": "Pierna derecha"
+      },
+      {
+        "val": "Pierna izquierda",
+        "txt": "Pierna izquierda"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "bp_systolic",
+    "label": "Presión arterial sistólica *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "bp_diastolic",
+    "label": "Presión arterial diastólica *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "vitals",
+    "field": "bp_percentile",
+    "label": "Percentil de presión arterial *",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "perfusion_status",
+    "label": "Estado de perfusión *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Bien perfundido",
+        "txt": "Bien perfundido"
+      },
+      {
+        "val": "Hipoperfundido",
+        "txt": "Hipoperfundido"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "skin_findings",
+    "label": "Piel *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Palidez",
+        "txt": "Palidez"
+      },
+      {
+        "val": "Rubicundez",
+        "txt": "Rubicundez"
+      },
+      {
+        "val": "Diaforesis",
+        "txt": "Diaforesis"
+      }
+    ]
+  },
+  {
+    "tab": "general",
+    "field": "general_exam_notes",
+    "label": "Otros hallazgos generales Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "anterior_chest_inspection",
+    "label": "Inspección del tórax/precordio *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Simétrico",
+        "txt": "Simétrico"
+      },
+      {
+        "val": "Asimétrico",
+        "txt": "Asimétrico"
+      },
+      {
+        "val": "Pectus excavatum",
+        "txt": "Pectus excavatum"
+      },
+      {
+        "val": "Pectus carinatum",
+        "txt": "Pectus carinatum"
+      }
+    ]
+  },
+  {
+    "tab": "general",
+    "field": "sternotomy_scar",
+    "label": "Cicatriz de esternotomía Opcional",
+    "type": "checkbox",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "thoracotomy_scar",
+    "label": "Cicatriz de toracotomía Opcional",
+    "type": "checkbox",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "precordial_palpation",
+    "label": "Palpación precordial *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Hiperdinámico",
+        "txt": "Hiperdinámico"
+      },
+      {
+        "val": "Frémito",
+        "txt": "Frémito"
+      },
+      {
+        "val": "Impulso sostenido",
+        "txt": "Impulso sostenido"
+      },
+      {
+        "val": "Latido sistólico palpable",
+        "txt": "Latido sistólico palpable"
+      },
+      {
+        "val": "Retracción sistólica palpable",
+        "txt": "Retracción sistólica palpable"
+      }
+    ]
+  },
+  {
+    "tab": "general",
+    "field": "thrill_present",
+    "label": "Frémito Opcional",
+    "type": "derived",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "thrill_location",
+    "label": "Localización del frémito Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Foco aórtico",
+        "txt": "Foco aórtico"
+      },
+      {
+        "val": "Foco pulmonar",
+        "txt": "Foco pulmonar"
+      },
+      {
+        "val": "Foco aórtico accesorio",
+        "txt": "Foco aórtico accesorio"
+      },
+      {
+        "val": "Foco tricuspídeo",
+        "txt": "Foco tricuspídeo"
+      },
+      {
+        "val": "Foco mitral",
+        "txt": "Foco mitral"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "pmi_type",
+    "label": "Latido sistólico *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Desplazado",
+        "txt": "Desplazado"
+      },
+      {
+        "val": "No palpable",
+        "txt": "No palpable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "pmi_side",
+    "label": "Lado Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Izquierdo",
+        "txt": "Izquierdo"
+      },
+      {
+        "val": "Derecho",
+        "txt": "Derecho"
+      },
+      {
+        "val": "Central",
+        "txt": "Central"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "pmi_intercostal_space",
+    "label": "Espacio intercostal Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "1",
+        "txt": "1"
+      },
+      {
+        "val": "2",
+        "txt": "2"
+      },
+      {
+        "val": "3",
+        "txt": "3"
+      },
+      {
+        "val": "4",
+        "txt": "4"
+      },
+      {
+        "val": "5",
+        "txt": "5"
+      },
+      {
+        "val": "6",
+        "txt": "6"
+      },
+      {
+        "val": "7",
+        "txt": "7"
+      },
+      {
+        "val": "8",
+        "txt": "8"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "pmi_reference_line",
+    "label": "Línea anatómica Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Paraesternal",
+        "txt": "Paraesternal"
+      },
+      {
+        "val": "Medioclavicular",
+        "txt": "Medioclavicular"
+      },
+      {
+        "val": "Axilar anterior",
+        "txt": "Axilar anterior"
+      },
+      {
+        "val": "Otra",
+        "txt": "Otra"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "pmi_notes",
+    "label": "Observaciones del PMI Opcional",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "general",
+    "field": "precordial_palpation_notes",
+    "label": "Observaciones de palpación Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "lung_auscultation",
+    "label": "Auscultación pulmonar Opcional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Murmullo vesicular conservado",
+        "txt": "Murmullo vesicular conservado"
+      },
+      {
+        "val": "Disminuido",
+        "txt": "Disminuido"
+      },
+      {
+        "val": "Crepitantes",
+        "txt": "Crepitantes"
+      },
+      {
+        "val": "Sibilancias",
+        "txt": "Sibilancias"
+      },
+      {
+        "val": "Roncus",
+        "txt": "Roncus"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "lung_findings_side",
+    "label": "Distribución Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Bilateral",
+        "txt": "Bilateral"
+      },
+      {
+        "val": "Derecho",
+        "txt": "Derecho"
+      },
+      {
+        "val": "Izquierdo",
+        "txt": "Izquierdo"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "respiratory_effort",
+    "label": "Trabajo respiratorio Opcional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Tiraje",
+        "txt": "Tiraje"
+      },
+      {
+        "val": "Aleteo nasal",
+        "txt": "Aleteo nasal"
+      },
+      {
+        "val": "Quejido",
+        "txt": "Quejido"
+      },
+      {
+        "val": "Taquipnea",
+        "txt": "Taquipnea"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "respiratory_exam_notes",
+    "label": "Observaciones respiratorias Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "heart_sounds",
+    "label": "Ruidos/hallazgos auscultatorios *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "S1",
+        "txt": "S1"
+      },
+      {
+        "val": "S2",
+        "txt": "S2"
+      },
+      {
+        "val": "S3",
+        "txt": "S3"
+      },
+      {
+        "val": "S4",
+        "txt": "S4"
+      },
+      {
+        "val": "Galope de sumación",
+        "txt": "Galope de sumación"
+      },
+      {
+        "val": "Click sistólico",
+        "txt": "Click sistólico"
+      },
+      {
+        "val": "Chasquido de apertura",
+        "txt": "Chasquido de apertura"
+      },
+      {
+        "val": "Roce",
+        "txt": "Roce"
+      },
+      {
+        "val": "Whoop",
+        "txt": "Whoop"
+      },
+      {
+        "val": "Knock",
+        "txt": "Knock"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "s1_type",
+    "label": "Características de S1 *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Único",
+        "txt": "Único"
+      },
+      {
+        "val": "Desdoblamiento fisiológico",
+        "txt": "Desdoblamiento fisiológico"
+      },
+      {
+        "val": "Desdoblamiento amplio",
+        "txt": "Desdoblamiento amplio"
+      },
+      {
+        "val": "Hipofonético",
+        "txt": "Hipofonético"
+      },
+      {
+        "val": "Hiperfonético",
+        "txt": "Hiperfonético"
+      },
+      {
+        "val": "Soplo",
+        "txt": "Soplo"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_present",
+    "label": "Soplo cardíaco *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Sí",
+        "txt": "Sí"
+      },
+      {
+        "val": "No",
+        "txt": "No"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_phase",
+    "label": "Fase del soplo *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Protosistólico",
+        "txt": "Protosistólico"
+      },
+      {
+        "val": "Mesosistólico",
+        "txt": "Mesosistólico"
+      },
+      {
+        "val": "Holosistólico",
+        "txt": "Holosistólico"
+      },
+      {
+        "val": "Continuo",
+        "txt": "Continuo"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_location",
+    "label": "Máxima intensidad/localización *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Ápex",
+        "txt": "Ápex"
+      },
+      {
+        "val": "Borde esternal inferior izquierdo",
+        "txt": "Borde esternal inferior izquierdo"
+      },
+      {
+        "val": "Borde esternal medio izquierdo",
+        "txt": "Borde esternal medio izquierdo"
+      },
+      {
+        "val": "Borde esternal superior izquierdo",
+        "txt": "Borde esternal superior izquierdo"
+      },
+      {
+        "val": "Borde esternal superior derecho",
+        "txt": "Borde esternal superior derecho"
+      },
+      {
+        "val": "Borde esternal medio derecho",
+        "txt": "Borde esternal medio derecho"
+      },
+      {
+        "val": "Borde esternal inferior derecho",
+        "txt": "Borde esternal inferior derecho"
+      },
+      {
+        "val": "Hemitórax derecho",
+        "txt": "Hemitórax derecho"
+      },
+      {
+        "val": "Hemitórax izquierdo",
+        "txt": "Hemitórax izquierdo"
+      },
+      {
+        "val": "Línea axilar anterior izquierda",
+        "txt": "Línea axilar anterior izquierda"
+      },
+      {
+        "val": "Axila izquierda",
+        "txt": "Axila izquierda"
+      },
+      {
+        "val": "Línea axilar anterior derecha",
+        "txt": "Línea axilar anterior derecha"
+      },
+      {
+        "val": "Axila derecha",
+        "txt": "Axila derecha"
+      },
+      {
+        "val": "Espalda",
+        "txt": "Espalda"
+      },
+      {
+        "val": "Infraclavicular izquierda",
+        "txt": "Infraclavicular izquierda"
+      },
+      {
+        "val": "Infraclavicular derecha",
+        "txt": "Infraclavicular derecha"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_grade",
+    "label": "Grado del soplo *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "I/VI",
+        "txt": "I/VI"
+      },
+      {
+        "val": "II/VI",
+        "txt": "II/VI"
+      },
+      {
+        "val": "III/VI",
+        "txt": "III/VI"
+      },
+      {
+        "val": "IV/VI",
+        "txt": "IV/VI"
+      },
+      {
+        "val": "V/VI",
+        "txt": "V/VI"
+      },
+      {
+        "val": "VI/VI",
+        "txt": "VI/VI"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_pitch",
+    "label": "Tono/frecuencia Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Alta",
+        "txt": "Alta"
+      },
+      {
+        "val": "Media",
+        "txt": "Media"
+      },
+      {
+        "val": "Baja",
+        "txt": "Baja"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_character",
+    "label": "Característica del soplo Condicional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Vibratorio",
+        "txt": "Vibratorio"
+      },
+      {
+        "val": "Soplante",
+        "txt": "Soplante"
+      },
+      {
+        "val": "Áspero-rudo",
+        "txt": "Áspero-rudo"
+      },
+      {
+        "val": "Multifrecuencia",
+        "txt": "Multifrecuencia"
+      },
+      {
+        "val": "Chillón",
+        "txt": "Chillón"
+      },
+      {
+        "val": "En maquinaria",
+        "txt": "En maquinaria"
+      },
+      {
+        "val": "Inespecífico",
+        "txt": "Inespecífico"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_radiation",
+    "label": "Irradiación del soplo Opcional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Cuello/carótidas",
+        "txt": "Cuello/carótidas"
+      },
+      {
+        "val": "Axila izquierda",
+        "txt": "Axila izquierda"
+      },
+      {
+        "val": "Axila derecha",
+        "txt": "Axila derecha"
+      },
+      {
+        "val": "Espalda",
+        "txt": "Espalda"
+      },
+      {
+        "val": "Infraclavicular",
+        "txt": "Infraclavicular"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      },
+      {
+        "val": "No irradia",
+        "txt": "No irradia"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s1_radiation_other",
+    "label": "Otra irradiación Condicional",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "s2_type",
+    "label": "Características de S2 *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Único",
+        "txt": "Único"
+      },
+      {
+        "val": "Desdoblamiento fisiológico",
+        "txt": "Desdoblamiento fisiológico"
+      },
+      {
+        "val": "Desdoblamiento amplio, fijo y permanente",
+        "txt": "Desdoblamiento amplio, fijo y permanente"
+      },
+      {
+        "val": "P2 hiperfonético",
+        "txt": "P2 hiperfonético"
+      },
+      {
+        "val": "Soplo",
+        "txt": "Soplo"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_present",
+    "label": "Soplo cardíaco *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Sí",
+        "txt": "Sí"
+      },
+      {
+        "val": "No",
+        "txt": "No"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_phase",
+    "label": "Fase del soplo *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Protosistólico",
+        "txt": "Protosistólico"
+      },
+      {
+        "val": "Mesosistólico",
+        "txt": "Mesosistólico"
+      },
+      {
+        "val": "Holosistólico",
+        "txt": "Holosistólico"
+      },
+      {
+        "val": "Continuo",
+        "txt": "Continuo"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_location",
+    "label": "Máxima intensidad/localización *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Ápex",
+        "txt": "Ápex"
+      },
+      {
+        "val": "Borde esternal inferior izquierdo",
+        "txt": "Borde esternal inferior izquierdo"
+      },
+      {
+        "val": "Borde esternal medio izquierdo",
+        "txt": "Borde esternal medio izquierdo"
+      },
+      {
+        "val": "Borde esternal superior izquierdo",
+        "txt": "Borde esternal superior izquierdo"
+      },
+      {
+        "val": "Borde esternal superior derecho",
+        "txt": "Borde esternal superior derecho"
+      },
+      {
+        "val": "Borde esternal medio derecho",
+        "txt": "Borde esternal medio derecho"
+      },
+      {
+        "val": "Borde esternal inferior derecho",
+        "txt": "Borde esternal inferior derecho"
+      },
+      {
+        "val": "Hemitórax derecho",
+        "txt": "Hemitórax derecho"
+      },
+      {
+        "val": "Hemitórax izquierdo",
+        "txt": "Hemitórax izquierdo"
+      },
+      {
+        "val": "Línea axilar anterior izquierda",
+        "txt": "Línea axilar anterior izquierda"
+      },
+      {
+        "val": "Axila izquierda",
+        "txt": "Axila izquierda"
+      },
+      {
+        "val": "Línea axilar anterior derecha",
+        "txt": "Línea axilar anterior derecha"
+      },
+      {
+        "val": "Axila derecha",
+        "txt": "Axila derecha"
+      },
+      {
+        "val": "Espalda",
+        "txt": "Espalda"
+      },
+      {
+        "val": "Infraclavicular izquierda",
+        "txt": "Infraclavicular izquierda"
+      },
+      {
+        "val": "Infraclavicular derecha",
+        "txt": "Infraclavicular derecha"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_grade",
+    "label": "Grado del soplo *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "I/VI",
+        "txt": "I/VI"
+      },
+      {
+        "val": "II/VI",
+        "txt": "II/VI"
+      },
+      {
+        "val": "III/VI",
+        "txt": "III/VI"
+      },
+      {
+        "val": "IV/VI",
+        "txt": "IV/VI"
+      },
+      {
+        "val": "V/VI",
+        "txt": "V/VI"
+      },
+      {
+        "val": "VI/VI",
+        "txt": "VI/VI"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_pitch",
+    "label": "Tono/frecuencia Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Alta",
+        "txt": "Alta"
+      },
+      {
+        "val": "Media",
+        "txt": "Media"
+      },
+      {
+        "val": "Baja",
+        "txt": "Baja"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_character",
+    "label": "Característica del soplo Condicional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Vibratorio",
+        "txt": "Vibratorio"
+      },
+      {
+        "val": "Soplante",
+        "txt": "Soplante"
+      },
+      {
+        "val": "Áspero-rudo",
+        "txt": "Áspero-rudo"
+      },
+      {
+        "val": "Multifrecuencia",
+        "txt": "Multifrecuencia"
+      },
+      {
+        "val": "Chillón",
+        "txt": "Chillón"
+      },
+      {
+        "val": "En maquinaria",
+        "txt": "En maquinaria"
+      },
+      {
+        "val": "Inespecífico",
+        "txt": "Inespecífico"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_radiation",
+    "label": "Irradiación del soplo Opcional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Cuello/carótidas",
+        "txt": "Cuello/carótidas"
+      },
+      {
+        "val": "Axila izquierda",
+        "txt": "Axila izquierda"
+      },
+      {
+        "val": "Axila derecha",
+        "txt": "Axila derecha"
+      },
+      {
+        "val": "Espalda",
+        "txt": "Espalda"
+      },
+      {
+        "val": "Infraclavicular",
+        "txt": "Infraclavicular"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      },
+      {
+        "val": "No irradia",
+        "txt": "No irradia"
+      }
+    ]
+  },
+  {
+    "tab": "auscult",
+    "field": "murmur_s2_radiation_other",
+    "label": "Otra irradiación Condicional",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "abdominal_inspection",
+    "label": "Inspección abdominal *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Plano",
+        "txt": "Plano"
+      },
+      {
+        "val": "Globoso",
+        "txt": "Globoso"
+      },
+      {
+        "val": "Escafoide",
+        "txt": "Escafoide"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "abdominal_auscultation",
+    "label": "Auscultación abdominal *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ruidos hidroaéreos presentes",
+        "txt": "Ruidos hidroaéreos presentes"
+      },
+      {
+        "val": "Ruidos hidroaéreos ausentes",
+        "txt": "Ruidos hidroaéreos ausentes"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "abdominal_palpation",
+    "label": "Palpación abdominal *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Hepatomegalia",
+        "txt": "Hepatomegalia"
+      },
+      {
+        "val": "Esplenomegalia",
+        "txt": "Esplenomegalia"
+      }
+    ]
+  },
+  {
+    "tab": "other",
+    "field": "hepatomegaly_present",
+    "label": "Hepatomegalia Opcional",
+    "type": "derived",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "liver_edge_cm",
+    "label": "Hígado palpable bajo reborde costal Condicional",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "splenomegaly_present",
+    "label": "Esplenomegalia Opcional",
+    "type": "derived",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "abdominal_exam_notes",
+    "label": "Observaciones abdominales Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "extremity_appearance",
+    "label": "Apariencia de extremidades *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Cianosis",
+        "txt": "Cianosis"
+      },
+      {
+        "val": "Hipocratismo digital",
+        "txt": "Hipocratismo digital"
+      },
+      {
+        "val": "Edema",
+        "txt": "Edema"
+      }
+    ]
+  },
+  {
+    "tab": "other",
+    "field": "edema_location",
+    "label": "Localización del edema Condicional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Miembros inferiores",
+        "txt": "Miembros inferiores"
+      },
+      {
+        "val": "Miembros superiores",
+        "txt": "Miembros superiores"
+      },
+      {
+        "val": "Generalizado",
+        "txt": "Generalizado"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      }
+    ]
+  },
+  {
+    "tab": "other",
+    "field": "edema_grade",
+    "label": "Grado de edema Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "1+",
+        "txt": "1+"
+      },
+      {
+        "val": "2+",
+        "txt": "2+"
+      },
+      {
+        "val": "3+",
+        "txt": "3+"
+      },
+      {
+        "val": "4+",
+        "txt": "4+"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "extremity_notes",
+    "label": "Observaciones Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "capillary_refill_seconds",
+    "label": "Llenado capilar *",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "capillary_refill_status",
+    "label": "Estado del llenado capilar Automático",
+    "type": "derived",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "pulse_location",
+    "label": "Pulso arterial *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Braquial",
+        "txt": "Braquial"
+      },
+      {
+        "val": "Cubital",
+        "txt": "Cubital"
+      },
+      {
+        "val": "Radial",
+        "txt": "Radial"
+      },
+      {
+        "val": "Femoral",
+        "txt": "Femoral"
+      },
+      {
+        "val": "Pedio",
+        "txt": "Pedio"
+      },
+      {
+        "val": "Tibial posterior",
+        "txt": "Tibial posterior"
+      },
+      {
+        "val": "Carotídeo",
+        "txt": "Carotídeo"
+      },
+      {
+        "val": "Aorta abdominal",
+        "txt": "Aorta abdominal"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "pulse_side",
+    "label": "Lado Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Derecho",
+        "txt": "Derecho"
+      },
+      {
+        "val": "Izquierdo",
+        "txt": "Izquierdo"
+      },
+      {
+        "val": "Central",
+        "txt": "Central"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "pulse_amplitude",
+    "label": "Amplitud *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "0 ausente",
+        "txt": "0 ausente"
+      },
+      {
+        "val": "1+ disminuido",
+        "txt": "1+ disminuido"
+      },
+      {
+        "val": "2+ normal",
+        "txt": "2+ normal"
+      },
+      {
+        "val": "3+ aumentado",
+        "txt": "3+ aumentado"
+      },
+      {
+        "val": "4+ salton-water hammer",
+        "txt": "4+ salton-water hammer"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "pulse_symmetry",
+    "label": "Simetría Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Simétricos",
+        "txt": "Simétricos"
+      },
+      {
+        "val": "Asimétricos",
+        "txt": "Asimétricos"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "pulse_symmetry_notes",
+    "label": "Observaciones de simetría de pulsos Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "external_genital_exam",
+    "label": "Genitales externos Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "No evaluado",
+        "txt": "No evaluado"
+      },
+      {
+        "val": "Alteración",
+        "txt": "Alteración"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "other",
+    "field": "external_genital_exam_notes",
+    "label": "Observaciones genitales Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "neurologic_exam_overall",
+    "label": "Examen neurológico global *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Anormal",
+        "txt": "Anormal"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "neurologic_exam_age_appropriate",
+    "label": "Examen acorde con edad y desarrollo *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Sí",
+        "txt": "Sí"
+      },
+      {
+        "val": "No",
+        "txt": "No"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "focal_neurologic_deficit",
+    "label": "Déficit neurológico focal *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "focal_neurologic_deficit_notes",
+    "label": "Descripción del déficit focal Condicional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "consciousness_level",
+    "label": "Nivel de conciencia *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Alerta",
+        "txt": "Alerta"
+      },
+      {
+        "val": "Somnoliento",
+        "txt": "Somnoliento"
+      },
+      {
+        "val": "Obnubilado",
+        "txt": "Obnubilado"
+      },
+      {
+        "val": "Estupor",
+        "txt": "Estupor"
+      },
+      {
+        "val": "Coma",
+        "txt": "Coma"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "response_to_environment",
+    "label": "Respuesta al entorno *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Adecuada para la edad",
+        "txt": "Adecuada para la edad"
+      },
+      {
+        "val": "Disminuida",
+        "txt": "Disminuida"
+      },
+      {
+        "val": "Irritable",
+        "txt": "Irritable"
+      },
+      {
+        "val": "No responde",
+        "txt": "No responde"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "behavior_status",
+    "label": "Conducta durante el examen Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Apropiada",
+        "txt": "Apropiada"
+      },
+      {
+        "val": "Irritable",
+        "txt": "Irritable"
+      },
+      {
+        "val": "Agitada",
+        "txt": "Agitada"
+      },
+      {
+        "val": "Hipoactiva",
+        "txt": "Hipoactiva"
+      },
+      {
+        "val": "No cooperador",
+        "txt": "No cooperador"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "behavior_notes",
+    "label": "Observaciones conductuales Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "gcs_required",
+    "label": "Aplicar escala de Glasgow Condicional",
+    "type": "checkbox",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "gcs_eye",
+    "label": "Glasgow – respuesta ocular Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "1",
+        "txt": "1"
+      },
+      {
+        "val": "2",
+        "txt": "2"
+      },
+      {
+        "val": "3",
+        "txt": "3"
+      },
+      {
+        "val": "4",
+        "txt": "4"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "gcs_verbal",
+    "label": "Glasgow – respuesta verbal Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "1",
+        "txt": "1"
+      },
+      {
+        "val": "2",
+        "txt": "2"
+      },
+      {
+        "val": "3",
+        "txt": "3"
+      },
+      {
+        "val": "4",
+        "txt": "4"
+      },
+      {
+        "val": "5",
+        "txt": "5"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "gcs_motor",
+    "label": "Glasgow – respuesta motora Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "1",
+        "txt": "1"
+      },
+      {
+        "val": "2",
+        "txt": "2"
+      },
+      {
+        "val": "3",
+        "txt": "3"
+      },
+      {
+        "val": "4",
+        "txt": "4"
+      },
+      {
+        "val": "5",
+        "txt": "5"
+      },
+      {
+        "val": "6",
+        "txt": "6"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "gcs_total",
+    "label": "Glasgow total Automático",
+    "type": "derived",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "mental_status",
+    "label": "Estado mental *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Apropiado para edad",
+        "txt": "Apropiado para edad"
+      },
+      {
+        "val": "Alterado",
+        "txt": "Alterado"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "orientation_person",
+    "label": "Orientación en persona Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Conservada",
+        "txt": "Conservada"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "orientation_place",
+    "label": "Orientación en lugar Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Conservada",
+        "txt": "Conservada"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "orientation_time",
+    "label": "Orientación en tiempo Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Conservada",
+        "txt": "Conservada"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "attention_status",
+    "label": "Atención Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Adecuada",
+        "txt": "Adecuada"
+      },
+      {
+        "val": "Disminuida",
+        "txt": "Disminuida"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "memory_status",
+    "label": "Memoria Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Conservada",
+        "txt": "Conservada"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "language_status",
+    "label": "Lenguaje *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Adecuado para edad",
+        "txt": "Adecuado para edad"
+      },
+      {
+        "val": "Retrasado",
+        "txt": "Retrasado"
+      },
+      {
+        "val": "Disártrico",
+        "txt": "Disártrico"
+      },
+      {
+        "val": "Afásico",
+        "txt": "Afásico"
+      },
+      {
+        "val": "No verbal por edad",
+        "txt": "No verbal por edad"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "mental_status_notes",
+    "label": "Observaciones de estado mental Opcional",
+    "type": "textarea",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "pupil_symmetry",
+    "label": "Pupilas *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Isocóricas",
+        "txt": "Isocóricas"
+      },
+      {
+        "val": "Anisocóricas",
+        "txt": "Anisocóricas"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "right_pupil_mm",
+    "label": "Pupila derecha Opcional",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "left_pupil_mm",
+    "label": "Pupila izquierda Opcional",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "right_pupil_reactivity",
+    "label": "Reactividad pupilar derecha *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Reactiva",
+        "txt": "Reactiva"
+      },
+      {
+        "val": "Hiporreactiva",
+        "txt": "Hiporreactiva"
+      },
+      {
+        "val": "Arreactiva",
+        "txt": "Arreactiva"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro1",
+    "field": "left_pupil_reactivity",
+    "label": "Reactividad pupilar izquierda *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Reactiva",
+        "txt": "Reactiva"
+      },
+      {
+        "val": "Hiporreactiva",
+        "txt": "Hiporreactiva"
+      },
+      {
+        "val": "Arreactiva",
+        "txt": "Arreactiva"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "extraocular_movements",
+    "label": "Movimientos oculares extrínsecos *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Conservados",
+        "txt": "Conservados"
+      },
+      {
+        "val": "Alterados",
+        "txt": "Alterados"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "gaze_alignment",
+    "label": "Alineación ocular *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Estrabismo",
+        "txt": "Estrabismo"
+      },
+      {
+        "val": "Desviación conjugada",
+        "txt": "Desviación conjugada"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "nystagmus",
+    "label": "Nistagmo *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "nystagmus_notes",
+    "label": "Características del nistagmo Condicional",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "ptosis",
+    "label": "Ptosis palpebral *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Derecha",
+        "txt": "Derecha"
+      },
+      {
+        "val": "Izquierda",
+        "txt": "Izquierda"
+      },
+      {
+        "val": "Bilateral",
+        "txt": "Bilateral"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "facial_symmetry",
+    "label": "Simetría facial *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Simétrica",
+        "txt": "Simétrica"
+      },
+      {
+        "val": "Asimétrica",
+        "txt": "Asimétrica"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "facial_movement",
+    "label": "Movimientos faciales *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Conservados",
+        "txt": "Conservados"
+      },
+      {
+        "val": "Disminuidos",
+        "txt": "Disminuidos"
+      },
+      {
+        "val": "Ausentes",
+        "txt": "Ausentes"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "palate_movement",
+    "label": "Elevación del paladar Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Simétrica",
+        "txt": "Simétrica"
+      },
+      {
+        "val": "Asimétrica",
+        "txt": "Asimétrica"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "swallowing_status",
+    "label": "Deglución *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disfagia",
+        "txt": "Disfagia"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "voice_status",
+    "label": "Voz/llanto Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disfónica",
+        "txt": "Disfónica"
+      },
+      {
+        "val": "Débil",
+        "txt": "Débil"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro2",
+    "field": "tongue_movement",
+    "label": "Movilidad lingual *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Desviación derecha",
+        "txt": "Desviación derecha"
+      },
+      {
+        "val": "Desviación izquierda",
+        "txt": "Desviación izquierda"
+      },
+      {
+        "val": "Fasciculaciones",
+        "txt": "Fasciculaciones"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "spontaneous_movements",
+    "label": "Movimientos espontáneos *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Simétricos",
+        "txt": "Simétricos"
+      },
+      {
+        "val": "Asimétricos",
+        "txt": "Asimétricos"
+      },
+      {
+        "val": "Disminuidos",
+        "txt": "Disminuidos"
+      },
+      {
+        "val": "Ausentes",
+        "txt": "Ausentes"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "motor_symmetry",
+    "label": "Simetría motora *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Simétrica",
+        "txt": "Simétrica"
+      },
+      {
+        "val": "Asimétrica",
+        "txt": "Asimétrica"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "muscle_bulk",
+    "label": "Trofismo muscular *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Hipotrofia",
+        "txt": "Hipotrofia"
+      },
+      {
+        "val": "Atrofia",
+        "txt": "Atrofia"
+      },
+      {
+        "val": "Hipertrofia",
+        "txt": "Hipertrofia"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "motor_deficit",
+    "label": "Déficit motor *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "pronator_drift",
+    "label": "Maniobra de Barré/pronator drift Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "involuntary_movements",
+    "label": "Movimientos involuntarios *",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Ninguno",
+        "txt": "Ninguno"
+      },
+      {
+        "val": "Temblor",
+        "txt": "Temblor"
+      },
+      {
+        "val": "Corea",
+        "txt": "Corea"
+      },
+      {
+        "val": "Atetosis",
+        "txt": "Atetosis"
+      },
+      {
+        "val": "Distonía",
+        "txt": "Distonía"
+      },
+      {
+        "val": "Mioclonías",
+        "txt": "Mioclonías"
+      },
+      {
+        "val": "Tics",
+        "txt": "Tics"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      }
+    ]
+  },
+  {
+    "tab": "neuro3",
+    "field": "involuntary_movement_other",
+    "label": "Otro movimiento involuntario Condicional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "MSD",
+        "txt": "MSD"
+      },
+      {
+        "val": "MSI",
+        "txt": "MSI"
+      },
+      {
+        "val": "MID",
+        "txt": "MID"
+      },
+      {
+        "val": "MII",
+        "txt": "MII"
+      },
+      {
+        "val": "Axial",
+        "txt": "Axial"
+      },
+      {
+        "val": "Generalizado",
+        "txt": "Generalizado"
+      }
+    ]
+  },
+  {
+    "tab": "neuro3",
+    "field": "muscle_tone_global",
+    "label": "Tono muscular global *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Hipotonía",
+        "txt": "Hipotonía"
+      },
+      {
+        "val": "Hipertonía",
+        "txt": "Hipertonía"
+      },
+      {
+        "val": "Mixto",
+        "txt": "Mixto"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "tone_distribution",
+    "label": "Distribución de alteración del tono Condicional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "MSD",
+        "txt": "MSD"
+      },
+      {
+        "val": "MSI",
+        "txt": "MSI"
+      },
+      {
+        "val": "MID",
+        "txt": "MID"
+      },
+      {
+        "val": "MII",
+        "txt": "MII"
+      },
+      {
+        "val": "Axial",
+        "txt": "Axial"
+      },
+      {
+        "val": "Generalizado",
+        "txt": "Generalizado"
+      }
+    ]
+  },
+  {
+    "tab": "neuro3",
+    "field": "tone_symmetry",
+    "label": "Simetría del tono Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Simétrica",
+        "txt": "Simétrica"
+      },
+      {
+        "val": "Asimétrica",
+        "txt": "Asimétrica"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "strength_assessment_method",
+    "label": "Método de valoración de fuerza *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Escala 0–5",
+        "txt": "Escala 0–5"
+      },
+      {
+        "val": "Evaluación funcional",
+        "txt": "Evaluación funcional"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "right_upper_strength",
+    "label": "Fuerza miembro superior derecho Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "0–5",
+        "txt": "0–5"
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disminuida",
+        "txt": "Disminuida"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "left_upper_strength",
+    "label": "Fuerza miembro superior izquierdo Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "0–5",
+        "txt": "0–5"
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disminuida",
+        "txt": "Disminuida"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "right_lower_strength",
+    "label": "Fuerza miembro inferior derecho Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "0–5",
+        "txt": "0–5"
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disminuida",
+        "txt": "Disminuida"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "left_lower_strength",
+    "label": "Fuerza miembro inferior izquierdo Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "0–5",
+        "txt": "0–5"
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disminuida",
+        "txt": "Disminuida"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "reflex_symmetry",
+    "label": "Simetría Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      },
+      {
+        "val": "",
+        "txt": "—"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "clonus_right",
+    "label": "Clonus derecho *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "clonus_left",
+    "label": "Clonus izquierdo *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "plantar_response_right",
+    "label": "Respuesta plantar derecha *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Flexora",
+        "txt": "Flexora"
+      },
+      {
+        "val": "Extensora",
+        "txt": "Extensora"
+      },
+      {
+        "val": "Indiferente",
+        "txt": "Indiferente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro3",
+    "field": "plantar_response_left",
+    "label": "Respuesta plantar izquierda *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Flexora",
+        "txt": "Flexora"
+      },
+      {
+        "val": "Extensora",
+        "txt": "Extensora"
+      },
+      {
+        "val": "Indiferente",
+        "txt": "Indiferente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "light_touch",
+    "label": "Tacto ligero Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disminuido",
+        "txt": "Disminuido"
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "pain_sensation",
+    "label": "Sensibilidad dolorosa Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disminuida",
+        "txt": "Disminuida"
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "temperature_sensation",
+    "label": "Sensibilidad térmica Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "vibration_sensation",
+    "label": "Sensibilidad vibratoria Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "proprioception",
+    "label": "Propiocepción Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "sensory_deficit_distribution",
+    "label": "Distribución del déficit sensitivo Condicional",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "coordination_overall",
+    "label": "Coordinación *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable por edad",
+        "txt": "No evaluable por edad"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "finger_to_nose",
+    "label": "Índice-nariz Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disimetría",
+        "txt": "Disimetría"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "rapid_alternating_movements",
+    "label": "Movimientos alternantes rápidos Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Disdiadococinesia",
+        "txt": "Disdiadococinesia"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "heel_to_shin",
+    "label": "Talón-rodilla Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterado",
+        "txt": "Alterado"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "truncal_ataxia",
+    "label": "Ataxia troncal *",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "balance_status",
+    "label": "Equilibrio Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterado",
+        "txt": "Alterado"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "romberg_test",
+    "label": "Romberg Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Negativo",
+        "txt": "Negativo"
+      },
+      {
+        "val": "Positivo",
+        "txt": "Positivo"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "single_leg_stance",
+    "label": "Apoyo monopodal Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterado",
+        "txt": "Alterado"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "gait_status",
+    "label": "Marcha Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Anormal",
+        "txt": "Anormal"
+      },
+      {
+        "val": "No camina por edad",
+        "txt": "No camina por edad"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "gait_abnormality",
+    "label": "Tipo de alteración de la marcha Condicional",
+    "type": "checkbox",
+    "options": [],
+    "choices": [
+      {
+        "val": "Atáxica",
+        "txt": "Atáxica"
+      },
+      {
+        "val": "Base amplia",
+        "txt": "Base amplia"
+      },
+      {
+        "val": "Circunducción",
+        "txt": "Circunducción"
+      },
+      {
+        "val": "Espástica",
+        "txt": "Espástica"
+      },
+      {
+        "val": "Hemiparética",
+        "txt": "Hemiparética"
+      },
+      {
+        "val": "En puntillas",
+        "txt": "En puntillas"
+      },
+      {
+        "val": "Equina",
+        "txt": "Equina"
+      },
+      {
+        "val": "Otro",
+        "txt": "Otro"
+      }
+    ]
+  },
+  {
+    "tab": "neuro4",
+    "field": "heel_walking",
+    "label": "Marcha sobre talones Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "toe_walking_test",
+    "label": "Marcha sobre puntas Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "tandem_gait",
+    "label": "Marcha en tándem Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normal",
+        "txt": "Normal"
+      },
+      {
+        "val": "Alterada",
+        "txt": "Alterada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "gait_other",
+    "label": "Otra alteración de marcha Condicional",
+    "type": "text",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "head_circumference_cm",
+    "label": "Perímetro cefálico Condicional",
+    "type": "number",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "anterior_fontanelle",
+    "label": "Fontanela anterior Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Normotensa",
+        "txt": "Normotensa"
+      },
+      {
+        "val": "Abombada",
+        "txt": "Abombada"
+      },
+      {
+        "val": "Deprimida",
+        "txt": "Deprimida"
+      },
+      {
+        "val": "Cerrada",
+        "txt": "Cerrada"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "infant_posture",
+    "label": "Postura espontánea Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Adecuada",
+        "txt": "Adecuada"
+      },
+      {
+        "val": "Anormal",
+        "txt": "Anormal"
+      },
+      {
+        "val": "Asimétrica",
+        "txt": "Asimétrica"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "infant_antigravity_movement",
+    "label": "Movimientos contra gravedad Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Presentes y simétricos",
+        "txt": "Presentes y simétricos"
+      },
+      {
+        "val": "Disminuidos",
+        "txt": "Disminuidos"
+      },
+      {
+        "val": "Asimétricos",
+        "txt": "Asimétricos"
+      },
+      {
+        "val": "Ausentes",
+        "txt": "Ausentes"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "head_control",
+    "label": "Control cefálico Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Adecuado para edad",
+        "txt": "Adecuado para edad"
+      },
+      {
+        "val": "Retrasado",
+        "txt": "Retrasado"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      },
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "meningeal_signs_assessed",
+    "label": "Signos meníngeos evaluados Opcional",
+    "type": "checkbox",
+    "options": [],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "neck_stiffness",
+    "label": "Rigidez de nuca Condicional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Ausente",
+        "txt": "Ausente"
+      },
+      {
+        "val": "Presente",
+        "txt": "Presente"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "kernig_sign",
+    "label": "Signo de Kernig Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Negativo",
+        "txt": "Negativo"
+      },
+      {
+        "val": "Positivo",
+        "txt": "Positivo"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  },
+  {
+    "tab": "neuro4",
+    "field": "brudzinski_sign",
+    "label": "Signo de Brudzinski Opcional",
+    "type": "select",
+    "options": [
+      {
+        "val": "",
+        "txt": "Seleccione..."
+      },
+      {
+        "val": "Negativo",
+        "txt": "Negativo"
+      },
+      {
+        "val": "Positivo",
+        "txt": "Positivo"
+      },
+      {
+        "val": "No evaluable",
+        "txt": "No evaluable"
+      }
+    ],
+    "choices": []
+  }
+]

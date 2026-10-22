@@ -411,86 +411,379 @@ CREATE TABLE IF NOT EXISTS `procedimiento_quirurgico` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------------------------------
--- 14. TABLA: laboratorio_estudio
+-- 14. TABLAS DE LABORATORIOS CLÍNICOS SERIADOS (HCIL V12 / V17)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `laboratorio_estudio` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `registro_solicitud_id` INT(11) NOT NULL,
   `hospitalizacion_id` INT(11) NULL DEFAULT NULL,
-  `tipo_analisis` VARCHAR(100) NOT NULL,
-  `fecha_toma_muestra` DATE NOT NULL,
-  `hora_toma_muestra` TIME NULL DEFAULT NULL,
-  `analito_parametro` VARCHAR(100) NOT NULL,
-  `resultado_valor` VARCHAR(50) NOT NULL,
-  `unidad_medida` VARCHAR(30) NULL DEFAULT NULL,
-  `valor_referencia_minimo` VARCHAR(50) NULL DEFAULT NULL,
-  `valor_referencia_maximo` VARCHAR(50) NULL DEFAULT NULL,
-  `es_valor_critico` TINYINT(1) NOT NULL DEFAULT 0,
-  `observaciones` TEXT NULL DEFAULT NULL,
-  `estatus_analisis` VARCHAR(50) NOT NULL DEFAULT 'Finalizado',
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `lab_study_id` VARCHAR(64) NOT NULL UNIQUE,
+  `lab_panel` VARCHAR(100) NOT NULL,
+  `lab_panel_other` VARCHAR(150) NULL,
+  `lab_order_date` DATE NULL,
+  `requesting_physician` VARCHAR(150) NULL,
+  `collection_datetime` DATETIME NULL,
+  `specimen_type` VARCHAR(100) NOT NULL,
+  `specimen_type_other` VARCHAR(150) NULL,
+  `specimen_site` VARCHAR(150) NULL,
+  `specimen_site_other` VARCHAR(150) NULL,
+  `fasting_status` VARCHAR(50) NULL,
+  `sample_quality_json` JSON NULL,
+  `sample_quality_notes` TEXT NULL,
+  `age_at_collection_days` INT(11) NULL,
+  `age_at_collection_months` INT(11) NULL,
+  `reference_sex` VARCHAR(20) NULL,
+  `blood_gas_type` VARCHAR(50) NULL,
+  `fio2` VARCHAR(50) NULL,
+  `oxygen_support_gas` VARCHAR(100) NULL,
+  `culture_type` VARCHAR(100) NULL,
+  `culture_collection_date` DATE NULL,
+  `culture_result` VARCHAR(50) NULL,
+  `organism` TEXT NULL,
+  `abo_group` VARCHAR(10) NULL,
+  `rh_factor` VARCHAR(20) NULL,
+  `antibody_screen` VARCHAR(50) NULL,
+  `crossmatch_status` VARCHAR(50) NULL,
+  `finalized` TINYINT(1) NOT NULL DEFAULT 0,
+  `finalized_at` DATETIME NULL,
+  `estatus_analisis` VARCHAR(50) NOT NULL DEFAULT 'Borrador',
+  `critical_admin_events_json` JSON NULL,
+  `datos_completos_json` LONGTEXT NULL,
   `audit_usu_id` VARCHAR(255) NULL DEFAULT NULL,
   `audit_ip` VARCHAR(45) NULL DEFAULT NULL,
   `audit_dep_id` VARCHAR(50) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_lab_solicitud` (`registro_solicitud_id`),
+  INDEX `idx_lab_uuid` (`lab_study_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+CREATE TABLE IF NOT EXISTS `laboratorio_resultado` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `laboratorio_estudio_id` INT(11) NOT NULL,
+  `lab_result_id` VARCHAR(64) NOT NULL UNIQUE,
+  `analyte_key` VARCHAR(100) NULL,
+  `test_code` VARCHAR(100) NOT NULL,
+  `test_name` VARCHAR(255) NOT NULL,
+  `loinc_code` VARCHAR(50) NULL,
+  `result_type` VARCHAR(20) NOT NULL DEFAULT 'NUMERIC',
+  `result_operator` VARCHAR(10) NOT NULL DEFAULT '=',
+  `result_value_numeric` DECIMAL(14,4) NULL,
+  `result_value_text` VARCHAR(500) NULL,
+  `result_value_code` VARCHAR(100) NULL,
+  `result_value_boolean` TINYINT(1) NULL,
+  `result_unit` VARCHAR(50) NULL,
+  `reference_lower` DECIMAL(14,4) NULL,
+  `reference_upper` DECIMAL(14,4) NULL,
+  `reference_text` VARCHAR(255) NULL,
+  `reference_basis` VARCHAR(255) NULL,
+  `reference_sex` VARCHAR(20) NULL,
+  `abnormal_flag` VARCHAR(50) NOT NULL DEFAULT 'Indeterminado',
+  `critical_flag` TINYINT(1) NOT NULL DEFAULT 0,
+  `critical_status` VARCHAR(50) NULL,
+  `result_method` VARCHAR(150) NULL,
+  `result_source` VARCHAR(50) NOT NULL DEFAULT 'Manual',
+  `result_validated` TINYINT(1) NOT NULL DEFAULT 0,
+  `orden` INT(11) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_res_estudio` (`laboratorio_estudio_id`),
+  INDEX `idx_res_uuid` (`lab_result_id`),
+  CONSTRAINT `fk_res_estudio` FOREIGN KEY (`laboratorio_estudio_id`) REFERENCES `laboratorio_estudio` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------------------------------
--- 15. TABLA: evolucion_diaria (Seguimiento clínico hospitalario)
+-- 15. TABLA: evolucion_diaria (Seguimiento clínico hospitalario - HCIL V13/V17)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `evolucion_diaria` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `registro_solicitud_id` INT(11) NOT NULL,
   `hospitalizacion_id` INT(11) NULL DEFAULT NULL,
-  `fecha_evolucion` DATE NOT NULL,
-  `hora_evolucion` TIME NOT NULL,
-  `dia_hospitalizacion` INT(11) NOT NULL DEFAULT 1,
-  `dia_postoperatorio` INT(11) NULL DEFAULT NULL,
-  `subjetivo_evolucion` TEXT NOT NULL,
-  `neurologico` TEXT NULL DEFAULT NULL,
-  `cardiovascular` TEXT NULL DEFAULT NULL,
-  `respiratorio` TEXT NULL DEFAULT NULL,
-  `gastrointestinal_nutricion` TEXT NULL DEFAULT NULL,
-  `renal_liquidos` TEXT NULL DEFAULT NULL,
-  `infeccioso_laboratorio` TEXT NULL DEFAULT NULL,
-  `impresion_diagnostica_plan` TEXT NOT NULL,
+  `daily_note_id` VARCHAR(64) NOT NULL UNIQUE,
+  `encounter_id` VARCHAR(64) NULL DEFAULT NULL,
+  `intent` VARCHAR(50) NOT NULL DEFAULT 'normal',
+  `parent_note_id` VARCHAR(64) NULL DEFAULT NULL,
+
+  -- 01. Identificación y responsable (Tab 01)
+  `evolution_date` DATE NOT NULL,
+  `evolution_time` TIME NOT NULL,
+  `evaluation_period_start` DATETIME NULL DEFAULT NULL,
+  `evaluation_period_end` DATETIME NULL DEFAULT NULL,
+  `care_location` VARCHAR(100) NULL DEFAULT NULL,
+  `service` VARCHAR(100) NULL DEFAULT NULL,
+  `author_id` VARCHAR(100) NULL DEFAULT NULL,
+  `hospital_day` INT(11) NULL DEFAULT NULL,
+  `postoperative_day` INT(11) NULL DEFAULT NULL,
+  `postprocedure_day` INT(11) NULL DEFAULT NULL,
+  `clinical_course_since_previous` VARCHAR(50) NULL DEFAULT NULL,
+  `significant_events_present` VARCHAR(10) NULL DEFAULT NULL,
+  `significant_events_summary` TEXT NULL DEFAULT NULL,
+
+  -- 02. Estado clínico actual (Tab 02)
+  `general_condition` VARCHAR(50) NULL DEFAULT NULL,
+  `consciousness_status` VARCHAR(50) NULL DEFAULT NULL,
+  `pain_present` VARCHAR(50) NULL DEFAULT NULL,
+  `pain_scale` VARCHAR(50) NULL DEFAULT NULL,
+  `pain_score` VARCHAR(20) NULL DEFAULT NULL,
+  `current_symptoms_json` JSON NULL DEFAULT NULL,
+  `current_symptoms_other` VARCHAR(250) NULL DEFAULT NULL,
+  `clinical_status_summary` TEXT NULL DEFAULT NULL,
+
+  -- 03. Antropometría y Signos vitales (Tab 03)
+  `weight_kg` DECIMAL(6,2) NULL DEFAULT NULL,
+  `weight_percentile` VARCHAR(150) NULL DEFAULT NULL,
+  `height_cm` DECIMAL(6,1) NULL DEFAULT NULL,
+  `height_percentile` VARCHAR(150) NULL DEFAULT NULL,
+  `bmi` DECIMAL(5,2) NULL DEFAULT NULL,
+  `bsa` DECIMAL(5,2) NULL DEFAULT NULL,
+  `heart_rate` INT(11) NULL DEFAULT NULL,
+  `respiratory_rate` INT(11) NULL DEFAULT NULL,
+  `oxygen_saturation` INT(11) NULL DEFAULT NULL,
+  `oxygen_support` VARCHAR(100) NULL DEFAULT NULL,
+  `oxygen_flow` DECIMAL(5,2) NULL DEFAULT NULL,
+  `bp_extremity` VARCHAR(50) NULL DEFAULT NULL,
+  `bp_systolic` INT(11) NULL DEFAULT NULL,
+  `bp_diastolic` INT(11) NULL DEFAULT NULL,
+  `bp_percentile` VARCHAR(150) NULL DEFAULT NULL,
+
+  -- 04. Cardiopulmonar (Tab 04)
+  `hemodynamic_status` VARCHAR(50) NULL DEFAULT NULL,
+  `cardiac_rhythm_status` VARCHAR(50) NULL DEFAULT NULL,
+  `perfusion_status_daily` VARCHAR(50) NULL DEFAULT NULL,
+  `cyanosis_status` VARCHAR(50) NULL DEFAULT NULL,
+  `edema_status` VARCHAR(50) NULL DEFAULT NULL,
+  `hepatomegaly_status` VARCHAR(50) NULL DEFAULT NULL,
+  `cardiovascular_daily_summary` TEXT NULL DEFAULT NULL,
+  `respiratory_status_daily` VARCHAR(50) NULL DEFAULT NULL,
+  `respiratory_support` VARCHAR(100) NULL DEFAULT NULL,
+  `fio2_current` DECIMAL(4,2) NULL DEFAULT NULL,
+  `respiratory_support_change` VARCHAR(50) NULL DEFAULT NULL,
+  `respiratory_daily_summary` TEXT NULL DEFAULT NULL,
+
+  -- 05. Balance y Nutrición (Tab 05)
+  `intake_24h_ml` DECIMAL(8,1) NULL DEFAULT NULL,
+  `output_24h_ml` DECIMAL(8,1) NULL DEFAULT NULL,
+  `fluid_balance_24h_ml` DECIMAL(8,1) NULL DEFAULT NULL,
+  `urine_output_ml_kg_h` DECIMAL(5,2) NULL DEFAULT NULL,
+  `urine_volume_ml` DECIMAL(8,1) NULL DEFAULT NULL,
+  `urine_measure_hours` DECIMAL(4,1) NULL DEFAULT NULL,
+  `renal_status_daily` VARCHAR(50) NULL DEFAULT NULL,
+  `fluid_renal_summary` TEXT NULL DEFAULT NULL,
+  `nutrition_route_json` JSON NULL DEFAULT NULL,
+  `feeding_tolerance` VARCHAR(50) NULL DEFAULT NULL,
+  `nutrition_change_24h` VARCHAR(50) NULL DEFAULT NULL,
+  `nutrition_summary` TEXT NULL DEFAULT NULL,
+
+  -- 06. Estudios y Procedimientos (Tab 06)
+  `new_labs_available` VARCHAR(10) NULL DEFAULT NULL,
+  `lab_result_ids_json` JSON NULL DEFAULT NULL,
+  `lab_clinical_interpretation` TEXT NULL DEFAULT NULL,
+  `lab_trend_status` VARCHAR(50) NULL DEFAULT NULL,
+  `new_imaging_performed` VARCHAR(10) NULL DEFAULT NULL,
+  `imaging_study_ids_json` JSON NULL DEFAULT NULL,
+  `control_chest_xray_performed` TINYINT(1) DEFAULT 0,
+  `imaging_results_available` VARCHAR(50) NULL DEFAULT NULL,
+  `imaging_clinical_interpretation` TEXT NULL DEFAULT NULL,
+  `imaging_change_vs_prior` VARCHAR(50) NULL DEFAULT NULL,
+  `procedure_performed_24h` VARCHAR(10) NULL DEFAULT NULL,
+  `procedure_ids_json` JSON NULL DEFAULT NULL,
+  `major_procedure_present` TINYINT(1) DEFAULT 0,
+  `procedure_tolerance` VARCHAR(50) NULL DEFAULT NULL,
+  `procedure_clinical_summary` TEXT NULL DEFAULT NULL,
+
+  -- 07. Eventos, Medicación y Dispositivos (Tab 07)
+  `clinical_events_json` JSON NULL DEFAULT NULL,
+  `medication_changes_present` VARCHAR(10) NULL DEFAULT NULL,
+  `medication_change_type_json` JSON NULL DEFAULT NULL,
+  `medication_change_summary` TEXT NULL DEFAULT NULL,
+  `active_devices_json` JSON NULL DEFAULT NULL,
+  `device_change_24h` VARCHAR(50) NULL DEFAULT NULL,
+  `drain_output_24h_ml` DECIMAL(8,1) NULL DEFAULT NULL,
+  `drain_entries_json` JSON NULL DEFAULT NULL,
+  `devices_summary` TEXT NULL DEFAULT NULL,
+
+  -- 08. Problemas Activos (Tab 08)
+  `active_problems_json` JSON NULL DEFAULT NULL,
+
+  -- 09. Plan por Sistemas y Objetivos (Tab 09)
+  `plan_cardiovascular` TEXT NULL DEFAULT NULL,
+  `plan_respiratory` TEXT NULL DEFAULT NULL,
+  `plan_neurologic` TEXT NULL DEFAULT NULL,
+  `plan_renal_fluid` TEXT NULL DEFAULT NULL,
+  `plan_nutrition` TEXT NULL DEFAULT NULL,
+  `plan_infectious` TEXT NULL DEFAULT NULL,
+  `plan_hematologic` TEXT NULL DEFAULT NULL,
+  `plan_other` TEXT NULL DEFAULT NULL,
+  `pending_tests_present` VARCHAR(10) NULL DEFAULT NULL,
+  `pending_other_summary` TEXT NULL DEFAULT NULL,
+  `next_24h_goals` TEXT NULL DEFAULT NULL,
+  `anticipated_disposition` VARCHAR(100) NULL DEFAULT NULL,
+  `discharge_barriers_json` JSON NULL DEFAULT NULL,
+
+  -- Estado y Firma
+  `signed_by` VARCHAR(150) NULL DEFAULT NULL,
+  `signed_at` DATETIME NULL DEFAULT NULL,
+  `finalized` TINYINT(1) NOT NULL DEFAULT 0,
   `estatus_nota` VARCHAR(50) NOT NULL DEFAULT 'Borrador',
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `datos_completos_json` LONGTEXT NULL DEFAULT NULL,
+
+  -- Auditoría
   `audit_usu_id` VARCHAR(255) NULL DEFAULT NULL,
   `audit_ip` VARCHAR(45) NULL DEFAULT NULL,
   `audit_dep_id` VARCHAR(50) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `idx_ev_solicitud` (`registro_solicitud_id`),
+  INDEX `idx_ev_uuid` (`daily_note_id`),
+  INDEX `idx_ev_fecha` (`evolution_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- -----------------------------------------------------------------------------
--- 16. TABLA: egreso_hospitalario
+-- 16. TABLA: egreso_hospitalario (Informe de alta y continuidad asistencial - HCIL V14/V17)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egreso_hospitalario` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `registro_solicitud_id` INT(11) NOT NULL,
   `hospitalizacion_id` INT(11) NULL DEFAULT NULL,
-  `fecha_ingreso` DATE NOT NULL,
-  `fecha_egreso` DATE NOT NULL,
-  `motivo_egreso` VARCHAR(100) NOT NULL,
-  `diagnostico_ingreso` VARCHAR(255) NOT NULL,
-  `diagnostico_principal_egreso` VARCHAR(255) NOT NULL,
-  `diagnosticos_secundarios` TEXT NULL DEFAULT NULL,
-  `resumen_hospitalizacion` TEXT NOT NULL,
-  `procedimientos_intervenciones` TEXT NULL DEFAULT NULL,
-  `condicion_salida` VARCHAR(100) NOT NULL,
-  `conciliacion_medicacion_alta` TEXT NOT NULL,
-  `indicaciones_cuidados_generales` TEXT NOT NULL,
-  `plan_citas_control` TEXT NULL DEFAULT NULL,
-  `estatus_alta` VARCHAR(50) NOT NULL DEFAULT 'Borrador',
-  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_actualizacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `discharge_id` VARCHAR(64) NOT NULL UNIQUE,
+  `encounter_id` VARCHAR(64) NULL DEFAULT NULL,
+  `intent` VARCHAR(50) NOT NULL DEFAULT 'normal',
+  `parent_discharge_id` VARCHAR(64) NULL DEFAULT NULL,
+
+  -- 01. Egreso e ingreso (Tab 01)
+  `admission_date` DATE NOT NULL,
+  `discharge_date` DATE NOT NULL,
+  `discharge_time` TIME NOT NULL,
+  `length_of_stay_days` INT(11) NULL DEFAULT NULL,
+  `discharge_service` VARCHAR(100) NULL DEFAULT NULL,
+  `discharge_physician_id` VARCHAR(100) NULL DEFAULT NULL,
+  `discharge_summary_status` VARCHAR(50) NOT NULL DEFAULT 'Borrador',
+  `present_illness_id` VARCHAR(64) NULL DEFAULT NULL,
+  `present_illness_display` TEXT NULL DEFAULT NULL,
+  `admission_condition` VARCHAR(50) NULL DEFAULT NULL,
+  `admission_diagnosis_ids_json` JSON NULL DEFAULT NULL,
+
+  -- 02. Evolución intrahospitalaria (Tab 02)
+  `hospital_course_outcome` VARCHAR(50) NULL DEFAULT NULL,
+  `icu_admission_occurred` TINYINT(1) DEFAULT 0,
+  `icu_stay_days` DECIMAL(6,1) NULL DEFAULT NULL,
+  `mechanical_ventilation_during_stay` TINYINT(1) DEFAULT 0,
+  `mechanical_support_during_stay` TINYINT(1) DEFAULT 0,
+  `hospital_course_summary` LONGTEXT NULL DEFAULT NULL,
+  `consultation_ids_json` JSON NULL DEFAULT NULL,
+  `consultations_summary` TEXT NULL DEFAULT NULL,
+
+  -- 03. Procedimientos realizados (Tab 03)
+  `discharge_procedure_links_json` JSON NULL DEFAULT NULL,
+  `cardiac_surgery_performed` TINYINT(1) DEFAULT 0,
+  `cardiac_surgery_ids_json` JSON NULL DEFAULT NULL,
+  `operative_note_id` VARCHAR(64) NULL DEFAULT NULL,
+  `operative_note_attached` TINYINT(1) DEFAULT 0,
+  `operative_note_file` VARCHAR(255) NULL DEFAULT NULL,
+  `operative_note_missing_reason` TEXT NULL DEFAULT NULL,
+  `surgery_result_discharge` VARCHAR(100) NULL DEFAULT NULL,
+  `cath_performed_during_stay` TINYINT(1) DEFAULT 0,
+  `cath_ids_json` JSON NULL DEFAULT NULL,
+  `cath_discharge_summary` TEXT NULL DEFAULT NULL,
+  `ep_performed_during_stay` TINYINT(1) DEFAULT 0,
+  `ep_study_ids_json` JSON NULL DEFAULT NULL,
+  `ep_discharge_summary` TEXT NULL DEFAULT NULL,
+  `complication_links_json` JSON NULL DEFAULT NULL,
+  `complications_summary` TEXT NULL DEFAULT NULL,
+  `unresolved_complication_present` TINYINT(1) DEFAULT 0,
+
+  -- 04. Estudios y Examen Físico (Tab 04)
+  `discharge_physical_exam_id` VARCHAR(64) NULL DEFAULT NULL,
+  `discharge_vitals_id` VARCHAR(64) NULL DEFAULT NULL,
+  `discharge_weight_kg` DECIMAL(6,2) NULL DEFAULT NULL,
+  `discharge_spo2` DECIMAL(5,1) NULL DEFAULT NULL,
+  `discharge_exam_summary` TEXT NULL DEFAULT NULL,
+  `discharge_cxr_status` VARCHAR(50) NULL DEFAULT NULL,
+  `discharge_cxr_id` VARCHAR(64) NULL DEFAULT NULL,
+  `discharge_cxr_date` DATE NULL DEFAULT NULL,
+  `discharge_cxr_summary` TEXT NULL DEFAULT NULL,
+  `discharge_cxr_comparison` VARCHAR(50) NULL DEFAULT NULL,
+  `discharge_cxr_not_done_reason` TEXT NULL DEFAULT NULL,
+  `discharge_labs_status` VARCHAR(50) NULL DEFAULT NULL,
+  `discharge_lab_result_ids_json` JSON NULL DEFAULT NULL,
+  `discharge_labs_summary` TEXT NULL DEFAULT NULL,
+  `discharge_ecg_id` VARCHAR(64) NULL DEFAULT NULL,
+  `discharge_echo_id` VARCHAR(64) NULL DEFAULT NULL,
+  `discharge_other_imaging_ids_json` JSON NULL DEFAULT NULL,
+  `discharge_studies_summary` TEXT NULL DEFAULT NULL,
+
+  -- 05. Diagnósticos de egreso (Tab 05)
+  `discharge_diagnoses_json` JSON NULL DEFAULT NULL,
+
+  -- 06. Medicamentos y soporte (Tab 06)
+  `discharge_medications_json` JSON NULL DEFAULT NULL,
+  `oxygen_at_home` TINYINT(1) DEFAULT 0,
+  `oxygen_flow_home` DECIMAL(4,1) NULL DEFAULT NULL,
+  `oxygen_interface_home` VARCHAR(50) NULL DEFAULT NULL,
+  `device_ids_at_discharge_json` JSON NULL DEFAULT NULL,
+  `vascular_access_at_discharge` VARCHAR(50) NULL DEFAULT NULL,
+  `drain_at_discharge` TINYINT(1) DEFAULT 0,
+  `home_equipment_required_json` JSON NULL DEFAULT NULL,
+
+  -- 07. Plan domiciliario y cuidados (Tab 07)
+  `home_feeding_route_json` JSON NULL DEFAULT NULL,
+  `home_diet_type` TEXT NULL DEFAULT NULL,
+  `activity_restriction` VARCHAR(100) NULL DEFAULT NULL,
+  `activity_restriction_detail` TEXT NULL DEFAULT NULL,
+  `sternal_precautions` VARCHAR(50) NULL DEFAULT NULL,
+  `sternal_precautions_duration` VARCHAR(100) NULL DEFAULT NULL,
+  `wound_care_required` TINYINT(1) DEFAULT 0,
+  `wound_care_instructions` TEXT NULL DEFAULT NULL,
+  `bathing_instructions` TEXT NULL DEFAULT NULL,
+  `return_school_daycare` VARCHAR(250) NULL DEFAULT NULL,
+  `sports_restriction` TEXT NULL DEFAULT NULL,
+  `ie_prophylaxis_status` VARCHAR(50) NULL DEFAULT NULL,
+  `ie_prophylaxis_instructions` TEXT NULL DEFAULT NULL,
+  `anticoagulation_at_discharge` TINYINT(1) DEFAULT 0,
+  `anticoagulant_medication_id` VARCHAR(64) NULL DEFAULT NULL,
+  `target_inr_min` DECIMAL(3,1) NULL DEFAULT NULL,
+  `target_inr_max` DECIMAL(3,1) NULL DEFAULT NULL,
+  `next_inr_date` DATE NULL DEFAULT NULL,
+  `device_precautions` TEXT NULL DEFAULT NULL,
+  `home_monitoring_required` TINYINT(1) DEFAULT 0,
+  `home_spo2_monitoring` TINYINT(1) DEFAULT 0,
+  `home_spo2_lower_limit` DECIMAL(5,1) NULL DEFAULT NULL,
+  `home_spo2_upper_limit` DECIMAL(5,1) NULL DEFAULT NULL,
+  `home_weight_monitoring` TINYINT(1) DEFAULT 0,
+  `home_hr_monitoring` TINYINT(1) DEFAULT 0,
+  `home_feeding_monitoring` TINYINT(1) DEFAULT 0,
+  `warning_signs_json` JSON NULL DEFAULT NULL,
+  `warning_sign_other` VARCHAR(250) NULL DEFAULT NULL,
+
+  -- 08. Pendientes y citas de seguimiento (Tab 08)
+  `pending_results_json` JSON NULL DEFAULT NULL,
+  `followups_json` JSON NULL DEFAULT NULL,
+
+  -- 09. Destino del paciente y firma (Tab 09)
+  `discharge_disposition` VARCHAR(100) NULL DEFAULT NULL,
+  `transfer_facility` VARCHAR(250) NULL DEFAULT NULL,
+  `transfer_reason` TEXT NULL DEFAULT NULL,
+  `transport_requirement` VARCHAR(100) NULL DEFAULT NULL,
+  `discharge_signed_by` VARCHAR(150) NULL DEFAULT NULL,
+  `discharge_signed_at` DATETIME NULL DEFAULT NULL,
+  `finalized` TINYINT(1) NOT NULL DEFAULT 0,
+  `datos_completos_json` LONGTEXT NULL DEFAULT NULL,
+
+  -- Auditoría
   `audit_usu_id` VARCHAR(255) NULL DEFAULT NULL,
   `audit_ip` VARCHAR(45) NULL DEFAULT NULL,
   `audit_dep_id` VARCHAR(50) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  INDEX `idx_eg_solicitud` (`registro_solicitud_id`),
+  INDEX `idx_eg_uuid` (`discharge_id`),
+  INDEX `idx_eg_fecha` (`discharge_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 
 -- =============================================================================
@@ -665,5 +958,32 @@ ALTER TABLE `evolucion_diaria`
 
 ALTER TABLE `egreso_hospitalario`
   ADD CONSTRAINT `fk_egreso_solicitud` FOREIGN KEY (`registro_solicitud_id`) REFERENCES `registro_solicitud` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- =============================================================================
+-- 18. REVISIÓN Y REGISTRO CLÍNICO INTEGRAL (PASO 15 · HCIL V17)
+-- Cierre formal del expediente clínico con auditoría y trazabilidad legal
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS `expediente_cierre` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `registro_solicitud_id` INT NOT NULL,
+  `paciente_id` INT NOT NULL,
+  `cierre_uuid` VARCHAR(64) NOT NULL UNIQUE,
+  `fecha_cierre` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `estatus_cierre` VARCHAR(50) NOT NULL DEFAULT 'Finalizado',
+  `profesional_responsable` VARCHAR(150) NULL,
+  `observaciones_finales` TEXT NULL,
+  `validaciones_superadas` TINYINT(1) NOT NULL DEFAULT 1,
+  `resumen_integral_json` LONGTEXT NULL,
+  `audit_usu_id` VARCHAR(255) NULL,
+  `audit_ip` VARCHAR(45) NULL,
+  `audit_dep_id` VARCHAR(50) NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX `idx_ec_solicitud` (`registro_solicitud_id`),
+  INDEX `idx_ec_paciente` (`paciente_id`),
+  INDEX `idx_ec_uuid` (`cierre_uuid`),
+  CONSTRAINT `fk_ec_solicitud` FOREIGN KEY (`registro_solicitud_id`) REFERENCES `registro_solicitud` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_ec_paciente` FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -300,13 +300,32 @@ const createCita = async (req, res) => {
             }
         }
 
-        // Determinar valores para registro_solicitud
+        // Determinar valores para registro_solicitud asegurando no-null en tipo_cita_id y procedimiento_planificado_id
         const fechaAsignadaCita = fecha_cita || new Date().toISOString().split('T')[0];
-        const horarioFinal = horario || horario_cita || null;
+        const horarioFinal = horario || horario_cita || '08:00 AM - Consulta Matutina';
         const estadoFinal = estado_cita || estatus || 'Programada';
         const obsFinal = observaciones || observacion_general || null;
-        const procPlanId = procedimiento_planificado_id || tipo_operacion_id || null;
-        const tipoOpId = tipo_operacion_id || procedimiento_planificado_id || 1;
+        
+        // tipo_cita_id: si viene null o no numérico, asignar 1 ('Cita de primera vez')
+        const tipoCitaFinal = (tipo_cita_id !== null && tipo_cita_id !== undefined && !isNaN(parseInt(tipo_cita_id, 10)))
+            ? parseInt(tipo_cita_id, 10)
+            : 1;
+
+        // procedimiento_planificado_id: si viene null, 'consulta_estandar' o vacío, asignar por defecto 9 ('Ecocardiograma especializado') o tipo_operacion_id
+        let procPlanId = null;
+        if (procedimiento_planificado_id && procedimiento_planificado_id !== 'consulta_estandar' && !isNaN(parseInt(procedimiento_planificado_id, 10))) {
+            procPlanId = parseInt(procedimiento_planificado_id, 10);
+        } else if (tipo_operacion_id && !isNaN(parseInt(tipo_operacion_id, 10))) {
+            procPlanId = parseInt(tipo_operacion_id, 10);
+        } else {
+            // Valor por defecto estándar en catálogo (9: Ecocardiograma especializado o 1)
+            procPlanId = 9;
+        }
+
+        const tipoOpId = (tipo_operacion_id && !isNaN(parseInt(tipo_operacion_id, 10)))
+            ? parseInt(tipo_operacion_id, 10)
+            : (procPlanId <= 2 ? procPlanId : 1);
+
         const centroSaludFinal = centro_salud_id || 4;
         const diagMotivo = diagnostico_motivo || 'Consulta y evaluación pediátrica';
 
@@ -336,8 +355,8 @@ const createCita = async (req, res) => {
                 fechaAsignadaCita,
                 fechaAsignadaCita,
                 horarioFinal,
-                tipo_cita_id,
-                pediatra_responsable || null,
+                tipoCitaFinal,
+                pediatra_responsable || 'Pediatra de Guardia',
                 procPlanId,
                 diagMotivo,
                 estadoFinal,

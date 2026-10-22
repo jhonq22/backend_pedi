@@ -312,10 +312,182 @@ const updateSolicitud = async (req, res) => {
     }
 };
 
+/**
+ * Obtener expediente clínico integral consolidado (Paso 15 · Revisión y Registro)
+ */
+const getExpedienteIntegral = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [solicitudes] = await db.query('SELECT * FROM registro_solicitud WHERE id = ?', [id]);
+        if (solicitudes.length === 0) {
+            return res.status(404).json({ status: 'error', message: 'Solicitud no encontrada' });
+        }
+        const sol = solicitudes[0];
+        const pacienteId = sol.paciente_id;
+
+        // Consultas concurrentes para máxima velocidad
+        const [
+            [pacientes],
+            [contactos],
+            [antecedentes],
+            [medicamentos],
+            [alergias],
+            [examenFisico],
+            [radiografias],
+            [cateterismos],
+            [cirugias],
+            [laboratorios],
+            [evoluciones],
+            [egresos],
+            [cierres]
+        ] = await Promise.all([
+            db.query('SELECT * FROM paciente WHERE id = ?', [pacienteId]),
+            db.query('SELECT * FROM paciente_contacto_responsable WHERE paciente_id = ?', [pacienteId]),
+            db.query('SELECT * FROM historia_antecedente WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM historia_medicamento_habitual WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM historia_alergia WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM historia_examen_fisico WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM estudio_radiografia WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM estudio_cateterismo WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM procedimiento_quirurgico WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM laboratorio_estudio WHERE registro_solicitud_id = ?', [id]),
+            db.query('SELECT * FROM evolucion_diaria WHERE registro_solicitud_id = ? ORDER BY hospital_day ASC, id ASC', [id]),
+            db.query('SELECT * FROM egreso_hospitalario WHERE registro_solicitud_id = ? ORDER BY id DESC', [id]),
+            db.query('SELECT * FROM expediente_cierre WHERE registro_solicitud_id = ? ORDER BY id DESC', [id])
+        ]);
+
+        const paciente = pacientes[0] || null;
+        if (paciente) {
+            paciente.contactos = contactos;
+        }
+
+        res.json({
+            status: 'success',
+            data: {
+                solicitud: sol,
+                paciente,
+                antecedentes: {
+                    antecedente: antecedentes[0] || null,
+                    medicamentos,
+                    alergias
+                },
+                examenFisico: examenFisico[0] || null,
+                radiografias,
+                cateterismos,
+                cirugias,
+                laboratorios,
+                evoluciones,
+                egresos,
+                cierres
+            }
+        });
+    } catch (error) {
+        console.error('Error al obtener expediente integral:', error);
+        res.status(500).json({ status: 'error', message: 'Error interno al consultar expediente integral', error: error.message });
+    }
+};
+
+/**
+ * Confirmar y finalizar formalmente el expediente clínico (Paso 15)
+ */
+const finalizarExpediente = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const audit = req.audit || { audit_usu_id: '1', audit_ip: '127.0.0.1', audit_dep_id: '1' };
+        const {
+            profesional_responsable,
+            observaciones_finales,
+            validaciones_superadas = true,
+            resumen_integral
+        } = req.body;
+
+        const [solicitudes] = await db.query('SELECT id, paciente_id, estatus FROM registro_solicitud WHERE id = ?', [id]);
+        if (solicitudes.length === 0) {
+            return res.status(404).json({ status: 'error', message: 'Solicitud clínica no encontrada' });
+        }
+        const sol = solicitudes[0];
+
+        const crypto = require('crypto');
+        const cierre_uuid = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : 'cierre-' + Date.now();
+
+        // 1. Guardar en expediente_cierre
+        const [cierreResult] = await db.query(
+            `INSERT INTO expediente_cierre (
+                registro_solicitud_id,
+                paciente_id,
+                cierre_uuid,
+                estatus_cierre,
+                profesional_responsable,
+                observaciones_finales,
+                validaciones_superadas,
+                resumen_integral_json,
+                audit_usu_id,
+                audit_ip,
+                audit_dep_id
+            ) VALUES (?, ?, ?, 'Finalizado', ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                id,
+                sol.paciente_id,
+                cierre_uuid,
+                profesional_responsable || 'Profesional de Guardia / Cirujano',
+                observaciones_finales || 'Expediente clínico integral verificado y cerrado satisfactoriamente.',
+                validaciones_superadas ? 1 : 0,
+                resumen_integral ? (typeof resumen_integral === 'string' ? resumen_integral : JSON.stringify(resumen_integral)) : null,
+                audit.audit_usu_id,
+                audit.audit_ip,
+                audit.audit_dep_id
+            ]
+        );
+
+        // 2. Actualizar registro_solicitud
+        await db.query(
+            `UPDATE registro_solicitud SET
+                estatus = 'Finalizada',
+                fecha_respuesta = CURDATE(),
+                audit_usu_id = ?,
+                audit_ip = ?,
+                audit_dep_id = ?
+             WHERE id = ?`,
+            [audit.audit_usu_id, audit.audit_ip, audit.audit_dep_id, id]
+        );
+
+        res.json({
+            status: 'success',
+            message: 'Expediente clínico integral validado, finalizado y archivado exitosamente.',
+            cierre_id: cierreResult.insertId,
+            cierre_uuid,
+            estatus: 'Finalizada'
+        });
+    } catch (error) {
+        console.error('Error al finalizar expediente:', error);
+        res.status(500).json({ status: 'error', message: 'Error interno al finalizar expediente', error: error.message });
+    }
+};
+
+/**
+ * Obtener historial de cierres de la solicitud
+ */
+const getHistorialCierres = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows] = await db.query(
+            'SELECT * FROM expediente_cierre WHERE registro_solicitud_id = ? ORDER BY id DESC',
+            [id]
+        );
+        res.json({ status: 'success', data: rows });
+    } catch (error) {
+        console.error('Error al consultar cierres:', error);
+        res.status(500).json({ status: 'error', message: 'Error al consultar historial de cierres', error: error.message });
+    }
+};
+
 module.exports = {
     getSolicitudes,
     getSolicitudPorId,
     getOCrearSolicitudActiva,
     createSolicitud,
-    updateSolicitud
+    updateSolicitud,
+    getExpedienteIntegral,
+    finalizarExpediente,
+    getHistorialCierres
 };

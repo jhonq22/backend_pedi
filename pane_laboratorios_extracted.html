@@ -1,0 +1,14 @@
+id="pane_laboratorios">
+<div class="panel-header"><div aria-hidden="true" class="panel-icon">12</div><div><h2>Laboratorios clínicos</h2><p>Estudios seriados · Analitos estructurados · Rangos pediátricos documentados · Trazabilidad</p></div></div>
+<div class="panel-body">
+<div class="lb-banner"><div><strong>Laboratorios por muestra y fecha</strong><p>Cada estudio y resultado tiene un identificador propio. Los estudios finalizados permanecen inmutables y el próximo control crea registros nuevos.</p></div><span class="lb-demo-tag">SOLO DATOS FICTICIOS</span></div>
+<div class="lb-toolbar"><button class="btn primary" id="lb_new" type="button">＋ Agregar estudio</button><button class="btn secondary" id="lb_export" type="button">↓ Exportar laboratorios (JSON)</button><div class="lb-count" id="lb_count">0 estudios</div></div>
+<div aria-live="polite" class="lb-message" hidden="" id="lb_message" role="status"></div>
+<div class="lb-layout"><aside class="lb-sidebar"><div class="lb-side-head">Estudios de la hospitalización</div><div id="lb_list"><p class="lb-empty-small">Sin estudios agregados.</p></div></aside>
+<div class="lb-workspace"><div aria-label="Pestañas de laboratorio" class="lb-tabs" id="lb_tabs" role="tablist"></div><div class="lb-content" id="lb_content"></div>
+<div class="lb-footer"><div class="lb-footer-paging"><button class="btn secondary" id="lb_prev" type="button">← Anterior</button><button class="btn secondary" id="lb_next" type="button">Siguiente →</button></div><div class="lb-footer-actions"><button class="btn secondary" id="lb_discard" type="button">Descartar borrador</button><button class="btn primary" id="lb_final" type="button">✓ Finalizar estudio (demo)</button></div></div>
+</div>
+</div>
+<div class="note"><strong>Seguridad clínica:</strong> no se incluyen intervalos de referencia pediátricos ni umbrales críticos precargados. El personal debe emplear los intervalos proporcionados por el laboratorio y asociados a edad, sexo y método. Las alertas y las confirmaciones de notificación son únicamente simuladas: este HTML no transmite avisos, no valida resultados ante un LIS ni almacena información clínica de forma persistente.</div>
+</div>
+</section>

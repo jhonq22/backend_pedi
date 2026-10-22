@@ -7,6 +7,9 @@ const inyectarAuditoria = require('../middlewares/auditMiddleware');
 
 router.get('/', verificarToken, solicitudController.getSolicitudes);
 router.get('/:id', verificarToken, solicitudController.getSolicitudPorId);
+router.get('/:id/expediente-integral', verificarToken, solicitudController.getExpedienteIntegral);
+router.post('/:id/finalizar-expediente', verificarToken, inyectarAuditoria, solicitudController.finalizarExpediente);
+router.get('/:id/cierres', verificarToken, solicitudController.getHistorialCierres);
 router.get('/paciente/:paciente_id/activa', verificarToken, inyectarAuditoria, solicitudController.getOCrearSolicitudActiva);
 router.post('/', verificarToken, inyectarAuditoria, solicitudController.createSolicitud);
 router.put('/:id', verificarToken, inyectarAuditoria, solicitudController.updateSolicitud);

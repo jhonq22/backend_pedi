@@ -1,0 +1,14 @@
+id="pane_evoluciones">
+<div class="panel-header"><div aria-hidden="true" class="panel-icon">13</div><div><h2>Evolución clínica diaria</h2><p>Notas seriadas por hospitalización · Seguimiento por sistemas y problemas · Registro estructurado</p></div></div>
+<div class="panel-body">
+<div class="dn-banner"><div><h3>Seguimiento clínico de hospitalización</h3><p>Las notas firmadas son inmutables en esta demostración. Los datos de laboratorio e imágenes se vinculan sin copiarlos.</p></div><div class="dn-counter"><b id="dn_total">0</b><small>evoluciones</small></div></div>
+<div class="dn-buttonbar"><button class="dn-btn primary" id="dn_new" type="button">＋ Agregar evolución</button><button class="dn-btn" id="dn_export" type="button">↓ Exportar evoluciones JSON</button><span class="help">Cada evolución recibe un UUID único.</span></div>
+<div class="dn-list" id="dn_note_list"></div><div class="dn-empty" id="dn_no_notes">No existen evoluciones todavía. Pulse <strong>Agregar evolución</strong> para comenzar.</div>
+<div class="dn-editor" hidden="" id="dn_editor">
+<div class="dn-editor-head"><div><h3 id="dn_editor_title">Evolución diaria</h3><p id="dn_editor_caption">Seguimiento por hospitalización</p></div><span class="dn-badge" id="dn_status">Borrador</span></div>
+<div aria-label="Secciones de evolución diaria" class="dn-tabs" id="dn_tabbar" role="tablist"></div>
+<div class="dn-main" id="dn_body"></div>
+<div class="dn-footer"><button class="dn-btn" id="dn_prev" type="button">← Anterior</button><span class="help" id="dn_tab_count">1/9</span><button class="dn-btn" id="dn_next" type="button">Siguiente →</button><button class="dn-btn warn" id="dn_discard" type="button">Descartar borrador</button><button class="dn-btn" id="dn_draft" type="button">Guardar borrador (demo)</button><button class="dn-btn primary" id="dn_sign" type="button">✓ Firmar (simulación)</button><button class="dn-btn" hidden="" id="dn_addendum" type="button">＋ Crear adenda</button><button class="dn-btn" hidden="" id="dn_correction" type="button">＋ Crear corrección</button></div>
+</div>
+</div>
+</section>

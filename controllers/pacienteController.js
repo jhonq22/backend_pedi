@@ -111,6 +111,7 @@ const getPacientes = async (req, res) => {
                 p.sexo_id,
                 COALESCE(NULLIF(p.sexo, ''), s.nombre) AS sexo_nombre,
                 p.sexo,
+                p.pais_residencia,
                 p.estado_residencia,
                 p.ciudad_residencia,
                 p.municipio_residencia,
@@ -234,12 +235,14 @@ const getPacientePorId = async (req, res) => {
                     cs.descripcion AS centro_salud_nombre,
                     top.nombre AS tipo_operacion_nombre,
                     tc.nombre AS tipo_cita_nombre,
-                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre
+                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
+                    COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo_nombre
              FROM registro_solicitud rs
              LEFT JOIN lista_centro_salud cs ON rs.centro_salud_id = cs.id
              LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
              LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
              LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+             LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
              WHERE rs.paciente_id = ?
              ORDER BY rs.id DESC`,
             [id]
@@ -256,12 +259,14 @@ const getPacientePorId = async (req, res) => {
                         cs.descripcion AS centro_salud_nombre,
                         top.nombre AS tipo_operacion_nombre,
                         tc.nombre AS tipo_cita_nombre,
-                        COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre
+                        COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
+                        COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo_nombre
                  FROM registro_solicitud rs
                  LEFT JOIN lista_centro_salud cs ON rs.centro_salud_id = cs.id
                  LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
                  LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
                  LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+                 LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
                  WHERE rs.id = ?`,
                 [insSol.insertId]
             );
@@ -526,6 +531,18 @@ const createPaciente = async (req, res) => {
             finalTipoDocId = 12;
         }
 
+        const esVenezuelaRes = !pais_residencia || String(pais_residencia).trim().toLowerCase() === 'venezuela';
+        const finalPaisResidencia = pais_residencia ? String(pais_residencia).trim() : 'Venezuela';
+        const finalPaisResId = pais_residencia_id || null;
+        const finalEstadoResId = estado_residencia_id || null;
+        const finalEstadoRes = estado_residencia || null;
+        const finalMunicipioResId = municipio_residencia_id || null;
+        const finalMunicipioRes = municipio_residencia || null;
+        const finalParroquiaResId = !esVenezuelaRes ? null : (parroquia_residencia_id || null);
+        const finalParroquiaRes = !esVenezuelaRes ? null : (parroquia_residencia || null);
+        const finalCiudadResId = esVenezuelaRes ? null : (ciudad_residencia_id || null);
+        const finalCiudadRes = esVenezuelaRes ? null : (ciudad_residencia || null);
+
         // Insertar paciente principal
         const [resultPaciente] = await connection.query(
             `INSERT INTO paciente (
@@ -633,16 +650,16 @@ const createPaciente = async (req, res) => {
                 ciudad_nacimiento_id || null,
                 ciudad_nacimiento || null,
                 lugar_nacimiento_otro || null,
-                pais_residencia_id || null,
-                pais_residencia || 'Venezuela',
-                estado_residencia_id || null,
-                estado_residencia || null,
-                municipio_residencia_id || null,
-                municipio_residencia || null,
-                parroquia_residencia_id || null,
-                parroquia_residencia || null,
-                ciudad_residencia_id || null,
-                ciudad_residencia || null,
+                finalPaisResId,
+                finalPaisResidencia,
+                finalEstadoResId,
+                finalEstadoRes,
+                finalMunicipioResId,
+                finalMunicipioRes,
+                finalParroquiaResId,
+                finalParroquiaRes,
+                finalCiudadResId,
+                finalCiudadRes,
                 urbanizacion_sector || null,
                 calle_avenida || null,
                 casa_edificio || null,
@@ -957,6 +974,30 @@ const updatePaciente = async (req, res) => {
             finalTipoDocId = 12;
         }
 
+        const updateResidencia = pais_residencia !== undefined;
+        const esVenezuelaRes = updateResidencia
+            ? (!pais_residencia || String(pais_residencia).trim().toLowerCase() === 'venezuela')
+            : null;
+
+        let finalPaisResId = pais_residencia_id !== undefined ? (pais_residencia_id || null) : null;
+        let finalPaisRes = pais_residencia !== undefined ? (pais_residencia || 'Venezuela') : null;
+        let finalEstadoResId = estado_residencia_id !== undefined ? (estado_residencia_id || null) : null;
+        let finalEstadoRes = estado_residencia !== undefined ? (estado_residencia || null) : null;
+        let finalMunicipioResId = municipio_residencia_id !== undefined ? (municipio_residencia_id || null) : null;
+        let finalMunicipioRes = municipio_residencia !== undefined ? (municipio_residencia || null) : null;
+        let finalParroquiaResId = parroquia_residencia_id !== undefined ? (parroquia_residencia_id || null) : null;
+        let finalParroquiaRes = parroquia_residencia !== undefined ? (parroquia_residencia || null) : null;
+        let finalCiudadResId = ciudad_residencia_id !== undefined ? (ciudad_residencia_id || null) : null;
+        let finalCiudadRes = ciudad_residencia !== undefined ? (ciudad_residencia || null) : null;
+
+        if (esVenezuelaRes === true) {
+            finalCiudadResId = null;
+            finalCiudadRes = null;
+        } else if (esVenezuelaRes === false) {
+            finalParroquiaResId = null;
+            finalParroquiaRes = null;
+        }
+
         await connection.query(
             `UPDATE paciente SET
                 tipo_documento_id = COALESCE(?, tipo_documento_id),
@@ -987,16 +1028,16 @@ const updatePaciente = async (req, res) => {
                 ciudad_nacimiento_id = COALESCE(?, ciudad_nacimiento_id),
                 ciudad_nacimiento = COALESCE(?, ciudad_nacimiento),
                 lugar_nacimiento_otro = COALESCE(?, lugar_nacimiento_otro),
-                pais_residencia_id = COALESCE(?, pais_residencia_id),
-                pais_residencia = COALESCE(?, pais_residencia),
-                estado_residencia_id = COALESCE(?, estado_residencia_id),
-                estado_residencia = COALESCE(?, estado_residencia),
-                municipio_residencia_id = COALESCE(?, municipio_residencia_id),
-                municipio_residencia = COALESCE(?, municipio_residencia),
-                parroquia_residencia_id = COALESCE(?, parroquia_residencia_id),
-                parroquia_residencia = COALESCE(?, parroquia_residencia),
-                ciudad_residencia_id = COALESCE(?, ciudad_residencia_id),
-                ciudad_residencia = COALESCE(?, ciudad_residencia),
+                pais_residencia_id = CASE WHEN ? = 1 THEN ? ELSE pais_residencia_id END,
+                pais_residencia = CASE WHEN ? = 1 THEN ? ELSE pais_residencia END,
+                estado_residencia_id = CASE WHEN ? = 1 THEN ? ELSE estado_residencia_id END,
+                estado_residencia = CASE WHEN ? = 1 THEN ? ELSE estado_residencia END,
+                municipio_residencia_id = CASE WHEN ? = 1 THEN ? ELSE municipio_residencia_id END,
+                municipio_residencia = CASE WHEN ? = 1 THEN ? ELSE municipio_residencia END,
+                parroquia_residencia_id = CASE WHEN ? = 1 THEN ? ELSE parroquia_residencia_id END,
+                parroquia_residencia = CASE WHEN ? = 1 THEN ? ELSE parroquia_residencia END,
+                ciudad_residencia_id = CASE WHEN ? = 1 THEN ? ELSE ciudad_residencia_id END,
+                ciudad_residencia = CASE WHEN ? = 1 THEN ? ELSE ciudad_residencia END,
                 urbanizacion_sector = COALESCE(?, urbanizacion_sector),
                 calle_avenida = COALESCE(?, calle_avenida),
                 casa_edificio = COALESCE(?, casa_edificio),
@@ -1056,16 +1097,26 @@ const updatePaciente = async (req, res) => {
                 ciudad_nacimiento_id !== undefined ? ciudad_nacimiento_id : null,
                 ciudad_nacimiento !== undefined ? ciudad_nacimiento : null,
                 lugar_nacimiento_otro !== undefined ? lugar_nacimiento_otro : null,
-                pais_residencia_id !== undefined ? pais_residencia_id : null,
-                pais_residencia !== undefined ? pais_residencia : null,
-                estado_residencia_id !== undefined ? estado_residencia_id : null,
-                estado_residencia !== undefined ? estado_residencia : null,
-                municipio_residencia_id !== undefined ? municipio_residencia_id : null,
-                municipio_residencia !== undefined ? municipio_residencia : null,
-                parroquia_residencia_id !== undefined ? parroquia_residencia_id : null,
-                parroquia_residencia !== undefined ? parroquia_residencia : null,
-                ciudad_residencia_id !== undefined ? ciudad_residencia_id : null,
-                ciudad_residencia !== undefined ? ciudad_residencia : null,
+                updateResidencia ? 1 : 0,
+                finalPaisResId,
+                updateResidencia ? 1 : 0,
+                finalPaisRes,
+                updateResidencia ? 1 : 0,
+                finalEstadoResId,
+                updateResidencia ? 1 : 0,
+                finalEstadoRes,
+                updateResidencia ? 1 : 0,
+                finalMunicipioResId,
+                updateResidencia ? 1 : 0,
+                finalMunicipioRes,
+                updateResidencia ? 1 : 0,
+                finalParroquiaResId,
+                updateResidencia ? 1 : 0,
+                finalParroquiaRes,
+                updateResidencia ? 1 : 0,
+                finalCiudadResId,
+                updateResidencia ? 1 : 0,
+                finalCiudadRes,
                 urbanizacion_sector !== undefined ? urbanizacion_sector : null,
                 calle_avenida !== undefined ? calle_avenida : null,
                 casa_edificio !== undefined ? casa_edificio : null,

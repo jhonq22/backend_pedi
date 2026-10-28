@@ -15,7 +15,7 @@ const verificarToken = (req, res, next) => {
         req.usuario = decodificado;
         next();
     } catch (error) {
-        return res.status(403).json({ message: 'Token inválido o expirado.' });
+        return res.status(401).json({ message: 'Token inválido o expirado.', expired: true });
     }
 };
 

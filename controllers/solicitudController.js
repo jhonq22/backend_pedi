@@ -14,13 +14,15 @@ const getSolicitudes = async (req, res) => {
                    cs.descripcion AS centro_salud_nombre,
                    top.nombre AS tipo_operacion_nombre,
                    tc.nombre AS tipo_cita_nombre,
-                   COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre
+                   COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
+                   COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo_nombre
             FROM registro_solicitud rs
             LEFT JOIN paciente p ON rs.paciente_id = p.id
             LEFT JOIN lista_centro_salud cs ON rs.centro_salud_id = cs.id
             LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
             LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
             LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+            LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
             WHERE 1=1
         `;
         const params = [];
@@ -63,13 +65,15 @@ const getSolicitudPorId = async (req, res) => {
                     cs.descripcion AS centro_salud_nombre,
                     top.nombre AS tipo_operacion_nombre,
                     tc.nombre AS tipo_cita_nombre,
-                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre
+                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
+                    COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo_nombre
              FROM registro_solicitud rs
              LEFT JOIN paciente p ON rs.paciente_id = p.id
              LEFT JOIN lista_centro_salud cs ON rs.centro_salud_id = cs.id
              LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
              LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
              LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+             LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
              WHERE rs.id = ?`,
             [id]
         );
@@ -103,12 +107,14 @@ const getOCrearSolicitudActiva = async (req, res) => {
                     cs.descripcion AS centro_salud_nombre,
                     top.nombre AS tipo_operacion_nombre,
                     tc.nombre AS tipo_cita_nombre,
-                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre
+                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
+                    COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo_nombre
              FROM registro_solicitud rs
              LEFT JOIN lista_centro_salud cs ON rs.centro_salud_id = cs.id
              LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
              LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
              LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+             LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
              WHERE rs.paciente_id = ?
              ORDER BY rs.id DESC
              LIMIT 1`,
@@ -141,12 +147,14 @@ const getOCrearSolicitudActiva = async (req, res) => {
                     cs.descripcion AS centro_salud_nombre,
                     top.nombre AS tipo_operacion_nombre,
                     tc.nombre AS tipo_cita_nombre,
-                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre
+                    COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
+                    COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo_nombre
              FROM registro_solicitud rs
              LEFT JOIN lista_centro_salud cs ON rs.centro_salud_id = cs.id
              LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
              LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
              LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+             LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
              WHERE rs.id = ?`,
             [insertResult.insertId]
         );
@@ -169,6 +177,7 @@ const createSolicitud = async (req, res) => {
             centro_salud_id,
             tipo_operacion_id,
             procedimiento_planificado_id,
+            diagnostico_motivo_id,
             fecha_solicitud = new Date().toISOString().split('T')[0],
             fecha_cita,
             horario_cita,
@@ -189,12 +198,26 @@ const createSolicitud = async (req, res) => {
             return res.status(404).json({ status: 'error', message: 'Paciente no encontrado' });
         }
 
+        let diagMotivoId = null;
+        if (diagnostico_motivo_id && !isNaN(parseInt(diagnostico_motivo_id, 10))) {
+            diagMotivoId = parseInt(diagnostico_motivo_id, 10);
+        }
+
+        let diagMotivo = diagnostico_motivo || null;
+        if (diagMotivoId && !diagMotivo) {
+            const [diagRow] = await db.query('SELECT nombre FROM lista_tipo_general WHERE id = ?', [diagMotivoId]);
+            if (diagRow.length > 0) {
+                diagMotivo = diagRow[0].nombre;
+            }
+        }
+
         const [result] = await db.query(
             `INSERT INTO registro_solicitud (
                 paciente_id,
                 centro_salud_id,
                 tipo_operacion_id,
                 procedimiento_planificado_id,
+                diagnostico_motivo_id,
                 fecha_solicitud,
                 fecha_cita,
                 horario_cita,
@@ -207,18 +230,19 @@ const createSolicitud = async (req, res) => {
                 audit_usu_id,
                 audit_ip,
                 audit_dep_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 paciente_id,
                 centro_salud_id || null,
                 tipo_operacion_id || null,
                 procedimiento_planificado_id || null,
+                diagMotivoId,
                 fecha_solicitud,
                 fecha_cita || null,
                 horario_cita || null,
                 tipo_cita_id || null,
                 pediatra_responsable || null,
-                diagnostico_motivo || null,
+                diagMotivo,
                 fecha_respuesta || null,
                 estatus,
                 observacion_general || null,
@@ -251,6 +275,7 @@ const updateSolicitud = async (req, res) => {
             centro_salud_id,
             tipo_operacion_id,
             procedimiento_planificado_id,
+            diagnostico_motivo_id,
             fecha_solicitud,
             fecha_cita,
             horario_cita,
@@ -267,11 +292,27 @@ const updateSolicitud = async (req, res) => {
             return res.status(404).json({ status: 'error', message: 'Solicitud no encontrada' });
         }
 
+        let diagMotivoId = undefined;
+        if (diagnostico_motivo_id !== undefined) {
+            diagMotivoId = (diagnostico_motivo_id && !isNaN(parseInt(diagnostico_motivo_id, 10)))
+                ? parseInt(diagnostico_motivo_id, 10)
+                : null;
+        }
+
+        let diagMotivoTexto = diagnostico_motivo !== undefined ? diagnostico_motivo : null;
+        if (diagMotivoId && !diagMotivoTexto) {
+            const [diagRow] = await db.query('SELECT nombre FROM lista_tipo_general WHERE id = ?', [diagMotivoId]);
+            if (diagRow.length > 0) {
+                diagMotivoTexto = diagRow[0].nombre;
+            }
+        }
+
         await db.query(
             `UPDATE registro_solicitud SET
                 centro_salud_id = COALESCE(?, centro_salud_id),
                 tipo_operacion_id = COALESCE(?, tipo_operacion_id),
                 procedimiento_planificado_id = COALESCE(?, procedimiento_planificado_id),
+                diagnostico_motivo_id = COALESCE(?, diagnostico_motivo_id),
                 fecha_solicitud = COALESCE(?, fecha_solicitud),
                 fecha_cita = COALESCE(?, fecha_cita),
                 horario_cita = COALESCE(?, horario_cita),
@@ -289,12 +330,13 @@ const updateSolicitud = async (req, res) => {
                 centro_salud_id,
                 tipo_operacion_id,
                 procedimiento_planificado_id,
+                diagMotivoId !== undefined ? diagMotivoId : null,
                 fecha_solicitud,
                 fecha_cita,
                 horario_cita,
                 tipo_cita_id,
                 pediatra_responsable,
-                diagnostico_motivo,
+                diagMotivoTexto,
                 fecha_respuesta,
                 estatus,
                 observacion_general,

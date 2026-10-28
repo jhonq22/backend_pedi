@@ -23,9 +23,11 @@ const getCitas = async (req, res) => {
                 tc.nombre AS tipo_cita_nombre,
                 rs.pediatra_responsable,
                 rs.procedimiento_planificado_id,
-                COALESCE(tp.nombre, top.nombre, 'Consulta Pediátrica Estándar') AS procedimiento_nombre,
+                COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
                 rs.tipo_operacion_id,
-                rs.diagnostico_motivo,
+                rs.diagnostico_motivo_id,
+                COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo,
+                td.nombre AS diagnostico_motivo_nombre,
                 rs.estatus AS estado_cita,
                 rs.estatus,
                 rs.observacion_general AS observaciones,
@@ -33,7 +35,10 @@ const getCitas = async (req, res) => {
                 rs.fecha_creacion,
                 rs.fecha_actualizacion,
                 p.numero_historia_clinica,
+                p.pais_residencia,
                 p.estado_residencia,
+                p.municipio_residencia,
+                p.parroquia_residencia,
                 p.ciudad_residencia,
                 p.direccion_completa,
                 CONCAT_WS(' ', p.primer_nombre, p.segundo_nombre, p.primer_apellido, p.segundo_apellido) AS paciente_nombre_completo,
@@ -54,6 +59,7 @@ const getCitas = async (req, res) => {
             LEFT JOIN paciente p ON rs.paciente_id = p.id
             LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
             LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+            LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
             LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
             LEFT JOIN lista_tipo_general s ON p.sexo_id = s.id
             WHERE 1=1
@@ -126,9 +132,14 @@ const getCitaPorId = async (req, res) => {
                 rs.estatus AS estado_cita,
                 rs.observacion_general AS observaciones,
                 tc.nombre AS tipo_cita_nombre,
-                COALESCE(tp.nombre, top.nombre, 'Consulta Pediátrica Estándar') AS procedimiento_nombre,
+                COALESCE(tp.nombre, top.nombre) AS procedimiento_nombre,
+                COALESCE(td.nombre, rs.diagnostico_motivo) AS diagnostico_motivo,
+                td.nombre AS diagnostico_motivo_nombre,
                 p.numero_historia_clinica,
+                p.pais_residencia,
                 p.estado_residencia,
+                p.municipio_residencia,
+                p.parroquia_residencia,
                 p.ciudad_residencia,
                 p.direccion_completa,
                 CONCAT_WS(' ', p.primer_nombre, p.segundo_nombre, p.primer_apellido, p.segundo_apellido) AS paciente_nombre_completo,
@@ -146,6 +157,7 @@ const getCitaPorId = async (req, res) => {
              LEFT JOIN paciente p ON rs.paciente_id = p.id
              LEFT JOIN lista_tipo_general tc ON rs.tipo_cita_id = tc.id
              LEFT JOIN lista_tipo_general tp ON rs.procedimiento_planificado_id = tp.id
+             LEFT JOIN lista_tipo_general td ON rs.diagnostico_motivo_id = td.id
              LEFT JOIN tipo_operacion top ON rs.tipo_operacion_id = top.id
              WHERE rs.id = ?`,
             [id]
@@ -183,6 +195,7 @@ const createCita = async (req, res) => {
             pediatra_responsable,
             procedimiento_planificado_id,
             tipo_operacion_id,
+            diagnostico_motivo_id,
             diagnostico_motivo,
             estado_cita,
             estatus,
@@ -302,7 +315,7 @@ const createCita = async (req, res) => {
 
         // Determinar valores para registro_solicitud asegurando no-null en tipo_cita_id y procedimiento_planificado_id
         const fechaAsignadaCita = fecha_cita || new Date().toISOString().split('T')[0];
-        const horarioFinal = horario || horario_cita || '08:00 AM - Consulta Matutina';
+        const horarioFinal = horario || horario_cita || null;
         const estadoFinal = estado_cita || estatus || 'Programada';
         const obsFinal = observaciones || observacion_general || null;
         
@@ -311,23 +324,35 @@ const createCita = async (req, res) => {
             ? parseInt(tipo_cita_id, 10)
             : 1;
 
-        // procedimiento_planificado_id: si viene null, 'consulta_estandar' o vacío, asignar por defecto 9 ('Ecocardiograma especializado') o tipo_operacion_id
+        // procedimiento_planificado_id
         let procPlanId = null;
-        if (procedimiento_planificado_id && procedimiento_planificado_id !== 'consulta_estandar' && !isNaN(parseInt(procedimiento_planificado_id, 10))) {
+        if (procedimiento_planificado_id && !isNaN(parseInt(procedimiento_planificado_id, 10))) {
             procPlanId = parseInt(procedimiento_planificado_id, 10);
         } else if (tipo_operacion_id && !isNaN(parseInt(tipo_operacion_id, 10))) {
             procPlanId = parseInt(tipo_operacion_id, 10);
-        } else {
-            // Valor por defecto estándar en catálogo (9: Ecocardiograma especializado o 1)
-            procPlanId = 9;
         }
 
         const tipoOpId = (tipo_operacion_id && !isNaN(parseInt(tipo_operacion_id, 10)))
             ? parseInt(tipo_operacion_id, 10)
-            : (procPlanId <= 2 ? procPlanId : 1);
+            : (procPlanId && procPlanId <= 2 ? procPlanId : 1);
 
         const centroSaludFinal = centro_salud_id || 4;
-        const diagMotivo = diagnostico_motivo || 'Consulta y evaluación pediátrica';
+
+        let diagMotivoId = null;
+        if (diagnostico_motivo_id && !isNaN(parseInt(diagnostico_motivo_id, 10))) {
+            diagMotivoId = parseInt(diagnostico_motivo_id, 10);
+        }
+
+        let diagMotivo = diagnostico_motivo || null;
+        if (diagMotivoId && !diagMotivo) {
+            const [diagRow] = await connection.query('SELECT nombre FROM lista_tipo_general WHERE id = ?', [diagMotivoId]);
+            if (diagRow.length > 0) {
+                diagMotivo = diagRow[0].nombre;
+            }
+        }
+        if (!diagMotivo) {
+            diagMotivo = 'Consulta y evaluación pediátrica';
+        }
 
         // Guardar directamente en la tabla registro_solicitud
         const [solResult] = await connection.query(
@@ -341,13 +366,14 @@ const createCita = async (req, res) => {
                 tipo_cita_id,
                 pediatra_responsable,
                 procedimiento_planificado_id,
+                diagnostico_motivo_id,
                 diagnostico_motivo,
                 estatus,
                 observacion_general,
                 audit_usu_id,
                 audit_ip,
                 audit_dep_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 finalPacienteId,
                 centroSaludFinal,
@@ -356,8 +382,9 @@ const createCita = async (req, res) => {
                 fechaAsignadaCita,
                 horarioFinal,
                 tipoCitaFinal,
-                pediatra_responsable || 'Pediatra de Guardia',
+                pediatra_responsable || null,
                 procPlanId,
+                diagMotivoId,
                 diagMotivo,
                 estadoFinal,
                 obsFinal,
@@ -387,8 +414,9 @@ const createCita = async (req, res) => {
                 fecha_cita: fechaAsignadaCita,
                 horario_cita: horarioFinal,
                 tipo_cita_id,
-                pediatra_responsable,
+                pediatra_responsable: pediatra_responsable || null,
                 procedimiento_planificado_id: procPlanId,
+                diagnostico_motivo_id: diagMotivoId,
                 diagnostico_motivo: diagMotivo,
                 estatus: estadoFinal,
                 observacion_general: obsFinal,
@@ -417,6 +445,7 @@ const updateCita = async (req, res) => {
             tipo_cita_id,
             pediatra_responsable,
             procedimiento_planificado_id,
+            diagnostico_motivo_id,
             diagnostico_motivo,
             estado_cita,
             estatus,
@@ -435,6 +464,21 @@ const updateCita = async (req, res) => {
         const horarioFinal = horario || horario_cita || null;
         const obsFinal = observaciones || observacion_general || null;
 
+        let diagMotivoId = undefined;
+        if (diagnostico_motivo_id !== undefined) {
+            diagMotivoId = (diagnostico_motivo_id && !isNaN(parseInt(diagnostico_motivo_id, 10)))
+                ? parseInt(diagnostico_motivo_id, 10)
+                : null;
+        }
+
+        let diagMotivoTexto = diagnostico_motivo !== undefined ? diagnostico_motivo : null;
+        if (diagMotivoId && !diagMotivoTexto) {
+            const [diagRow] = await db.query('SELECT nombre FROM lista_tipo_general WHERE id = ?', [diagMotivoId]);
+            if (diagRow.length > 0) {
+                diagMotivoTexto = diagRow[0].nombre;
+            }
+        }
+
         await db.query(
             `UPDATE registro_solicitud SET
                 fecha_cita = COALESCE(?, fecha_cita),
@@ -442,6 +486,7 @@ const updateCita = async (req, res) => {
                 tipo_cita_id = COALESCE(?, tipo_cita_id),
                 pediatra_responsable = COALESCE(?, pediatra_responsable),
                 procedimiento_planificado_id = COALESCE(?, procedimiento_planificado_id),
+                diagnostico_motivo_id = COALESCE(?, diagnostico_motivo_id),
                 diagnostico_motivo = COALESCE(?, diagnostico_motivo),
                 estatus = COALESCE(?, estatus),
                 observacion_general = COALESCE(?, observacion_general),
@@ -455,7 +500,8 @@ const updateCita = async (req, res) => {
                 tipo_cita_id || null,
                 pediatra_responsable || null,
                 procedimiento_planificado_id || null,
-                diagnostico_motivo || null,
+                diagMotivoId !== undefined ? diagMotivoId : null,
+                diagMotivoTexto,
                 estadoFinal,
                 obsFinal,
                 audit.audit_usu_id,

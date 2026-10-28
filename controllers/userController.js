@@ -65,7 +65,7 @@ const login = async (req, res) => {
 
 // 2. CRUD: Crear Usuario
 const createUser = async (req, res) => {
-    const { usuario, password, nombres, rol_id } = req.body;
+    const { usuario, password, nombres, rol_id, centro_salud_id } = req.body;
     try {
         if (!usuario || !password || !nombres) {
             return res.status(400).json({ message: 'Todos los campos son obligatorios' });
@@ -79,9 +79,12 @@ const createUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // El centro de salud se guarda null explícitamente según requerimiento
+        const centroSaludFinal = centro_salud_id !== undefined ? centro_salud_id : null;
+
         const [result] = await db.query(
-            'INSERT INTO users (usuario, password, nombres, rol_id, estatus) VALUES (?, ?, ?, ?, 1)',
-            [usuario, hashedPassword, nombres, rol_id || 1]
+            'INSERT INTO users (usuario, password, nombres, rol_id, centro_salud_id, estatus) VALUES (?, ?, ?, ?, ?, 1)',
+            [usuario, hashedPassword, nombres, rol_id || 2, centroSaludFinal]
         );
 
         res.status(201).json({ message: 'Usuario creado exitosamente', id: result.insertId });
@@ -100,6 +103,7 @@ const getUsers = async (req, res) => {
                 u.usuario, 
                 u.nombres, 
                 u.rol_id, 
+                u.centro_salud_id,
                 r.rol, 
                 u.estatus as estatus_usuario
             FROM users u 
@@ -117,11 +121,12 @@ const getUsers = async (req, res) => {
 // 4. Actualizar Usuario
 const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { nombres, rol_id, usuario } = req.body;
+    const { nombres, rol_id, usuario, centro_salud_id } = req.body;
     try {
+        const centroSaludFinal = centro_salud_id !== undefined ? centro_salud_id : null;
         await db.query(
-            'UPDATE users SET nombres = ?, rol_id = ?, usuario = ? WHERE id = ?',
-            [nombres, rol_id, usuario, id]
+            'UPDATE users SET nombres = ?, rol_id = ?, usuario = ?, centro_salud_id = ? WHERE id = ?',
+            [nombres, rol_id, usuario, centroSaludFinal, id]
         );
         res.json({ message: 'Usuario actualizado correctamente' });
     } catch (error) {

@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `registro_solicitud` (
   `tipo_cita_id` INT(11) NULL DEFAULT NULL,
   `pediatra_responsable` VARCHAR(150) NULL DEFAULT NULL,
   `procedimiento_planificado_id` INT(11) NULL DEFAULT NULL,
+  `diagnostico_motivo_id` INT(11) NULL DEFAULT NULL,
   `diagnostico_motivo` VARCHAR(255) NULL DEFAULT NULL,
   `fecha_respuesta` DATE NULL DEFAULT NULL,
   `estatus` VARCHAR(50) NOT NULL DEFAULT 'Pendiente',
@@ -927,7 +928,8 @@ INSERT INTO `lista_tipo_general` (`tipo`, `nombre`, `padre_id`, `orden`, `estatu
 ALTER TABLE `registro_solicitud`
   ADD CONSTRAINT `fk_solicitud_paciente` FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_solicitud_tipo_cita` FOREIGN KEY (`tipo_cita_id`) REFERENCES `lista_tipo_general` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_solicitud_procedimiento` FOREIGN KEY (`procedimiento_planificado_id`) REFERENCES `lista_tipo_general` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_solicitud_procedimiento` FOREIGN KEY (`procedimiento_planificado_id`) REFERENCES `lista_tipo_general` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_solicitud_diagnostico` FOREIGN KEY (`diagnostico_motivo_id`) REFERENCES `lista_tipo_general` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE `historia_antecedente`
   ADD CONSTRAINT `fk_antecedente_solicitud` FOREIGN KEY (`registro_solicitud_id`) REFERENCES `registro_solicitud` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

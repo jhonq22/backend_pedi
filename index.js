@@ -22,6 +22,8 @@ const evolucionRoutes = require('./routes/evolucionRoutes');
 const egresoRoutes = require('./routes/egresoRoutes');
 const solicitudRoutes = require('./routes/solicitudRoutes');
 const dptRoutes = require('./routes/dptRoutes');
+const precargaReferenciaRoutes = require('./routes/precargaReferenciaRoutes');
+const centroSaludRoutes = require('./routes/centroSaludRoutes');
 
 const app = express();
 
@@ -48,6 +50,8 @@ app.use('/api/cirugias', cirugiaRoutes);
 app.use('/api/laboratorios', laboratorioRoutes);
 app.use('/api/evoluciones', evolucionRoutes);
 app.use('/api/egresos', egresoRoutes);
+app.use('/api/referencias', precargaReferenciaRoutes);
+app.use('/api/centros-salud', centroSaludRoutes);
 
 // Ruta base para comprobación de estado y documentación de endpoints
 app.get('/', (req, res) => {

@@ -132,6 +132,28 @@ const getPacientes = async (req, res) => {
 
         const params = [estatus];
 
+        // Si es Red de Enlace (rol_id = 2), filtrar solo pacientes con solicitudes en su centro_salud_id
+        let filtroCentroRol2 = '';
+        if (Number(req.usuario?.rol_id) === 2) {
+            const rawCentro = req.usuario?.centro_salud_id;
+            const centrosIds = Array.isArray(rawCentro)
+                ? rawCentro.map(Number).filter(n => !isNaN(n))
+                : String(rawCentro || '')
+                    .replace(/[\[\]\s"]/g, '')
+                    .split(',')
+                    .map(Number)
+                    .filter(n => n > 0 && !isNaN(n));
+
+            if (centrosIds.length > 0) {
+                filtroCentroRol2 = ' AND EXISTS (SELECT 1 FROM registro_solicitud rs WHERE rs.paciente_id = p.id AND rs.centro_salud_id IN (?))';
+                query += filtroCentroRol2;
+                params.push(centrosIds);
+            } else {
+                filtroCentroRol2 = ' AND 1 = 0';
+                query += filtroCentroRol2;
+            }
+        }
+
         if (q) {
             query += ` AND (
                 p.numero_historia_clinica LIKE ? OR
@@ -151,10 +173,15 @@ const getPacientes = async (req, res) => {
         const [rows] = await db.query(query, params);
 
         // Contar total para paginación
-        const [totalRows] = await db.query(
-            `SELECT COUNT(*) as total FROM paciente WHERE estatus = ?`,
-            [estatus]
-        );
+        const countParams = [estatus];
+        let countQuery = `SELECT COUNT(*) as total FROM paciente p WHERE p.estatus = ?`;
+        if (filtroCentroRol2) {
+            countQuery += filtroCentroRol2;
+            if (filtroCentroRol2.includes('IN (?)')) {
+                countParams.push(params[1]);
+            }
+        }
+        const [totalRows] = await db.query(countQuery, countParams);
 
         res.json({
             status: 'success',

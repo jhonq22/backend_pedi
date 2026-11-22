@@ -11,7 +11,7 @@ const login = async (req, res) => {
         }
 
         const [rows] = await db.query(
-            `SELECT u.id, u.usuario, u.password, u.nombres, u.rol_id, u.estatus, r.rol 
+            `SELECT u.id, u.usuario, u.password, u.nombres, u.rol_id, u.centro_salud_id, u.estatus, r.rol 
              FROM users u 
              LEFT JOIN roles r ON u.rol_id = r.id 
              WHERE u.usuario = ?`,
@@ -40,7 +40,8 @@ const login = async (req, res) => {
                 usuario: user.usuario,
                 nombres: user.nombres,
                 rol: user.rol,
-                rol_id: user.rol_id
+                rol_id: user.rol_id,
+                centro_salud_id: user.centro_salud_id || null
             },
             process.env.JWT_SECRET || 'secret_key_123',
             { expiresIn: '8h' }
@@ -54,7 +55,8 @@ const login = async (req, res) => {
                 usuario: user.usuario,
                 nombres: user.nombres,
                 rol: user.rol,
-                rol_id: user.rol_id
+                rol_id: user.rol_id,
+                centro_salud_id: user.centro_salud_id || null
             }
         });
     } catch (error) {

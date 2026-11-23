@@ -1,5 +1,17 @@
 // backend/controllers/precargaReferencia/pacienteUpsertService.js
 
+const SOLO_LETRAS_NOMBRE_REGEX = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+
+const validarNombreSoloLetras = (valor, etiqueta) => {
+    const clean = String(valor || '').trim();
+    if (!clean) return;
+    if (!SOLO_LETRAS_NOMBRE_REGEX.test(clean)) {
+        const err = new Error(`${etiqueta} solo debe contener letras y acentos (sin números ni caracteres especiales).`);
+        err.statusCode = 400;
+        throw err;
+    }
+};
+
 const splitNombreCompleto = (texto) => {
     const clean = String(texto || '').trim().replace(/\s+/g, ' ');
     if (!clean) return { primero: '', segundo: null };
@@ -23,6 +35,25 @@ const calcularEdadNumericaSimple = (fechaNacStr, fechaRefStr) => {
     if (ref.getDate() < birth.getDate()) months--;
     if (months < 12) return { edad: Math.max(1, months), unidad: 'meses' };
     return { edad: Math.floor(months / 12), unidad: 'años' };
+};
+
+const isValidCalendarDateYMD = (val) => {
+    if (!val) return false;
+    const s = String(val).trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    const [y, m, d] = s.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+};
+
+const normalizarTipoDocEntrada = (rawTipo, numDoc) => {
+    const t = String(rawTipo || '').trim();
+    const low = t.toLowerCase();
+    if (!t || low === 'no indicado') {
+        return numDoc ? 'Cédula V' : 'Sin documento';
+    }
+    if (low === 'no_posee' || low.includes('sin documento')) return 'Sin documento';
+    return t.slice(0, 50);
 };
 
 const generarHCILProvisional = (tipoDoc, numDoc, cedMadreNum, numHijo) => {
@@ -71,12 +102,17 @@ const upsertPacienteYRepresentante = async (connection, body, audit, options = {
     } = body;
 
     const nombresSplit = primer_nombre
-        ? { primero: String(primer_nombre).trim(), segundo: segundo_nombre ? String(segundo_nombre).trim() : null }
+        ? { primero: String(primer_nombre).trim().slice(0, 60), segundo: segundo_nombre ? String(segundo_nombre).trim().slice(0, 60) : null }
         : splitNombreCompleto(paciente_nombres);
 
     const apellidosSplit = primer_apellido
-        ? { primero: String(primer_apellido).trim(), segundo: segundo_apellido ? String(segundo_apellido).trim() : null }
+        ? { primero: String(primer_apellido).trim().slice(0, 60), segundo: segundo_apellido ? String(segundo_apellido).trim().slice(0, 60) : null }
         : splitNombreCompleto(paciente_apellidos);
+
+    if (nombresSplit.primero) nombresSplit.primero = nombresSplit.primero.slice(0, 60);
+    if (nombresSplit.segundo) nombresSplit.segundo = nombresSplit.segundo.slice(0, 60);
+    if (apellidosSplit.primero) apellidosSplit.primero = apellidosSplit.primero.slice(0, 60);
+    if (apellidosSplit.segundo) apellidosSplit.segundo = apellidosSplit.segundo.slice(0, 60);
 
     if (!nombresSplit.primero || !apellidosSplit.primero) {
         const err = new Error('Los nombres y apellidos del paciente son obligatorios.');
@@ -84,30 +120,53 @@ const upsertPacienteYRepresentante = async (connection, body, audit, options = {
         throw err;
     }
 
-    const tipoDoc = paciente_tipo_documento ? String(paciente_tipo_documento).trim() : null;
+    validarNombreSoloLetras(nombresSplit.primero, 'El primer nombre del paciente');
+    validarNombreSoloLetras(nombresSplit.segundo, 'El segundo nombre del paciente');
+    validarNombreSoloLetras(apellidosSplit.primero, 'El primer apellido del paciente');
+    validarNombreSoloLetras(apellidosSplit.segundo, 'El segundo apellido del paciente');
+
+    const tipoDoc = normalizarTipoDocEntrada(paciente_tipo_documento, paciente_num_documento);
     const isSinDoc = !tipoDoc || tipoDoc.toLowerCase().includes('sin documento') || tipoDoc.toLowerCase() === 'no_posee';
     const numDoc = (!isSinDoc && paciente_num_documento && String(paciente_num_documento).trim() !== '')
-        ? String(paciente_num_documento).trim().toUpperCase()
+        ? String(paciente_num_documento).trim().toUpperCase().slice(0, 30)
         : null;
 
-    const fechaNac = paciente_fecha_nacimiento || null;
-    const sexo = paciente_sexo_registrado || null;
-    const nacionalidad = paciente_nacionalidad || null;
+    const rawFechaNac = paciente_fecha_nacimiento ? String(paciente_fecha_nacimiento).trim() : '';
+    let fechaNac = null;
+    if (rawFechaNac) {
+        if (!isValidCalendarDateYMD(rawFechaNac)) {
+            const err = new Error('La fecha de nacimiento no es válida.');
+            err.statusCode = 400;
+            throw err;
+        }
+        const hoy = new Date();
+        const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+        if (rawFechaNac > hoyStr) {
+            const err = new Error('La fecha de nacimiento no puede ser posterior a la fecha actual.');
+            err.statusCode = 400;
+            throw err;
+        }
+        fechaNac = rawFechaNac;
+    }
+    const sexo = paciente_sexo_registrado ? String(paciente_sexo_registrado).trim().slice(0, 20) : null;
+    const nacionalidad = paciente_nacionalidad ? String(paciente_nacionalidad).trim().slice(0, 100) : null;
     const nacionalidadesJson = nacionalidad ? JSON.stringify([nacionalidad]) : null;
-    const estadoRes = domicilio_estado || null;
-    const municipioRes = domicilio_municipio || null;
-    const direccionRes = domicilio_direccion || null;
+    const estadoRes = domicilio_estado ? String(domicilio_estado).trim().slice(0, 100) : null;
+    const municipioRes = domicilio_municipio ? String(domicilio_municipio).trim().slice(0, 100) : null;
+    const direccionRes = domicilio_direccion ? String(domicilio_direccion).trim().slice(0, 500) : null;
 
     const { edad: edadNum, unidad: unidadEdad } = calcularEdadNumericaSimple(fechaNac, fecha_referencia);
 
-    // Datos representante
-    const repNombres = representante_nombres ? String(representante_nombres).trim() : null;
-    const repApellidos = representante_apellidos ? String(representante_apellidos).trim() : null;
-    const repParentesco = representante_parentesco ? String(representante_parentesco).trim() : null;
-    const repDoc = representante_doc_numero ? String(representante_doc_numero).trim() : null;
-    const repMovil = representante_movil ? String(representante_movil).trim() : null;
-    const repFijo = representante_telefono ? String(representante_telefono).trim() : null;
-    const repEmail = representante_email ? String(representante_email).trim() : null;
+    // Datos representante (respetando longitudes exactas de columnas MySQL)
+    const repNombres = representante_nombres ? String(representante_nombres).trim().slice(0, 120) : null;
+    const repApellidos = representante_apellidos ? String(representante_apellidos).trim().slice(0, 120) : null;
+    validarNombreSoloLetras(repNombres, 'Los nombres del representante');
+    validarNombreSoloLetras(repApellidos, 'Los apellidos del representante');
+    const repParentesco = representante_parentesco ? String(representante_parentesco).trim().slice(0, 50) : null;
+    const repDoc = representante_doc_numero ? String(representante_doc_numero).trim().slice(0, 35) : null;
+    const repMovil = representante_movil ? String(representante_movil).trim().slice(0, 25) : null;
+    const repFijo = representante_telefono ? String(representante_telefono).trim().slice(0, 20) : null;
+    const repEmail = representante_email ? String(representante_email).trim().slice(0, 254) : null;
     const telPrincipalFinal = repMovil || repFijo || null;
     const telSecundarioFinal = repMovil ? repFijo : null;
 
@@ -145,17 +204,35 @@ const upsertPacienteYRepresentante = async (connection, body, audit, options = {
         if (rows.length > 0) existingPaciente = rows[0];
     }
 
-    if (!existingPaciente && fechaNac) {
+    if (!existingPaciente && !numDoc && fechaNac) {
         const [rows] = await connection.query(
             `SELECT id, numero_historia_clinica FROM paciente 
              WHERE LOWER(primer_nombre) = LOWER(?) 
                AND LOWER(primer_apellido) = LOWER(?) 
                AND fecha_nacimiento = ? 
+               AND (numero_documento IS NULL OR TRIM(numero_documento) = '')
                AND estatus = 1
              LIMIT 1`,
             [nombresSplit.primero, apellidosSplit.primero, fechaNac]
         );
         if (rows.length > 0) existingPaciente = rows[0];
+    }
+
+    if (existingPaciente && numDoc) {
+        const [dupDocRows] = await connection.query(
+            `SELECT id FROM paciente 
+             WHERE UPPER(TRIM(numero_documento)) = UPPER(?) 
+               AND LOWER(TRIM(COALESCE(tipo_documento, ''))) = LOWER(?)
+               AND id != ? 
+               AND estatus = 1 
+             LIMIT 1`,
+            [numDoc, tipoDoc, existingPaciente.id]
+        );
+        if (dupDocRows.length > 0) {
+            const err = new Error(`Ya existe otro paciente registrado con el documento ${tipoDoc} ${numDoc}.`);
+            err.statusCode = 400;
+            throw err;
+        }
     }
 
     let finalPacienteId;
@@ -168,7 +245,7 @@ const upsertPacienteYRepresentante = async (connection, body, audit, options = {
 
         const updateSql = allowIdentityUpdate
             ? `UPDATE paciente SET
-                tipo_documento = COALESCE(?, tipo_documento),
+                tipo_documento = ?,
                 numero_documento = ?,
                 primer_nombre = ?,
                 segundo_nombre = ?,
@@ -177,17 +254,17 @@ const upsertPacienteYRepresentante = async (connection, body, audit, options = {
                 fecha_nacimiento = COALESCE(?, fecha_nacimiento),
                 edad_informada = COALESCE(?, edad_informada),
                 unidad_edad_informada = COALESCE(?, unidad_edad_informada),
-                sexo_id = COALESCE(?, sexo_id),
+                sexo_id = ?,
                 sexo = COALESCE(?, sexo),
-                nacionalidad = COALESCE(?, nacionalidad),
-                nacionalidades = COALESCE(?, nacionalidades),
-                estado_residencia = COALESCE(?, estado_residencia),
-                municipio_residencia = COALESCE(?, municipio_residencia),
-                direccion_completa = COALESCE(?, direccion_completa),
+                nacionalidad = ?,
+                nacionalidades = ?,
+                estado_residencia = ?,
+                municipio_residencia = ?,
+                direccion_completa = ?,
                 contacto_nombres = COALESCE(?, contacto_nombres),
                 contacto_apellidos = COALESCE(?, contacto_apellidos),
                 contacto_parentesco = COALESCE(?, contacto_parentesco),
-                contacto_numero_documento = COALESCE(?, contacto_numero_documento),
+                contacto_numero_documento = ?,
                 contacto_telefono_principal = COALESCE(?, contacto_telefono_principal),
                 contacto_telefono_secundario = ?,
                 contacto_correo_electronico = ?,
@@ -260,10 +337,14 @@ const upsertPacienteYRepresentante = async (connection, body, audit, options = {
         creado = true;
         finalHc = generarHCILProvisional(tipoDoc, numDoc, repDoc, 1);
 
-        // Garantizar unicidad de HCIL
-        const [dupHc] = await connection.query('SELECT id FROM paciente WHERE numero_historia_clinica = ?', [finalHc]);
-        if (dupHc.length > 0) {
-            finalHc = `REF-${Date.now().toString().slice(-8)}`;
+        // Garantizar unicidad absoluta de HCIL
+        let attempt = 0;
+        while (attempt < 5) {
+            const [dupHc] = await connection.query('SELECT id FROM paciente WHERE numero_historia_clinica = ? LIMIT 1', [finalHc]);
+            if (dupHc.length === 0) break;
+            attempt++;
+            const randSuffix = Math.floor(100 + Math.random() * 900);
+            finalHc = `REF-${Date.now().toString().slice(-6)}${randSuffix}`;
         }
 
         const [insPac] = await connection.query(
@@ -347,7 +428,7 @@ const upsertPacienteYRepresentante = async (connection, body, audit, options = {
                     apellidos = COALESCE(?, apellidos),
                     parentesco_id = COALESCE(?, parentesco_id),
                     parentesco = COALESCE(?, parentesco),
-                    numero_documento = COALESCE(?, numero_documento),
+                    numero_documento = ${allowIdentityUpdate ? '?' : 'COALESCE(?, numero_documento)'},
                     telefono_principal = COALESCE(?, telefono_principal),
                     telefono_secundario = ?,
                     correo_electronico = ?,

@@ -10,6 +10,7 @@ router.post('/login', userController.login);
 router.get('/', verificarToken, userController.getUsers);
 router.post('/register', verificarToken, userController.createUser);
 router.put('/:id', verificarToken, userController.updateUser);
+router.patch('/me/password', verificarToken, userController.changeOwnPassword);
 router.patch('/:id/password', verificarToken, userController.updatePassword);
 router.delete('/:id', verificarToken, userController.deleteUser);
 router.get('/roles', verificarToken, userController.getRoles);

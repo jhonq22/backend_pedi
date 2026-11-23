@@ -154,6 +154,40 @@ const updatePassword = async (req, res) => {
     }
 };
 
+// 5b. Cambiar Propia Contraseña (Cualquier usuario autenticado)
+const changeOwnPassword = async (req, res) => {
+    const userId = req.usuario?.id;
+    const { currentPassword, newPassword } = req.body || {};
+    try {
+        if (!userId) {
+            return res.status(401).json({ message: 'Sesión no válida.' });
+        }
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: 'Debe ingresar la contraseña actual y la nueva contraseña.' });
+        }
+        if (String(newPassword).length < 6) {
+            return res.status(400).json({ message: 'La nueva contraseña debe tener al menos 6 caracteres.' });
+        }
+
+        const [rows] = await db.query('SELECT id, password FROM users WHERE id = ? LIMIT 1', [userId]);
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+        const isMatch = await bcrypt.compare(String(currentPassword), rows[0].password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'La contraseña actual es incorrecta.' });
+        }
+
+        const hashedPassword = await bcrypt.hash(String(newPassword), 10);
+        await db.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId]);
+        res.json({ status: 'success', message: 'Su contraseña ha sido actualizada correctamente.' });
+    } catch (error) {
+        console.error('Error cambiando contraseña propia:', error);
+        res.status(500).json({ message: 'Error interno al cambiar la contraseña.', error: error.message });
+    }
+};
+
 // 6. Cambiar Estado / Desactivar Usuario
 const deleteUser = async (req, res) => {
     const { id } = req.params;
@@ -187,6 +221,7 @@ module.exports = {
     getUsers,
     updateUser,
     updatePassword,
+    changeOwnPassword,
     deleteUser,
     getRoles
 };

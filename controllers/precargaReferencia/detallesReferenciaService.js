@@ -1,5 +1,14 @@
 // backend/controllers/precargaReferencia/detallesReferenciaService.js
 
+const sanitizeYMD = (val) => {
+    if (!val) return null;
+    const s = String(val).trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+    const [y, m, d] = s.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    return (dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d) ? s : null;
+};
+
 /**
  * Reemplaza en bucle los exámenes en la tabla `laboratorios` para un `registro_solicitud_id`
  */
@@ -27,7 +36,7 @@ const replaceLaboratoriosReferencia = async (connection, registroSolicitudId, pa
                 lab.resultado !== undefined && lab.resultado !== null ? String(lab.resultado).trim().slice(0, 255) : '',
                 lab.unidad ? String(lab.unidad).trim().slice(0, 50) : null,
                 lab.estado ? String(lab.estado).trim().slice(0, 50) : 'Disponible',
-                lab.fecha || null,
+                sanitizeYMD(lab.fecha),
                 i + 1,
                 audit.audit_usu_id,
                 audit.audit_ip,
@@ -55,7 +64,7 @@ const replaceEvaluacionesReferencia = async (connection, registroSolicitudId, pa
         if (!ev || !ev.tipo) continue;
 
         const estado = ev.estado ? String(ev.estado).trim() : 'No documentado';
-        const fecha = estado === 'Sí' && ev.fecha ? ev.fecha : null;
+        const fecha = estado === 'Sí' ? sanitizeYMD(ev.fecha) : null;
         const resumen = estado === 'Sí' && ev.resumen ? String(ev.resumen).trim() : null;
 
         await connection.query(

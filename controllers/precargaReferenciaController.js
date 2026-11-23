@@ -28,6 +28,36 @@ const parseUserCentroIds = (centroSaludRaw) => {
     return isNaN(n) ? [] : [n];
 };
 
+const formatDateYMD = (val) => {
+    if (!val) return '';
+    if (val instanceof Date) {
+        if (isNaN(val.getTime())) return '';
+        const y = val.getFullYear();
+        const m = String(val.getMonth() + 1).padStart(2, '0');
+        const d = String(val.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+    const s = String(val).trim();
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+    const parsed = new Date(s);
+    if (isNaN(parsed.getTime())) return '';
+    return `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}-${String(parsed.getDate()).padStart(2, '0')}`;
+};
+
+const normalizarTipoDocumentoSalida = (rawTipo, numDoc) => {
+    const t = String(rawTipo || '').trim();
+    const low = t.toLowerCase();
+    if (!t || low === 'no indicado') {
+        return numDoc ? 'Cédula V' : 'Sin documento';
+    }
+    if (low === 'cedula' || low === 'cédula' || low === 'v') return 'Cédula V';
+    if (low === 'e') return 'Cédula E';
+    if (low === 'pasaporte') return 'Pasaporte';
+    if (low === 'no_posee' || low === 'sin documento') return 'Sin documento';
+    if (low.includes('acta')) return 'Acta de nacimiento';
+    return t;
+};
+
 const getCentrosUsuarioActualizados = async (user, executor = db) => {
     if (user?.id) {
         try {
@@ -48,7 +78,7 @@ const getCentrosUsuarioActualizados = async (user, executor = db) => {
  */
 const buscarPacientePorDocumento = async (req, res) => {
     try {
-        const { numero_documento } = req.query;
+        const { numero_documento, tipo_documento } = req.query;
         const docRaw = String(numero_documento || '').trim().toUpperCase();
         if (!docRaw) {
             return res.status(400).json({ status: 'error', message: 'Debe ingresar un número de documento para buscar.' });
@@ -56,6 +86,7 @@ const buscarPacientePorDocumento = async (req, res) => {
 
         const soloDigitos = docRaw.replace(/[^0-9]/g, '');
         const docAlfanum = docRaw.replace(/[^A-Z0-9]/g, '');
+        const tipoFiltro = String(tipo_documento || '').trim();
 
         let query = `
             SELECT p.*
@@ -72,7 +103,12 @@ const buscarPacientePorDocumento = async (req, res) => {
             params.push(soloDigitos);
         }
 
-        query += ' ) ORDER BY p.id DESC LIMIT 1';
+        if (tipoFiltro && !tipoFiltro.toLowerCase().includes('sin documento')) {
+            query += ' ) ORDER BY (LOWER(TRIM(COALESCE(p.tipo_documento, \'\'))) = LOWER(?)) DESC, p.id DESC LIMIT 1';
+            params.push(tipoFiltro);
+        } else {
+            query += ' ) ORDER BY p.id DESC LIMIT 1';
+        }
 
         const [rows] = await db.query(query, params);
         if (rows.length === 0) {
@@ -116,10 +152,8 @@ const buscarPacientePorDocumento = async (req, res) => {
         if (nacResuelta === 'Venezuela') nacResuelta = 'Venezolana';
         if (nacResuelta === 'Colombia') nacResuelta = 'Colombiana';
 
-        // Mapear tipo documento de sistema previo ('cedula'/'pasaporte') si aplica
-        let tipoDocResuelto = p.tipo_documento || '';
-        if (tipoDocResuelto.toLowerCase() === 'cedula') tipoDocResuelto = 'Cédula V';
-        if (tipoDocResuelto.toLowerCase() === 'pasaporte') tipoDocResuelto = 'Pasaporte';
+        // Mapear tipo documento normalizado (sin 'No indicado')
+        const tipoDocResuelto = normalizarTipoDocumentoSalida(p.tipo_documento, p.numero_documento);
 
         let sexoResuelto = p.sexo || '';
         if (!sexoResuelto && Number(p.sexo_id) === 13) sexoResuelto = 'Masculino';
@@ -135,7 +169,7 @@ const buscarPacientePorDocumento = async (req, res) => {
                 paciente_apellidos: [p.primer_apellido, p.segundo_apellido].filter(Boolean).join(' '),
                 paciente_tipo_documento: tipoDocResuelto,
                 paciente_num_documento: p.numero_documento || docRaw,
-                paciente_fecha_nacimiento: p.fecha_nacimiento ? new Date(p.fecha_nacimiento).toISOString().split('T')[0] : '',
+                paciente_fecha_nacimiento: formatDateYMD(p.fecha_nacimiento),
                 paciente_sexo_registrado: sexoResuelto,
                 paciente_nacionalidad: nacResuelta,
                 domicilio_estado: p.estado_residencia || '',
@@ -296,7 +330,7 @@ const listarHistoricoReferencias = async (req, res) => {
         }
 
         if (estado_referencia) {
-            query += ' AND COALESCE(rs.estado_referencia, "Borrador") = ?';
+            query += " AND COALESCE(rs.estado_referencia, IF(rs.estatus = 'Borrador', 'Borrador', 'Enviada')) = ?";
             params.push(estado_referencia);
         }
 
@@ -352,6 +386,7 @@ const getReferenciaPorId = async (req, res) => {
                     p.primer_apellido,
                     p.segundo_apellido,
                     p.fecha_nacimiento,
+                    p.sexo_id,
                     p.sexo,
                     p.nacionalidad,
                     p.nacionalidades,
@@ -452,6 +487,14 @@ const getReferenciaPorId = async (req, res) => {
                 if (Array.isArray(arr) && arr.length > 0) nacResuelta = arr[0];
             } catch {}
         }
+        if (nacResuelta === 'Venezuela') nacResuelta = 'Venezolana';
+        if (nacResuelta === 'Colombia') nacResuelta = 'Colombiana';
+
+        const tipoDocResuelto = normalizarTipoDocumentoSalida(r.tipo_documento, r.numero_documento);
+
+        let sexoResuelto = r.sexo || '';
+        if (!sexoResuelto && Number(r.sexo_id) === 13) sexoResuelto = 'Masculino';
+        if (!sexoResuelto && Number(r.sexo_id) === 14) sexoResuelto = 'Femenino';
 
         res.json({
             status: 'success',
@@ -461,7 +504,7 @@ const getReferenciaPorId = async (req, res) => {
                 numero_historia_clinica: r.numero_historia_clinica,
                 centro_salud_id: r.centro_salud_id,
                 centro_origen_nombre: r.centro_origen_nombre_resuelto || '',
-                fecha_referencia: r.fecha_referencia ? new Date(r.fecha_referencia).toISOString().split('T')[0] : (r.fecha_solicitud ? new Date(r.fecha_solicitud).toISOString().split('T')[0] : ''),
+                fecha_referencia: formatDateYMD(r.fecha_referencia) || formatDateYMD(r.fecha_solicitud),
                 prioridad_solicitada: r.prioridad_solicitada || 'Rutinaria',
                 estado_referencia: r.estado_referencia || 'Borrador',
                 estatus: r.estatus,
@@ -472,10 +515,10 @@ const getReferenciaPorId = async (req, res) => {
                 // Datos del paciente
                 paciente_nombres: pacienteNombres,
                 paciente_apellidos: pacienteApellidos,
-                paciente_tipo_documento: r.tipo_documento || '',
+                paciente_tipo_documento: tipoDocResuelto,
                 paciente_num_documento: r.numero_documento || '',
-                paciente_fecha_nacimiento: r.fecha_nacimiento ? new Date(r.fecha_nacimiento).toISOString().split('T')[0] : '',
-                paciente_sexo_registrado: r.sexo || '',
+                paciente_fecha_nacimiento: formatDateYMD(r.fecha_nacimiento),
+                paciente_sexo_registrado: sexoResuelto,
                 paciente_nacionalidad: nacResuelta || '',
                 domicilio_estado: r.estado_residencia || '',
                 domicilio_municipio: r.municipio_residencia || '',
@@ -501,10 +544,10 @@ const getReferenciaPorId = async (req, res) => {
                 saturacion_o2: r.saturacion_o2 !== null && r.saturacion_o2 !== undefined ? Number(r.saturacion_o2) : '',
                 cirugia_paliativa_estado: cirugias[0]?.cirugia_paliativa_estado || r.cirugia_paliativa_estado || 'Desconocido',
                 cirugia_paliativa_tipo: cirugias[0]?.tipo_cirugia || r.cirugia_paliativa_tipo || '',
-                cirugia_paliativa_fecha: cirugias[0]?.fecha_cirugia || (r.cirugia_paliativa_fecha ? new Date(r.cirugia_paliativa_fecha).toISOString().split('T')[0] : ''),
+                cirugia_paliativa_fecha: cirugias[0]?.fecha_cirugia || formatDateYMD(r.cirugia_paliativa_fecha),
 
                 // Datos de cita (Red de Enlace - rol_id = 2)
-                fecha_cita: r.fecha_cita ? new Date(r.fecha_cita).toISOString().split('T')[0] : '',
+                fecha_cita: formatDateYMD(r.fecha_cita),
                 tipo_cita_id: r.tipo_cita_id ? Number(r.tipo_cita_id) : '',
                 tipo_cita_nombre: r.tipo_cita_nombre || '',
                 procedimiento_planificado_id: r.procedimiento_planificado_id ? Number(r.procedimiento_planificado_id) : '',
@@ -549,6 +592,23 @@ const crearPrecargaReferencia = async (req, res) => {
         const audit = req.audit || { audit_usu_id: '1', audit_ip: '127.0.0.1', audit_dep_id: '1' };
         const user = req.usuario || {};
         const body = req.body || {};
+
+        // Si el usuario rol_id = 6 tiene centro asignado, validar o fijar su centro
+        if (Number(user.rol_id) === 6) {
+            const centrosUsuario = await getCentrosUsuarioActualizados(user, connection);
+            if (centrosUsuario.length > 0) {
+                if (body.centro_salud_id && !centrosUsuario.includes(Number(body.centro_salud_id))) {
+                    await connection.rollback();
+                    return res.status(403).json({
+                        status: 'error',
+                        message: 'No tiene permiso para registrar referencias en un centro distinto al asignado.'
+                    });
+                }
+                if (!body.centro_salud_id) {
+                    body.centro_salud_id = centrosUsuario[0];
+                }
+            }
+        }
 
         // 1. Upsert Paciente + Representante
         const { paciente_id, numero_historia_clinica, creado: pacienteCreado } = await upsertPacienteYRepresentante(connection, body, audit);
@@ -612,8 +672,28 @@ const actualizarPrecargaReferencia = async (req, res) => {
         const user = req.usuario || {};
         const body = req.body || {};
 
+        // Si el usuario rol_id = 6 tiene centro asignado, validar o fijar su centro
+        if (Number(user.rol_id) === 6) {
+            const centrosUsuario = await getCentrosUsuarioActualizados(user, connection);
+            if (centrosUsuario.length > 0) {
+                if (body.centro_salud_id && !centrosUsuario.includes(Number(body.centro_salud_id))) {
+                    await connection.rollback();
+                    return res.status(403).json({
+                        status: 'error',
+                        message: 'No tiene permiso para registrar referencias en un centro distinto al asignado.'
+                    });
+                }
+                if (!body.centro_salud_id) {
+                    body.centro_salud_id = centrosUsuario[0];
+                }
+            }
+        }
+
         // Buscar solicitud existente para obtener paciente_id y validar acceso
-        const [solRows] = await connection.query('SELECT paciente_id, centro_salud_id FROM registro_solicitud WHERE id = ? LIMIT 1', [id]);
+        const [solRows] = await connection.query(
+            'SELECT paciente_id, centro_salud_id, usuario_referencia_id, audit_usu_id FROM registro_solicitud WHERE id = ? LIMIT 1',
+            [id]
+        );
         if (solRows.length === 0) {
             await connection.rollback();
             return res.status(404).json({ status: 'error', message: 'Registro de solicitud de referencia no encontrado' });
@@ -621,6 +701,19 @@ const actualizarPrecargaReferencia = async (req, res) => {
 
         if (!body.paciente_id) {
             body.paciente_id = solRows[0].paciente_id;
+        }
+
+        // Control de acceso para rol_id = 6 (Centro de Referencia)
+        if (Number(user.rol_id) === 6) {
+            const centrosUsuario = await getCentrosUsuarioActualizados(user, connection);
+            const rSol = solRows[0];
+            const esPropio = Number(rSol.usuario_referencia_id) === Number(user.id) ||
+                             String(rSol.audit_usu_id) === String(user.id) ||
+                             centrosUsuario.includes(Number(rSol.centro_salud_id));
+            if (!esPropio) {
+                await connection.rollback();
+                return res.status(403).json({ status: 'error', message: 'No tiene permiso para modificar esta referencia.' });
+            }
         }
 
         // Flujo específico para rol_id = 2 (Red de Enlace): solo edita datos de paciente, representante y campos de cita
@@ -631,6 +724,8 @@ const actualizarPrecargaReferencia = async (req, res) => {
                 return res.status(403).json({ status: 'error', message: 'Solo puede editar referencias registradas en su centro de salud.' });
             }
 
+            // Forzar paciente_id vinculado a esta solicitud (evita modificar otro paciente por manipulación de payload)
+            body.paciente_id = solRows[0].paciente_id;
             const { paciente_id, numero_historia_clinica } = await upsertPacienteYRepresentante(connection, body, audit, { allowIdentityUpdate: true });
             const { registro_solicitud_id, estado_referencia, estatus } = await updateCitaRedEnlace(connection, id, body, audit);
             await registrarHistorialReferencia(

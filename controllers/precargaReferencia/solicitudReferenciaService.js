@@ -1,5 +1,21 @@
 // backend/controllers/precargaReferencia/solicitudReferenciaService.js
 
+const SOLO_LETRAS_NOMBRE_REGEX = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?:\s+[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+
+const isValidYMD = (val) => {
+    if (!val) return false;
+    const s = String(val).trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    const [y, m, d] = s.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+};
+
+const getTodayLocalYMD = () => {
+    const h = new Date();
+    return `${h.getFullYear()}-${String(h.getMonth() + 1).padStart(2, '0')}-${String(h.getDate()).padStart(2, '0')}`;
+};
+
 /**
  * Inserta o actualiza la solicitud en registro_solicitud y su cirugía previa en referencia_cirugia_previa
  */
@@ -30,9 +46,13 @@ const upsertSolicitudReferencia = async (connection, pacienteId, body, user, aud
         completitud_porcentaje = 0
     } = body;
 
-    // Resolver centro_salud_id y centro_origen_nombre
+    // Resolver centro_salud_id y centro_origen_nombre (con fallback al centro asignado del usuario si rol_id = 6)
     let finalCentroId = centro_salud_id ? Number(centro_salud_id) : null;
-    let finalCentroNombre = centro_origen_nombre ? String(centro_origen_nombre).trim() : null;
+    if (!finalCentroId && Number(user?.rol_id) === 6 && user?.centro_salud_id) {
+        const parsed = String(user.centro_salud_id).replace(/[\[\]\s"]/g, '').split(',').map(Number).find(n => n > 0 && !isNaN(n));
+        if (parsed) finalCentroId = parsed;
+    }
+    let finalCentroNombre = centro_origen_nombre ? String(centro_origen_nombre).trim().slice(0, 255) : null;
 
     if (!finalCentroId && finalCentroNombre) {
         const [cRows] = await connection.query(
@@ -51,19 +71,89 @@ const upsertSolicitudReferencia = async (connection, pacienteId, body, user, aud
         if (cRows.length > 0) finalCentroNombre = cRows[0].descripcion;
     }
 
-    const fechaRefFinal = fecha_referencia || new Date().toISOString().split('T')[0];
+    if (!finalCentroId) {
+        const err = new Error('Debe especificar un centro regional de origen válido.');
+        err.statusCode = 400;
+        throw err;
+    }
+
+    let fechaRefFinal = getTodayLocalYMD();
+    if (fecha_referencia !== undefined && fecha_referencia !== null && String(fecha_referencia).trim() !== '') {
+        const cleanRef = String(fecha_referencia).trim();
+        if (!isValidYMD(cleanRef)) {
+            const err = new Error('La fecha de referencia debe tener el formato válido YYYY-MM-DD.');
+            err.statusCode = 400;
+            throw err;
+        }
+        if (cleanRef > getTodayLocalYMD()) {
+            const err = new Error('La fecha de referencia no puede ser posterior al día de hoy.');
+            err.statusCode = 400;
+            throw err;
+        }
+        fechaRefFinal = cleanRef;
+    }
     const esEnviada = String(estado_referencia).toLowerCase() === 'enviada';
     const estadoReferenciaFinal = esEnviada ? 'Enviada' : 'Borrador';
     const estatusSolicitud = esEnviada ? 'Pendiente' : 'Borrador';
     const fechaEnvio = esEnviada ? new Date() : null;
 
-    const satO2Val = (saturacion_o2 !== undefined && saturacion_o2 !== null && saturacion_o2 !== '')
-        ? Number(saturacion_o2)
-        : null;
+    let satO2Val = null;
+    if (saturacion_o2 !== undefined && saturacion_o2 !== null && String(saturacion_o2).trim() !== '') {
+        const numSat = Number(saturacion_o2);
+        if (isNaN(numSat) || numSat < 0 || numSat > 100) {
+            const err = new Error('La saturación de O₂ debe ser un valor numérico entre 0 y 100.');
+            err.statusCode = 400;
+            throw err;
+        }
+        satO2Val = numSat;
+    }
 
     const cirugiaEstadoFinal = cirugia_paliativa_estado || 'Desconocido';
-    const cirugiaTipoFinal = cirugiaEstadoFinal === 'Sí' ? (cirugia_paliativa_tipo || null) : null;
-    const cirugiaFechaFinal = (cirugiaEstadoFinal === 'Sí' && cirugia_paliativa_fecha) ? cirugia_paliativa_fecha : null;
+    const cirugiaTipoFinal = cirugiaEstadoFinal === 'Sí' && cirugia_paliativa_tipo
+        ? String(cirugia_paliativa_tipo).trim().slice(0, 255)
+        : null;
+    let cirugiaFechaFinal = null;
+    if (cirugiaEstadoFinal === 'Sí' && cirugia_paliativa_fecha && String(cirugia_paliativa_fecha).trim() !== '') {
+        const fCir = String(cirugia_paliativa_fecha).trim();
+        if (!isValidYMD(fCir)) {
+            const err = new Error('La fecha de cirugía paliativa no es válida.');
+            err.statusCode = 400;
+            throw err;
+        }
+        cirugiaFechaFinal = fCir;
+    }
+
+    const medicoNombreClean = medico_nombre_completo ? String(medico_nombre_completo).trim().slice(0, 150) : null;
+    const medicoDocClean = medico_documento ? String(medico_documento).trim().slice(0, 50) : null;
+    const medicoEspClean = medico_especialidad ? String(medico_especialidad).trim().slice(0, 100) : null;
+
+    if (medicoNombreClean && !SOLO_LETRAS_NOMBRE_REGEX.test(medicoNombreClean)) {
+        const err = new Error('El nombre y apellidos del médico remitente solo debe contener letras y acentos (sin números ni caracteres especiales).');
+        err.statusCode = 400;
+        throw err;
+    }
+    if (medicoDocClean && !/^\d+$/.test(medicoDocClean)) {
+        const err = new Error('La cédula del médico remitente solo debe contener dígitos numéricos.');
+        err.statusCode = 400;
+        throw err;
+    }
+    if (esEnviada) {
+        if (!medicoNombreClean) {
+            const err = new Error('Debe indicar el nombre y apellidos del médico remitente.');
+            err.statusCode = 400;
+            throw err;
+        }
+        if (!medicoDocClean) {
+            const err = new Error('Debe indicar la cédula del médico remitente.');
+            err.statusCode = 400;
+            throw err;
+        }
+        if (!medicoEspClean) {
+            const err = new Error('Debe indicar la especialidad del médico remitente.');
+            err.statusCode = 400;
+            throw err;
+        }
+    }
 
     const diagMotivoCorto = (dx_cardiologico_texto || motivo_referencia || 'Referencia cardiológica pediátrica').slice(0, 250);
     const usuarioRefId = user?.id ? Number(user.id) : null;
@@ -244,11 +334,40 @@ const updateCitaRedEnlace = async (connection, solicitudId, body, audit) => {
         throw err;
     }
 
-    const fechaCitaFinal = body.fecha_cita || null;
-    const tipoCitaIdFinal = body.tipo_cita_id ? Number(body.tipo_cita_id) : null;
-    const procPlanificadoIdFinal = body.procedimiento_planificado_id ? Number(body.procedimiento_planificado_id) : null;
-    const diagMotivoIdFinal = body.diagnostico_motivo_id ? Number(body.diagnostico_motivo_id) : null;
-    let diagMotivoTexto = body.diagnostico_motivo ? String(body.diagnostico_motivo).trim() : null;
+    let fechaCitaFinal = null;
+    if (body.fecha_cita !== undefined && body.fecha_cita !== null && String(body.fecha_cita).trim() !== '') {
+        const cleanCita = String(body.fecha_cita).trim();
+        if (!isValidYMD(cleanCita)) {
+            const err = new Error('La fecha asignada de cita debe tener un formato válido.');
+            err.statusCode = 400;
+            throw err;
+        }
+        fechaCitaFinal = cleanCita;
+    }
+    const tipoCitaParsed = body.tipo_cita_id ? Number(body.tipo_cita_id) : null;
+    const tipoCitaIdFinal = tipoCitaParsed && !isNaN(tipoCitaParsed) ? tipoCitaParsed : null;
+    const procParsed = body.procedimiento_planificado_id ? Number(body.procedimiento_planificado_id) : null;
+    const procPlanificadoIdFinal = procParsed && !isNaN(procParsed) ? procParsed : null;
+    const diagParsed = body.diagnostico_motivo_id ? Number(body.diagnostico_motivo_id) : null;
+    const diagMotivoIdFinal = diagParsed && !isNaN(diagParsed) ? diagParsed : null;
+    let diagMotivoTexto = body.diagnostico_motivo ? String(body.diagnostico_motivo).trim().slice(0, 255) : null;
+
+    if (tipoCitaIdFinal) {
+        const [tcRows] = await connection.query('SELECT id FROM lista_tipo_general WHERE id = ? LIMIT 1', [tipoCitaIdFinal]);
+        if (tcRows.length === 0) {
+            const err = new Error('El tipo de consulta seleccionado no es válido.');
+            err.statusCode = 400;
+            throw err;
+        }
+    }
+    if (procPlanificadoIdFinal) {
+        const [tpRows] = await connection.query('SELECT id FROM lista_tipo_general WHERE id = ? LIMIT 1', [procPlanificadoIdFinal]);
+        if (tpRows.length === 0) {
+            const err = new Error('El procedimiento cardiovascular seleccionado no es válido.');
+            err.statusCode = 400;
+            throw err;
+        }
+    }
 
     if (diagMotivoIdFinal && !diagMotivoTexto) {
         const [diagRows] = await connection.query(
